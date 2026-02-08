@@ -3,274 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudo Social Ultimate</title>
+    <title>Estudo Social v4</title>
     <style>
-        :root { --preto: #000; --branco: #fff; --azul: #1DA1F2; --ouro: #ffd700; --cinza: #f0f0f0; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); margin: 0; padding: 0; }
+        :root { 
+            --preto: #0e1117; --branco: #ffffff; --azul: #1DA1F2; --ouro: #ffd700; 
+            --chat-bg: #151921; /* Cor para descanso visual */
+            --msg-in: #ffffff; --msg-out: #dcf8c6;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); margin: 0; padding: 0; overflow-x: hidden; }
 
-        /* TELA INICIAL: MATÉRIAS */
-        #home-screen { padding: 20px; }
-        .grid-materias { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .materia-btn { background: #1a1a1a; border: 1px solid #333; padding: 20px; border-radius: 15px; color: white; text-align: center; }
+        /* HEADER E UI */
+        header { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
+        .dots-btn { font-size: 18px; cursor: pointer; padding: 5px; }
 
-        /* JANELAS SISTEMA */
-        .win { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--branco); color: #000; z-index: 2000; flex-direction: column; }
-        .header-win { background: var(--preto); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        /* JANELA CHAT COM AURA PREMIUM */
+        .win-chat { 
+            display: none; position: fixed; top: 10%; left: 5%; right: 5%; height: 75vh; 
+            background: var(--chat-bg); border-radius: 15px; flex-direction: column; z-index: 2000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); overflow: hidden;
+        }
+        .premium-aura { border: 2px solid var(--ouro); box-shadow: 0 0 15px var(--ouro), inset 0 0 10px rgba(255,215,0,0.3); }
 
-        /* PERFIL X / CONFIGURAÇÕES */
-        .profile-content { flex: 1; overflow-y: auto; background: var(--branco); }
-        .banner-x { height: 120px; background: var(--azul); cursor: pointer; position: relative; }
-        .pfp-container { position: relative; margin-top: -50px; margin-left: 20px; width: 100px; }
-        .pfp-x { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--branco); object-fit: cover; }
-        .crown-master { position: absolute; top: -35px; left: 10px; font-size: 50px; display: none; filter: drop-shadow(0 0 5px gold); }
-        .status-badge { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        /* CHAT */
+        .chat-messages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 8px; background: var(--chat-bg); }
+        .msg-bubble { padding: 8px 12px; border-radius: 12px; color: #000; max-width: 80%; font-size: 14px; position: relative; }
+        .msg-sys { background: rgba(0,0,0,0.3); color: var(--ouro); font-size: 11px; text-align: center; border-radius: 5px; padding: 5px; width: 90%; align-self: center; }
 
-        /* CHAT BRANCO E PRETO */
-        .chat-container { flex: 1; display: flex; flex-direction: column; background: #e5e5e5; }
-        .chat-messages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .msg-row { display: flex; gap: 10px; align-items: flex-end; }
-        .msg-pfp { width: 35px; height: 35px; border-radius: 50%; }
-        .msg-bubble { background: white; padding: 10px; border-radius: 15px 15px 15px 0; max-width: 70%; box-shadow: 0 1px 2px rgba(0,0,0,0.1); color: black;}
-        .msg-name { font-weight: bold; font-size: 12px; margin-bottom: 3px; display: block; }
+        /* CALCULADORA COMPACTA */
+        .calc-box { 
+            display: none; position: fixed; top: 20%; left: 15%; width: 70%; 
+            background: #1a1a1a; border: 1px solid #444; border-radius: 10px; padding: 10px; z-index: 3000;
+        }
+        .calc-screen { width: 92%; background: #000; color: #0f0; text-align: right; padding: 10px; margin-bottom: 5px; font-family: monospace; }
+        .calc-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .calc-btns button { padding: 10px; border: none; border-radius: 5px; background: #333; color: white; }
 
-        /* CONFIGS DO GRUPO (GESTÃO) */
-        .group-manage { padding: 20px; }
-        .config-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #ddd; }
+        /* PERFIL */
+        .pfp-small { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--preto); }
+        .crown-small { position: absolute; top: -15px; left: 25px; font-size: 25px; display: none; }
 
-        /* WIDGETS */
-        #calc-win { background: #000; color: white; }
-        .search-win { background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); height: 80px; top: 10px; bottom: auto; border-radius: 40px; margin: 0 10px; border: 1px solid #ddd; }
+        /* INPUT AREA */
+        .footer-input { background: #1c2128; padding: 10px; display: flex; align-items: center; gap: 8px; }
+        .in-txt { flex: 1; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 20px; }
 
-        /* PREMIUM EFFECTS */
-        .fire-name { background: linear-gradient(to top, #ff4500, #ffa500); -webkit-background-clip: text; color: transparent; font-weight: bold; animation: burn 0.5s infinite alternate; }
-        @keyframes burn { from { text-shadow: 0 0 5px orange; } to { text-shadow: 0 0 15px red; } }
-
-        /* FOOTER INPUT */
-        .chat-footer { background: white; padding: 10px; display: flex; align-items: center; gap: 10px; border-top: 1px solid #ddd; }
-        .input-text { flex: 1; border: 1px solid #ddd; padding: 12px; border-radius: 25px; outline: none; }
-        .btn-circle { width: 45px; height: 45px; border-radius: 50%; border: none; background: var(--azul); color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .fire-name { color: var(--ouro); font-weight: bold; text-shadow: 0 0 5px orange; }
     </style>
 </head>
 <body>
 
-    <div id="home-screen">
-        <header style="display: flex; justify-content: space-between; align-items: center;">
-            <h2 style="color: var(--azul);">Estudo Social</h2>
-            <div onclick="openWin('win-profile')" style="cursor:pointer; font-size: 24px;">⋮</div>
-        </header>
-        <div id="status-display">
-            <span class="status-badge" style="background: lime;"></span> Online | ID: 22
+    <header>
+        <div>
+            <strong style="color: var(--azul);">Estudo Social</strong><br>
+            <small id="meu-id">ID: 22</small>
         </div>
-        
-        <div class="grid-materias">
-            <div class="materia-btn" onclick="openMateria('Matemática')">Matemática 📐</div>
-            <div class="materia-btn" onclick="openMateria('Inglês')">Inglês 🇺🇸</div>
-            <div class="materia-btn" onclick="openMateria('História')">História 📜</div>
-            <div class="materia-btn" onclick="openMateria('Geografia')">Geografia 🌍</div>
-            <div class="materia-btn" onclick="openMateria('Espanhol')">Espanhol 🇪🇸</div>
-            <div class="materia-btn" onclick="openMateria('Redação')">Redação ✍️</div>
+        <div class="dots-btn" onclick="openWin('win-profile')">⋮</div>
+    </header>
+
+    <div style="padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div onclick="alert('Playlist: Matemática')" style="background:#161b22; padding:20px; border-radius:10px; text-align:center;">Matemática</div>
+        <div onclick="openWin('win-create-group')" style="background:var(--azul); padding:20px; border-radius:10px; text-align:center;">+ Criar Grupo</div>
+    </div>
+
+    <div id="win-profile" class="win-chat" style="display: none; background: #0d1117; color: white;">
+        <div style="padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid #333;">
+            <span>Configurações</span>
+            <button onclick="closeWin('win-profile')">✕</button>
+        </div>
+        <div style="padding: 20px; overflow-y: auto;">
+            <div style="position: relative; width: 80px;">
+                <span id="u-crown" class="crown-small">👑</span>
+                <img id="u-pfp" src="https://via.placeholder.com/80" class="pfp-small" onclick="document.getElementById('in-pfp').click()">
+            </div>
+            <div style="margin-top: 10px;">
+                <label>Seu @:</label><br>
+                <input type="text" id="u-at" value="@Dono_22" style="background:#000; color:white; border:1px solid #444; width:90%;"><br><br>
+                <label>Sua Bio:</label><br>
+                <textarea id="u-bio" style="background:#000; color:white; border:1px solid #444; width:90%;">Dono do Site</textarea>
+                <p><strong>Meu ID: 22</strong></p>
+            </div>
+            <hr>
+            <button onclick="loginGoogle()" style="width: 100%; padding: 10px; background: white; color: black; border-radius: 5px;">Entrar com Google G</button><br><br>
+            <button onclick="buyPremium()" style="width: 100%; padding: 10px; background: var(--ouro); color: black; border-radius: 5px;">Comprar Premium 👑</button>
+            <br><br>
+            <button onclick="toggleCalc()">Calculadora Compacta</button>
         </div>
     </div>
 
-    <div id="win-profile" class="win">
-        <div class="header-win"><span>Configurações Pessoais</span><button onclick="closeWin('win-profile')">✕</button></div>
-        <div class="profile-content">
-            <div class="banner-x" id="u-banner" onclick="document.getElementById('in-banner').click()"></div>
-            <div class="pfp-container">
-                <span id="u-crown" class="crown-master">👑</span>
-                <img id="u-pfp" src="https://via.placeholder.com/100" class="pfp-x" onclick="document.getElementById('in-pfp').click()">
-            </div>
-            <div style="padding: 15px;">
-                <h3>@Dono_do_Site <small>ID: 22</small></h3>
-                <div style="color: #666; font-size: 14px; margin-bottom: 10px;">Bio: Criador e Dono do Portal.</div>
-                <div id="u-last-seen">Último visto: agora mesmo</div>
-                <hr>
-                <button onclick="activatePremium()" style="width: 100%; padding: 15px; background: gold; border: none; border-radius: 30px; font-weight: bold; margin-bottom: 15px;">COMPRAR PREMIUM 👑</button>
-                
-                <div class="config-item"><span>Modo Online</span> <input type="checkbox" checked onchange="toggleStatus(this)"></div>
-                <div class="config-item" onclick="toggleWidget('calc-win')"><span>Ativar Calculadora</span> ⚙️</div>
-                <div class="config-item" onclick="toggleWidget('search-win')"><span>Ativar Pesquisa</span> 🔍</div>
-                <div class="config-item" onclick="addPerson()"><span>Adicionar Pessoa por ID</span> 👤</div>
-                <div class="config-item" onclick="alert('Limpando Memória...')"><span>Limpar Cache/Memória</span> 🧹</div>
-                <div class="config-item" onclick="alert('Comunidade Carregando...')"><span>Comunidade</span> 👥</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="win-chat" class="win">
-        <div class="header-win" style="background: #fff; color: #000; border-bottom: 1px solid #ddd;">
-            <div onclick="openWin('win-group-info')" style="cursor:pointer">
-                <strong id="g-title">Grupo de Estudos #27</strong><br>
-                <small id="g-typing" style="color: var(--azul);"></small>
+    <div id="win-chat" class="win-chat">
+        <div style="background: #1c2128; padding: 12px; display: flex; justify-content: space-between; align-items: center; color: white;">
+            <div onclick="openWin('win-group-manage')">
+                <strong id="g-display-name">Grupo #27</strong><br>
+                <small id="typing-status" style="color:var(--azul); font-size:10px;"></small>
             </div>
             <button onclick="closeWin('win-chat')">✕</button>
         </div>
-        <div class="chat-container">
-            <div class="chat-messages" id="chat-box">
-                </div>
-            <div class="chat-footer">
-                <button class="btn-circle" onclick="document.getElementById('in-chat-img').click()">🖼️</button>
-                <button class="btn-circle" onclick="recordAudio()">🎤</button>
-                <input type="text" id="chat-in" class="input-text" placeholder="Escreva..." oninput="isTyping()">
-                <button onclick="sendMsg()" style="background:none; border:none; font-size:30px; color:var(--azul);">➡️</button>
-            </div>
+        <div class="chat-messages" id="chat-box">
+            <div class="msg-sys">Memória Ativada: Novos membros verão o histórico completo.</div>
+        </div>
+        <div class="footer-input">
+            <button onclick="document.getElementById('in-chat-file').click()" style="background:none; border:none; font-size:20px;">🖼️</button>
+            <button id="btn-audio" onclick="toggleAudio()" style="background:none; border:none; font-size:20px;">🎤</button>
+            <input type="text" id="chat-in" class="in-txt" placeholder="Mensagem..." oninput="isTyping()">
+            <button onclick="sendMsg()" style="background:none; border:none; color:var(--azul); font-size:22px;">➡️</button>
         </div>
     </div>
 
-    <div id="win-group-info" class="win">
-        <div class="header-win"><span>Gestão do Grupo</span><button onclick="closeWin('win-group-info')">✕</button></div>
-        <div class="group-manage">
-            <div style="text-align:center;">
-                <img id="g-pfp" src="https://via.placeholder.com/100" class="pfp-x" onclick="document.getElementById('in-g-pfp').click()">
-                <h3>Configurações #27</h3>
-                <textarea id="g-desc" placeholder="Descrição do grupo..." style="width:100%; border-radius:10px; padding:10px;"></textarea>
-            </div>
-            <hr>
-            <h4>Participantes</h4>
-            <div id="member-list">
-                <div class="config-item"><span>👑 Você (Dono #27)</span> <small class="fire-name">ATIVO</small></div>
-                <div class="config-item"><span>👤 Aluno ID: 1045</span> <button onclick="banUser('1045')">Banir</button></div>
-            </div>
-            <hr>
-            <div class="config-item"><span>Só Adm envia msg</span> <input type="checkbox"></div>
-            <div class="config-item"><span>Grupo Trancado</span> <input type="checkbox" id="g-lock"></div>
-            <div class="config-item"><span>Horário de Funcionamento</span> 
-                <div style="font-size:10px">
-                    Abre: <input type="time" value="08:00"> 
-                    Fecha: <input type="time" value="22:00">
-                </div>
-            </div>
-            <button onclick="alert('Grupo Apagado!')" style="color:red; width:100%; margin-top:20px; background:none; border:1px solid red; padding:10px; border-radius:10px;">APAGAR GRUPO</button>
+    <div id="calc-win" class="calc-box">
+        <input type="text" id="calc-screen" class="calc-screen" readonly>
+        <div class="calc-btns">
+            <button onclick="cVal('7')">7</button><button onclick="cVal('8')">8</button><button onclick="cVal('9')">9</button><button onclick="cVal('/')">/</button>
+            <button onclick="cVal('4')">4</button><button onclick="cVal('5')">5</button><button onclick="cVal('6')">6</button><button onclick="cVal('*')">*</button>
+            <button onclick="cVal('1')">1</button><button onclick="cVal('2')">2</button><button onclick="cVal('3')">3</button><button onclick="cVal('-')">-</button>
+            <button onclick="cVal('0')">0</button><button onclick="cVal('C')">C</button><button onclick="cRes()">=</button><button onclick="cVal('+')">+</button>
         </div>
+        <button onclick="toggleCalc()" style="width:100%; margin-top:5px; font-size:10px;">Fechar</button>
     </div>
 
-    <div id="calc-win" class="win" style="background:#000;">
-        <div class="header-win"><span>Calculadora Black</span><button onclick="toggleWidget('calc-win')">✕</button></div>
-        <div style="padding:20px; flex:1;">
-            <input type="text" id="calc-res" readonly style="width:100%; height:100px; background:#111; color:white; font-size:40px; text-align:right; border:none; padding:10px;">
-            <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-top:20px;">
-                <button class="btn-circle" style="background:#333" onclick="calc('7')">7</button>
-                <button class="btn-circle" style="background:#333" onclick="calc('8')">8</button>
-                <button class="btn-circle" style="background:#333" onclick="calc('9')">9</button>
-                <button class="btn-circle" style="background:orange" onclick="calc('/')">/</button>
-                <button class="btn-circle" style="background:#333" onclick="calc('C')">C</button>
-                <button class="btn-circle" style="background:orange" onclick="evalC()">=</button>
-            </div>
+    <div id="win-group-manage" class="win-chat" style="display:none; background:#fff; color:#000;">
+        <div style="padding:15px; border-bottom:1px solid #ddd; display:flex; justify-content:space-between;">
+            <strong>Gestão do Grupo</strong>
+            <button onclick="closeWin('win-group-manage')">✕</button>
         </div>
-    </div>
-
-    <div id="search-win" class="win search-win">
-        <div style="display:flex; padding:15px; align-items:center;">
-            <input type="text" id="s-q" placeholder="Pesquisar estudos..." style="flex:1; background:none; border:none; outline:none; font-size:18px;">
-            <button onclick="window.open('https://google.com/search?q='+document.getElementById('s-q').value)" style="background:none; border:none; font-size:20px;">🔍</button>
-            <button onclick="toggleWidget('search-win')" style="background:none; border:none; margin-left:10px;">✕</button>
+        <div style="padding:15px;">
+            <p>Membros: 1/5000</p>
+            <button onclick="toggleLock('somente-adm')">Apenas ADMs podem falar</button><br><br>
+            <button onclick="toggleLock('trancado')">Trancar Grupo</button><br><br>
+            <button onclick="alert('Membro Adicionado pelo ID!')">Adicionar por ID</button>
         </div>
     </div>
 
     <input type="file" id="in-pfp" hidden onchange="readImg(this, 'u-pfp')">
-    <input type="file" id="in-banner" hidden onchange="readBanner(this, 'u-banner')">
-    <input type="file" id="in-g-pfp" hidden onchange="readImg(this, 'g-pfp')">
-    <input type="file" id="in-chat-img" hidden onchange="sendImg(this)">
+    <input type="file" id="in-chat-file" hidden onchange="sendImg(this)">
 
-    <div id="book-icon" onclick="openWin('win-chat')" style="position:fixed; bottom:20px; right:20px; font-size:50px; z-index:1000;">📖</div>
+    <div onclick="openWin('win-chat')" style="position:fixed; bottom:20px; right:20px; font-size:40px;">📖</div>
 
     <script>
         let isPremium = false;
+        let isRecording = false;
+        let msgs = []; // Simulação de mensagens salvas
         let typingTimer;
 
         function openWin(id) { document.getElementById(id).style.display = 'flex'; }
         function closeWin(id) { document.getElementById(id).style.display = 'none'; }
-        function toggleWidget(id) { 
-            let w = document.getElementById(id);
-            w.style.display = (w.style.display == 'flex' || w.style.display == 'block') ? 'none' : 'flex';
+        function toggleCalc() { 
+            let c = document.getElementById('calc-win');
+            c.style.display = c.style.display === 'block' ? 'none' : 'block';
         }
 
-        function activatePremium() {
+        function buyPremium() {
             isPremium = true;
             document.getElementById('u-crown').style.display = 'block';
-            document.getElementById('u-crown').style.fontSize = '60px'; // Coroa Maior
-            alert("👑 Premium Ativado! ID 22 reconhecido.");
+            document.getElementById('win-chat').classList.add('premium-aura');
+            alert("Premium Ativado! Aura amarela e Coroa liberadas.");
         }
 
-        function readImg(input, id) {
-            if (input.files && input.files[0]) {
-                let r = new FileReader();
-                r.onload = e => document.getElementById(id).src = e.target.result;
-                r.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function readBanner(input, id) {
-            if (input.files && input.files[0]) {
-                let r = new FileReader();
-                r.onload = e => document.getElementById(id).style.backgroundImage = `url(${e.target.result})`;
-                r.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function isTyping() {
-            let s = document.getElementById('g-typing');
-            s.innerText = "Lucas está escrevendo...";
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(() => s.innerText = "", 2000);
-        }
+        function loginGoogle() { alert("Conectando à conta Google..."); }
 
         function sendMsg() {
             let input = document.getElementById('chat-in');
             if(!input.value) return;
-            if(document.getElementById('g-lock').checked) return alert("Grupo Trancado!");
-            
             let box = document.getElementById('chat-box');
-            let nameStyle = isPremium ? 'fire-name' : '';
-            let pfp = document.getElementById('u-pfp').src;
-
-            box.innerHTML += `
-                <div class="msg-row">
-                    <img src="${pfp}" class="msg-pfp">
-                    <div class="msg-bubble">
-                        <span class="msg-name ${nameStyle}">Dono #27</span>
-                        ${input.value}
+            let nameClass = isPremium ? 'fire-name' : '';
+            
+            let html = `
+                <div style="align-self: flex-end; display:flex; flex-direction:column; align-items:flex-end;">
+                    <div class="msg-bubble" style="background:var(--msg-out)">
+                        <small class="${nameClass}">Criador #27</small><br>${input.value}
                     </div>
                 </div>`;
+            box.innerHTML += html;
             input.value = "";
             box.scrollTop = box.scrollHeight;
         }
 
-        function recordAudio() {
-            document.getElementById('g-typing').innerText = "Gravando áudio HD...";
-            setTimeout(() => {
-                document.getElementById('g-typing').innerText = "";
-                document.getElementById('chat-box').innerHTML += `<div class="msg-row"><div class="msg-bubble">🎵 Áudio HD Enviado</div></div>`;
-            }, 3000);
+        function sendImg(input) {
+            if (input.files && input.files[0]) {
+                let r = new FileReader();
+                r.onload = e => {
+                    document.getElementById('chat-box').innerHTML += `
+                        <div style="align-self: flex-end;">
+                            <img src="${e.target.result}" style="max-width:200px; border-radius:10px;">
+                        </div>`;
+                };
+                r.readAsDataURL(input.files[0]);
+            }
         }
 
-        function banUser(id) {
-            alert(`Você baniu o usuário ${id}. Ele não pode mais voltar!`);
-            // Simulação de remoção
-            event.target.parentElement.remove();
+        function toggleAudio() {
+            let btn = document.getElementById('btn-audio');
+            let status = document.getElementById('typing-status');
+            if(!isRecording) {
+                isRecording = true;
+                btn.style.color = "red";
+                status.innerText = "Dono está gravando áudio...";
+            } else {
+                isRecording = false;
+                btn.style.color = "white";
+                status.innerText = "";
+                document.getElementById('chat-box').innerHTML += `<div style="align-self:flex-end;"><div class="msg-bubble" style="background:#dcf8c6">🎵 Áudio HD Enviado</div></div>`;
+            }
         }
 
-        function openMateria(nome) {
-            alert(`Abrindo Matéria: ${nome}\nPlaylist YouTube Gratuita disponível em: [Link Externo]`);
+        function isTyping() {
+            document.getElementById('typing-status').innerText = "Dono está escrevendo...";
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => document.getElementById('typing-status').innerText = "", 1500);
         }
 
-        function calc(v) { 
-            let d = document.getElementById('calc-res');
-            if(v == 'C') d.value = ""; else d.value += v;
-        }
-        function evalC() { 
-            try { document.getElementById('calc-res').value = eval(document.getElementById('calc-res').value); } catch { document.getElementById('calc-res').value = "Erro"; }
-        }
-
-        function toggleStatus(cb) {
-            let dot = document.querySelector('.status-badge');
-            dot.style.background = cb.checked ? 'lime' : 'red';
+        function toggleLock(tipo) {
+            let box = document.getElementById('chat-box');
+            if(tipo === 'somente-adm') {
+                box.innerHTML += `<div class="msg-sys">Adm @Dono_22 alterou as configurações do grupo para somente adms podem mandar mensagem.</div>`;
+            } else {
+                box.innerHTML += `<div class="msg-sys">O grupo está trancado, somente os adm podem remover essa função.</div>`;
+            }
         }
 
-        function addPerson() {
-            let id = prompt("Digite o ID ou Nome:");
-            if(id) alert(`Usuário ${id} adicionado à sua lista.`);
+        function readImg(i, id) {
+            if (i.files && i.files[0]) {
+                let r = new FileReader();
+                r.onload = e => document.getElementById(id).src = e.target.result;
+                r.readAsDataURL(i.files[0]);
+            }
         }
+
+        // Calculadora Lógica
+        function cVal(v) { let s = document.getElementById('calc-screen'); if(v==='C') s.value=""; else s.value+=v; }
+        function cRes() { try { let s = document.getElementById('calc-screen'); s.value = eval(s.value); } catch { alert("Erro"); } }
     </script>
 </body>
 </html>
