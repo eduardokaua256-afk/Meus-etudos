@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
+<head> <div class="user-header-profile" onclick="triggerProfileUpdate()">
+    <span id="header-user-name">@User</span> <div class="profile-circle">
+        <img id="header-pfp" src="https://via.placeholder.com/40" alt="Profile">
+    </div>
+</div>
+
+<input type="file" id="input-galeria-header" hidden accept="image/*" onchange="updateProfileFromHeader(this)">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Estudo Social Master v16</title>
@@ -48,6 +55,40 @@
         .float-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: rgba(29, 161, 242, 0.3); border: 1px solid var(--azul-brilhante); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 1000; backdrop-filter: blur(5px); }
         .last-seen { font-size: 10px; color: #bbb; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .user-header-profile {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+#header-user-name {
+    font-size: 10px;
+    color: var(--bright-blue);
+    margin-bottom: 2px;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(29, 161, 242, 0.5);
+}
+
+.profile-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    overflow: hidden;
+    background: #111;
+}
+
+.profile-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
     </style>
 </head>
 <body onload="initApp()">
@@ -311,6 +352,45 @@
         }
 
         function triggerFile(id) { document.getElementById(id).click(); }
+        // Função para disparar o clique no input de arquivo
+function triggerProfileUpdate() {
+    document.getElementById('input-galeria-header').click();
+}
+
+// Função para ler a imagem da galeria e atualizar nome/foto
+function updateProfileFromHeader(input) {
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        
+        reader.onload = function(e) {
+            // 1. Atualiza a foto no cabeçalho
+            document.getElementById('header-pfp').src = e.target.result;
+            // 2. Atualiza a foto na janela de perfil principal (sincronização)
+            document.getElementById('p-img').src = e.target.result;
+            
+            // 3. Pede o novo nome de usuário
+            let novoNome = prompt("Enter your username:");
+            if (novoNome) {
+                document.getElementById('header-user-name').innerText = "@" + novoNome;
+                document.getElementById('p-name-disp').innerText = "@" + novoNome;
+                localStorage.setItem('saved_username', novoNome);
+            }
+            
+            // 4. Salva a foto no banco de dados local (LocalStorage)
+            localStorage.setItem('pfp', e.target.result);
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// ADICIONE ISSO DENTRO DA SUA FUNÇÃO initApp() PARA CARREGAR AO ABRIR:
+// let savedName = localStorage.getItem('saved_username');
+// if(savedName) {
+//    document.getElementById('header-user-name').innerText = "@" + savedName;
+//    document.getElementById('p-name-disp').innerText = "@" + savedName;
+// }
+
     </script>
 </body>
 </html>
