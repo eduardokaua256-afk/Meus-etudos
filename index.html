@@ -3,21 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Estudos</title>
+    <title>Central de Estudos</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; padding: 20px; background: #f4f4f4; }
-        header { background: #333; color: white; padding: 10px; text-align: center; border-radius: 8px; }
-        .card { background: white; padding: 15px; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { color: #007bff; }
+        :root {
+            --preto: #1a1a1a;
+            --branco: #ffffff;
+            --azul: #007bff;
+            --cinza: #f4f4f4;
+        }
+
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: var(--preto); 
+            color: var(--branco); 
+            margin: 0; padding: 20px;
+            transition: font-size 0.3s;
+        }
+
+        /* Header e Menu */
+        header { 
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--azul); padding: 15px; border-radius: 12px; margin-bottom: 20px;
+        }
+
+        .dots-menu { cursor: pointer; font-size: 24px; font-weight: bold; }
+
+        /* Configurações (Escondido por padrão) */
+        #settings-panel {
+            display: none; background: var(--branco); color: var(--preto);
+            padding: 15px; border-radius: 8px; margin-bottom: 20px;
+        }
+
+        /* Cards de Conteúdo */
+        .card { 
+            background: var(--branco); color: var(--preto); 
+            padding: 20px; border-radius: 12px; margin-bottom: 15px;
+            border-left: 8px solid var(--azul);
+        }
+
+        /* Ícone do Livro Flutuante e Janela */
+        #book-icon {
+            position: fixed; bottom: 20px; right: 20px;
+            font-size: 40px; cursor: move; z-index: 1000;
+            filter: drop-shadow(0 0 10px var(--azul));
+            touch-action: none; /* Necessário para arrastar no celular */
+        }
+
+        #chat-window {
+            display: none; position: fixed; bottom: 80px; right: 20px;
+            width: 300px; height: 400px; background: var(--branco);
+            color: var(--preto); border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            flex-direction: column; overflow: hidden; z-index: 1001;
+        }
+
+        .chat-header { background: var(--azul); color: white; padding: 10px; font-weight: bold; }
+        .chat-content { flex: 1; padding: 10px; overflow-y: auto; font-size: 14px; }
+        .chat-input { display: flex; border-top: 1px solid #ddd; }
+        .chat-input input { flex: 1; border: none; padding: 10px; }
+        .chat-input button { background: var(--azul); color: white; border: none; padding: 10px; }
+
+        button.btn-group { width: 100%; margin-top: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <header><h1>Central de Estudos</h1></header>
-    
-    <div class="card">
-        <h2>Matéria 1</h2>
-        <p>Anote aqui seus resumos ou links importantes.</p>
-        <a href="#">Link para PDF</a>
+
+    <header>
+        <span>Central de Estudos</span>
+        <div class="dots-menu" onclick="toggleSettings()">⋮</div>
+    </header>
+
+    <div id="settings-panel">
+        <strong>Configurações</strong><br>
+        Tamanho da Letra: 
+        <button onclick="changeFontSize('small')">A-</button>
+        <button onclick="changeFontSize('large')">A+</button>
+        <br><br>
+        Qualidade do Texto: <button onclick="improveQuality()">Alta Nitidez</button>
     </div>
+
+    <div class="card">
+        <h2>Matéria 1: Matemática</h2>
+        <p>Resumos de álgebra e geometria.</p>
+        <a href="#" style="color: var(--azul)">Abrir PDF</a>
+    </div>
+
+    <div id="book-icon" onclick="toggleChat()">📖</div>
+
+    <div id="chat-window">
+        <div class="chat-header">Grupos de Estudo</div>
+        <div class="chat-content" id="chat-box">
+            <p><strong>Sistema:</strong> Bem-vindo ao grupo de estudos!</p>
+            <hr>
+            <input type="text" id="group-name" placeholder="Nome do novo grupo...">
+            <button class="btn-group" onclick="createGroup()">Criar Grupo</button>
+            <div id="groups-list"></div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="msg-input" placeholder="Mensagem ou link da foto...">
+            <button onclick="sendMsg()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        // Função Abrir/Fechar Configurações
+        function toggleSettings() {
+            const panel = document.getElementById('settings-panel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Tamanho da Letra
+        function changeFontSize(type) {
+            document.body.style.fontSize = type === 'large' ? '22px' : '16px';
+        }
+
+        // Qualidade de Texto (Filtro de contraste)
+        function improveQuality() {
+            document.body.style.textShadow = "0.5px 0.5px 0px #000";
+            alert("Nitidez aumentada!");
+        }
+
+        // Abrir/Fechar Janela do Livro
+        function toggleChat() {
+            const chat = document.getElementById('chat-window');
+            chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Simular Envio de Mensagem
+        function sendMsg() {
+            const input = document.getElementById('msg-input');
+            if(input.value) {
+                const p = document.createElement('p');
+                p.innerHTML = `<b>Você:</b> ${input.value}`;
+                document.getElementById('chat-box').appendChild(p);
+                input.value = '';
+            }
+        }
+
+        // Criar Grupo
+        function createGroup() {
+            const name = document.getElementById('group-name').value;
+            if(name) {
+                const div = document.createElement('div');
+                div.innerHTML = `📁 Grupo: ${name}`;
+                div.style.padding = "5px";
+                div.style.borderBottom = "1px solid #eee";
+                document.getElementById('groups-list').appendChild(div);
+                document.getElementById('group-name').value = '';
+            }
+        }
+
+        // Lógica simples para arrastar o ícone no celular
+        const icon = document.getElementById('book-icon');
+        icon.addEventListener('touchmove', function(e) {
+            var touchLocation = e.targetTouches[0];
+            icon.style.left = touchLocation.pageX + 'px';
+            icon.style.top = touchLocation.pageY + 'px';
+        });
+    </script>
 </body>
 </html>
