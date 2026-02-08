@@ -78,13 +78,44 @@
                 <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer; object-fit: cover; background: #000;" onclick="triggerFile('in-pfp')">
             </div>
             <h2 id="p-name" onclick="editName()" style="margin:10px 0; cursor:pointer;">@Usuario</h2>
-            <div id="p-status"><span style="width:10px; height:10px; border-radius:50%; background:#00ff00; display:inline-block; margin-right:5px;"></span>Online</div>
-            <p style="font-size:12px; opacity:0.6;">ID: <span id="my-id-display">22</span></p>
-            
-            <div style="padding:20px; display:flex; flex-direction:column; gap:10px;">
-                <button id="btn-premium" onclick="buyPremium()" style="background:var(--ouro); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px; cursor:pointer;">OBTER PREMIUM 👑</button>
-                <button onclick="toggleCalc()" style="background:#222; color:white; border:none; padding:10px; border-radius:8px;">Calculadora Científica</button>
-                <button onclick="clearCache()" style="color:var(--vermelho); background:none; border:none; font-size:12px; cursor:pointer;">Limpar Cache e Memória</button>
+            <center>
+    <div style="position:relative; width:90px; margin-top:-45px;">
+        <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none; z-index:10;">👑</span>
+        <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer; object-fit: cover; background: #000;" onclick="triggerFile('in-pfp')">
+    </div>
+    <h2 id="p-name" onclick="editName()" style="margin:10px 0; cursor:pointer;">@Usuario</h2>
+
+    <div id="status-box" style="margin-bottom: 15px;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <div id="status-box" style="margin-bottom: 15px;">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <span id="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #00ff00;"></span>
+        <span id="status-text" style="font-weight: bold; color: #00ff00;">Online</span>
+    </div>
+    <div style="color: white; font-size: 11px; margin-top: 4px;">
+        visto por último hoje às <span id="last-time" style="color: white;">--:--</span>
+    </div>
+</div>
+
+<div style="display: flex; gap: 5px; padding: 0 20px 10px 20px;">
+    <button onclick="setStatus('online')" style="flex:1; background:#004400; color:#0f0; border:1px solid #0f0; padding:5px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR ONLINE</button>
+    <button onclick="setStatus('offline')" style="flex:1; background:#440000; color:#f00; border:1px solid #f00; padding:5px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR OFFLINE</button>
+</div>
+  
+    </div>
+
+    <div style="padding:0 20px; display:flex; flex-direction:column; gap:10px;">
+        <div style="display: flex; gap: 5px;">
+            <button onclick="setStatus('online')" style="flex:1; background:#004400; color:#0f0; border:1px solid #0f0; padding:8px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR ONLINE</button>
+            <button onclick="setStatus('offline')" style="flex:1; background:#440000; color:#f00; border:1px solid #f00; padding:8px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR OFFLINE</button>
+        </div>
+        
+        <button id="btn-premium" onclick="buyPremium()" style="background:var(--ouro); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px; cursor:pointer;">OBTER PREMIUM 👑</button>
+        <button onclick="toggleCalc()" style="background:#222; color:white; border:none; padding:10px; border-radius:8px;">Calculadora Científica</button>
+        <button onclick="clearCache()" style="color:var(--vermelho); background:none; border:none; font-size:12px; cursor:pointer; margin-top:10px;">Limpar Cache e Memória</button>
+    </div>
+</center>
+
             </div>
         </center>
     </div>
