@@ -362,30 +362,84 @@ function togglePlus() {
         cursor: pointer; text-align: right; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         font-weight: bold;
     }
-</style>
+</script>
 
-<div id="meuMenuOpcoes" class="menu-central">
-    <div class="item-menu" onclick="alert('Criando Grupo...'); acaoBotao()">👥 Criar Grupo</div>
-    <div class="item-menu" onclick="openWin('win-profile'); acaoBotao()">⚙️ Configurações</div>
+    <div id="win-criar-grupo-v2" style="display: none; width: 340px; height: 200px; top: 50%; left: 50%; transform: translate(-50%, -50%); position: fixed; z-index: 999999; background: #121212; border: 2px solid #007bff; border-radius: 20px; padding: 25px; box-shadow: 0 0 30px rgba(0,0,0,1); font-family: sans-serif;">
+    
+    <button onclick="document.getElementById('win-criar-grupo-v2').style.display='none'" style="position: absolute; right: 15px; top: 10px; background: none; border: none; color: #666; font-size: 22px; cursor: pointer;">&times;</button>
+    
+    <h3 style="color: white; margin-top: 0; margin-bottom: 25px;">Criar Grupo</h3>
+
+    <div style="display: flex; gap: 15px; align-items: center; position: relative;">
+        <div onclick="alert('Selecionar foto...')" style="width: 70px; height: 70px; border-radius: 50%; background: #1e1e1e; border: 2px dashed #007bff; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #007bff; flex-shrink: 0;">
+            <span style="font-size: 24px;">📷</span>
+        </div>
+        
+        <input type="text" placeholder="Nome do grupo..." style="flex: 1; height: 45px; background: #1e1e1e; border: 1px solid #333; color: white; padding: 0 15px; border-radius: 12px; outline: none; font-size: 16px;">
+    </div>
+
+    <button onclick="alert('Grupo criado!'); document.getElementById('win-criar-grupo-v2').style.display='none'" style="position: absolute; bottom: -25px; right: 20px; width: 60px; height: 60px; background: #007bff; color: white; border-radius: 50%; border: 4px solid #121212; font-size: 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,123,255,0.5);">
+        ✅
+    </button>
 </div>
 
-<button id="meuBotaoPlus" class="botao-central" onclick="acaoBotao()">+</button>
+    <style>
+    /* Estilos do Botão e Menu */
+    .botao-flutuante { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #007bff; color: white; border-radius: 50%; border: none; font-size: 30px; cursor: pointer; z-index: 999999; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.3s; }
+    .menu-opcoes { position: fixed; bottom: 100px; right: 30px; display: none; flex-direction: column; gap: 10px; z-index: 999999; }
+    .opcao-item { background: #1a1a1a; color: white; border: 1px solid #007bff; padding: 12px 20px; border-radius: 25px; font-size: 14px; cursor: pointer; text-align: right; }
+    
+    /* Janela de Criar Grupo */
+    .janela-grupo { display: none; width: 340px; top: 50%; left: 50%; transform: translate(-50%, -50%); position: fixed; z-index: 1000000; background: #121212; border: 2px solid #007bff; border-radius: 20px; padding: 25px; box-shadow: 0 0 30px rgba(0,0,0,1); font-family: sans-serif; }
+    
+    /* Botão ✅ Redondo e Azul */
+    .btn-check-azul { position: absolute; bottom: -25px; right: 20px; width: 60px; height: 60px; background: #007bff; color: white; border-radius: 50%; border: 4px solid #121212; font-size: 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,123,255,0.6); }
+</style>
+
+<div id="menuPrincipal" class="menu-opcoes">
+    <div class="opcao-item" onclick="abrirJanelaGrupo()">👥 Criar Grupo</div>
+    <div class="opcao-item" onclick="openWin('win-profile'); fecharMenuGeral()">⚙️ Configurações</div>
+</div>
+
+<button id="btnPrincipal" class="botao-flutuante" onclick="toggleMenuGeral()">+</button>
+
+<div id="janelaCriar" class="janela-grupo">
+    <button onclick="fecharJanelaGrupo()" style="position: absolute; right: 15px; top: 10px; background: none; border: none; color: #666; font-size: 22px; cursor: pointer;">&times;</button>
+    <h3 style="color: white; margin-top: 0;">Criar Grupo</h3>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <div onclick="alert('Escolher foto...')" style="width: 70px; height: 70px; border-radius: 50%; background: #1e1e1e; border: 2px dashed #007bff; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #007bff;"><span style="font-size: 24px;">📷</span></div>
+        <input type="text" placeholder="Nome do grupo..." style="flex: 1; height: 45px; background: #1e1e1e; border: 1px solid #333; color: white; padding: 0 15px; border-radius: 12px; outline: none;">
+    </div>
+    <button class="btn-check-azul" onclick="alert('Grupo Criado!'); fecharJanelaGrupo()">✅</button>
+</div>
 
 <script>
-function acaoBotao() {
-    var menu = document.getElementById('meuMenuOpcoes');
-    var btn = document.getElementById('meuBotaoPlus');
-    
-    // Se estiver escondido, mostra. Se não, esconde.
-    if (menu.style.display === 'none' || menu.style.display === '') {
+// FUNÇÕES DE CONTROLE
+function toggleMenuGeral() {
+    var menu = document.getElementById('menuPrincipal');
+    var btn = document.getElementById('btnPrincipal');
+    if (menu.style.display === 'flex') {
+        fecharMenuGeral();
+    } else {
         menu.style.display = 'flex';
         btn.style.transform = 'rotate(45deg)';
-        btn.style.backgroundColor = '#ff0000'; // Fica vermelho (X)
-    } else {
-        menu.style.display = 'none';
-        btn.style.transform = 'rotate(0deg)';
-        btn.style.backgroundColor = '#007bff'; // Volta azul (+)
+        btn.style.background = '#ff4444';
     }
+}
+
+function fecharMenuGeral() {
+    document.getElementById('menuPrincipal').style.display = 'none';
+    document.getElementById('btnPrincipal').style.transform = 'rotate(0deg)';
+    document.getElementById('btnPrincipal').style.background = '#007bff';
+}
+
+function abrirJanelaGrupo() {
+    document.getElementById('janelaCriar').style.display = 'block';
+    fecharMenuGeral(); // Fecha o menu quando a aba abre
+}
+
+function fecharJanelaGrupo() {
+    document.getElementById('janelaCriar').style.display = 'none';
 }
 </script>
 
