@@ -636,37 +636,6 @@ function previewFoto(input) {
     </div>
     <button class="btn-check-azul" onclick="alert('Grupo Criado!'); fecharJanelaGrupo()">✅</button>
 </div>
-
-<script>
-function toggleMenuGeral() {
-    var menu = document.getElementById('menuPrincipal');
-    var btn = document.getElementById('btnPrincipal');
-    if (menu.style.display === 'flex') {
-        fecharMenuGeral();
-    } else {
-        menu.style.display = 'flex';
-        btn.style.transform = 'rotate(45deg)';
-        btn.style.background = '#ff4444';
-    }
-}
-
-function fecharMenuGeral() {
-    document.getElementById('menuPrincipal').style.display = 'none';
-    var btn = document.getElementById('btnPrincipal');
-    btn.style.transform = 'rotate(0deg)';
-    btn.style.background = '#007bff';
-}
-
-function abrirJanelaGrupo() {
-    document.getElementById('janelaCriar').style.display = 'block';
-    fecharMenuGeral();
-}
-
-function fecharJanelaGrupo() {
-    document.getElementById('janelaCriar').style.display = 'none';
-}
-</script>
-
         <input type="text" placeholder="Nome do grupo..." style="flex: 1; height: 45px; background: #1e1e1e; border: 1px solid #333; color: white; padding: 0 15px; border-radius: 12px; outline: none; color: white;">
     </div>
     <button class="btn-check-azul" onclick="alert('Grupo Criado!'); fecharJanelaGrupo()">✅</button>
