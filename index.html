@@ -1,571 +1,228 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head> <div class="user-header-profile" onclick="openWin('win-profile')">
-    <span id="header-user-name">@User</span>
-    <div class="profile-circle">
-        <img id="header-pfp" src="https://via.placeholder.com/40" alt="Profile">
-    </div>
-</div>
-
-    </div>
-</div>
-
-<input type="file" id="input-galeria-header" hidden accept="image/*" onchange="updateProfileFromHeader(this)">
-
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Estudo Social Master v16</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Study v18 - Ultimate</title>
     <style>
         :root {
-            --preto: #000000; --azul-profundo: #001a33; --azul-brilhante: #1DA1F2;
-            --msg-out: #004d99; --msg-in: #1a1a1a; --ouro: #ffd700; --vermelho: #ff3b3b;
+            --bright-blue: #00d9ff;
+            --ouro: #ffd700;
+            --fundo: #0a0a0a;
+            --card: #161616;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: white; margin: 0; overflow: hidden; }
-
-        /* ANIMAÇÕES PREMIUM */
-        @keyframes fogoAzul { from { text-shadow: 0 0 5px #00f, 0 0 10px #0ff; } to { text-shadow: 0 0 10px #0ff, 0 0 20px #00f; } }
-        @keyframes fogoOuro { from { box-shadow: 0 0 10px #ff0; border: 1px solid #ff0; } to { box-shadow: 0 0 25px #f60; border: 1px solid #f60; } }
-        ./* ID 22 Pegando Fogo Azul */
-        /* FORÇAR ID 22 COM FOGO AZUL */
-.id-owner {
-    color: #1DA1F2 !important;
-    font-weight: bold;
-    font-size: 22px;
-    text-shadow: 0 0 10px #00f, 0 0 20px #0ff;
-    animation: blueFire 0.6s infinite alternate;
-    display: inline-block;
-}
-
-@keyframes blueFire {
-    from { text-shadow: 0 0 10px #00d9ff, 0 0 20px #0051ff, 0 0 5px #fff; }
-    to { text-shadow: 0 0 20px #00f, 0 0 35px #00ffff, 0 0 12px #fff; }
-}
-/* NOME BRANCO NO TEXTO DO ID */
-.id-label {
-    color: white !important;
-    font-weight: bold;
-}
-        .premium-aura { animation: fogoOuro 0.6s infinite alternate !important; }
-        .fire-name { animation: fogoAzul 0.4s infinite alternate; }
-
-        /* GERAL */
-        .win { display: none; position: fixed; inset: 0; background: var(--preto); flex-direction: column; z-index: 2000; }
-        .win-small { height: 80%; top: 10%; border-radius: 20px; border: 1px solid #333; }
-        .btn-v { position: absolute; top: 15px; right: 15px; background: var(--vermelho); color: white; border: none; border-radius: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 3000; }
+        body { background: var(--fundo); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* CHAT ESTILO WHATSAPP/DISCORD */
-        .chat-header { display: flex; flex-direction: column; align-items: center; padding: 10px; border-bottom: 1px solid #222; background: #000a1a; }
-        .g-pfp-chat { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; cursor: pointer; }
-        .chat-flow { flex: 1; overflow-y: auto; padding: 15px; background: linear-gradient(180deg, #000000 0%, #001122 100%); display: flex; flex-direction: column; gap: 8px; }
-        .bubble { max-width: 85%; padding: 10px; border-radius: 12px; font-size: 14px; position: relative; }
-        .b-out { align-self: flex-end; background: var(--msg-out); border-bottom-right-radius: 2px; }
-        .b-in { align-self: flex-start; background: var(--msg-in); border-bottom-left-radius: 2px; }
-
-        /* CALCULADORA CIENTÍFICA FLUTUANTE */
-        #calc-sci { display: none; position: fixed; width: 220px; background: #000; border: 1px solid #444; border-radius: 12px; z-index: 9999; cursor: move; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .calc-disp { width: 100%; height: 40px; background: #111; color: #0f0; border: none; text-align: right; font-size: 20px; margin-bottom: 8px; padding: 5px; box-sizing: border-box; }
-        .calc-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-        .calc-btns button { padding: 10px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
-        .calc-btns button:active { background: #444; }
-
-        /* PESQUISA TRANSPARENTE */
-        #search-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 9000; align-items: center; justify-content: center; }
-        .search-box { width: 80%; background: transparent; border: none; border-bottom: 2px solid var(--azul-brilhante); color: white; font-size: 24px; text-align: center; outline: none; }
-
-        /* MATÉRIAS */
-        .mat-item { background: #111; padding: 15px; margin: 8px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        /* HEADER */
+        header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 20px; background: #111; border-bottom: 1px solid #222;
+        }
         
-        .float-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: rgba(29, 161, 242, 0.3); border: 1px solid var(--azul-brilhante); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 1000; backdrop-filter: blur(5px); }
-        .last-seen { font-size: 10px; color: #bbb; }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; }
-        .user-header-profile {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    z-index: 2500; /* Aumentado para ficar acima de tudo */
-}
+        .user-header-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .profile-circle { position: relative; width: 40px; height: 40px; }
+        .profile-circle img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--bright-blue); object-fit: cover; }
 
+        /* ID FOGO AZUL */
+        .id-owner {
+            color: #1DA1F2 !important; font-weight: bold; font-size: 20px;
+            text-shadow: 0 0 10px #00f; animation: blueFire 0.6s infinite alternate;
+        }
+        @keyframes blueFire {
+            from { text-shadow: 0 0 10px #00d9ff, 0 0 5px #fff; }
+            to { text-shadow: 0 0 20px #00f, 0 0 10px #fff; }
+        }
 
-#header-user-name {
-    font-size: 10px;
-    color: var(--bright-blue);
-    margin-bottom: 2px;
-    font-weight: bold;
-    text-shadow: 0 0 5px rgba(29, 161, 242, 0.5);
-}
+        /* NAVEGAÇÃO */
+        .nav-tabs { display: flex; justify-content: space-around; background: #111; padding: 10px; border-bottom: 1px solid #222; }
+        .nav-tabs button { background: none; border: none; color: #888; cursor: pointer; font-weight: bold; }
+        .nav-tabs button.active { color: var(--bright-blue); border-bottom: 2px solid var(--bright-blue); }
 
-.profile-circle {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 2px solid #333;
-    overflow: hidden;
-    background: #111;
-}
+        /* CARDS */
+        .container { padding: 20px; }
+        .card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--bright-blue); }
+        .btn-main { background: var(--bright-blue); color: black; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
 
-.profile-circle img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
+        /* JANELAS */
+        .win { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 1px solid #333; border-radius: 15px; z-index: 1000; padding: 20px; width: 90%; max-width: 400px; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
+        .overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index: 999; }
     </style>
 </head>
-<body onload="initApp()">
+<body>
 
-    <div id="screen-home" style="padding: 20px; height: 100vh; overflow-y: auto;">
-        <div style="display:flex; justify-content: space-between; align-items: center;">
-            <h1 style="margin:0; font-size:22px; color:var(--azul-brilhante)">Estudo Social</h1>
-            <div style="display:flex; justify-content: space-between; align-items: center;">
+<header>
     <h1 style="margin:0; font-size:22px; color:var(--bright-blue)">Social Study</h1>
     <div class="user-header-profile" onclick="openWin('win-profile')">
         <span id="header-user-name">@User</span>
-        <div class="profile-circle" style="position: relative;">
-            <span id="header-premium-crown" style="display:none; position:absolute; top:-12px; left:50%; transform:translateX(-50%); font-size:18px; z-index:10;">👑</span>
+        <div class="profile-circle">
+            <span id="header-premium-crown" style="display:none; position:absolute; top:-12px; left:50%; transform:translateX(-50%); font-size:18px;">👑</span>
             <img id="header-pfp" src="https://via.placeholder.com/40">
         </div>
     </div>
+</header>
+
+<div class="nav-tabs">
+    <button class="active" onclick="showTab('materias')">Matérias</button>
+    <button onclick="showTab('comunidade')">Comunidade</button>
+</div>
+
+<div id="tab-materias" class="container">
+    <button class="btn-main" style="margin-bottom: 20px;" onclick="openWin('win-criar-grupo')">+ Criar Novo Grupo</button>
+    <div id="subject-list"></div>
+</div>
+
+<div id="tab-comunidade" class="container" style="display:none;">
+    <div class="card">
+        <h3>🌍 Comunidade Global</h3>
+        <p>Bem-vindo ao mural de estudantes.</p>
+        <div id="feed-comunidade"></div>
     </div>
-            <div onclick="openWin('win-profile')" style="cursor:pointer;">
-            </div>
+</div>
+
+<div id="win-profile" class="win">
+    <button onclick="closeWin('win-profile')" style="float:right; background:none; color:white; border:none; font-size:20px; cursor:pointer;">X</button>
+    <center>
+        <div style="position:relative; width:90px;">
+            <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none;">👑</span>
+            <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--bright-blue); cursor:pointer;" onclick="document.getElementById('in-pfp').click()">
         </div>
+        <h2 id="p-name-disp" style="margin:10px 0;">@Usuario</h2>
+        <p id="p-bio-disp" style="color:#888; cursor:pointer;" onclick="changeBio()">Clique para mudar a bio...</p>
         
-        <div style="margin: 20px 0;">
-            <button onclick="toggleSearch()" style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid #333; border-radius:25px; color:#888; text-align:left;">🔍 Pesquisar na internet...</button>
+        <div id="status-box" style="color:#0f0; font-size:13px;">● Online</div>
+        <div style="color:#666; font-size:11px;">Visto por último hoje às <span id="seen-time">--:--</span></div>
+
+        <div style="margin:15px 0;">
+            <span style="font-weight:bold;">ID: </span><span class="id-owner">22</span>
         </div>
 
-        <div id="materia-section">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3 style="color:var(--azul-brilhante)">Matérias</h3>
-                <button onclick="addMateriaPrompt()" style="background:none; border:1px solid #444; color:white; border-radius:15px; padding:2px 10px; font-size:11px;">+ Adicionar</button>
-            </div>
-            <div id="mat-list"></div>
-        </div>
+        <button class="btn-main" onclick="buyPremium()" style="background:var(--ouro); margin-bottom:10px;">OBTER PREMIUM 👑</button>
+        <button onclick="changeName()" style="background:#222; color:white; width:100%; border:1px solid #444; padding:10px; border-radius:8px;">Configurar Perfil</button>
+    </center>
+</div>
 
-        <h3 style="margin-top:25px; color:var(--azul-brilhante)">Grupos e Comunidade</h3>
-        <div id="group-list"></div>
+<div id="win-criar-grupo" class="win">
+    <h3>Criar Novo Grupo</h3>
+    <input type="text" id="group-name" placeholder="Nome do Grupo" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid #444; color:white; border-radius:5px;">
+    <button class="btn-main" onclick="criarNovoGrupo()">Criar Grupo</button>
+    <button onclick="closeWin('win-criar-grupo')" style="background:none; color:#888; border:none; width:100%; margin-top:10px; cursor:pointer;">Cancelar</button>
+</div>
 
-        <div class="float-btn" onclick="openWin('win-create-group')">+</div>
-    </div>
-    <div id="win-profile" class="win win-small">
-        <button class="btn-v" onclick="closeWin('win-profile')">X</button>
-        <div id="p-banner" onclick="triggerFile('in-banner')" style="width:100%; height:130px; background:#111; background-size:cover; cursor:pointer;"></div>
-        <center>
-            <div style="position:relative; width:90px; margin-top:-45px;">
-                <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none;">👑</span>
-                <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--bright-blue); cursor:pointer;" onclick="triggerFile('in-pfp')">
-            </div>
+<div id="overlay" class="overlay" onclick="closeAll()"></div>
+<input type="file" id="in-pfp" style="display:none" onchange="uploadImg(this)">
 
-            <h2 id="p-name-disp" style="margin:10px 0; color: white !important;">@Usuario</h2>
-            
-            <p id="p-bio-disp" style="color: #ffffff; font-size: 14px; margin: 5px 20px; opacity: 0.8;" onclick="changeBio()">Clique para adicionar uma bio...</p>
-            
-            <div id="p-status"><span class="status-dot" style="background:#00ff00;"></span>Online</div>
-            <div class="last-seen" style="color: white !important;">visto por último hoje às <span id="seen-time">--:--</span></div>
-            
-            <div style="margin-top:15px;">
-                <span style="color: white !important; font-weight: bold;">ID: </span>
-                <span class="id-owner">22</span>
-            </div>
-            
-            <div style="padding:20px; display:flex; flex-direction:column; gap:10px;">
-                <button onclick="changeName()" style="background:#222; color:white; border:1px solid #444; padding:8px; border-radius:8px;">Mudar Nome (@)</button>
-                <button onclick="buyPremium()" style="background:var(--ouro); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px;">OBTER PREMIUM 👑</button>
-                <button onclick="toggleCalc()" style="background:#222; color:white; border:none; padding:10px; border-radius:8px;">Calculadora Científica</button>
-                <button onclick="clearCache()" style="color:var(--vermelho); background:none; border:none; font-size:12px; margin-top:10px;">Limpar Cache e Memória</button>
-            </div>
-        </center>
-    </div>
+<script>
+    // --- BANCO DE DADOS ---
+    let materias = ["Matemática", "Português", "Ciências", "História"];
+    let grupos = JSON.parse(localStorage.getItem('user_groups')) || [];
 
-            <h2 id="p-name" style="margin:10px 0;">@Usuario</h2>
-            <div id="p-status"><span class="status-dot" style="background:#00ff00;"></span>Online</div>
-            <div class="last-seen">visto por último hoje às <span id="last-time">--:--</span></div>
-            <p style="font-size:12px;">ID: <span id="my-id-display">22</span></p>
-            
-            <div style="padding:20px; display:flex; flex-direction:column; gap:10px;">
-                <button onclick="buyPremium()" style="background:var(--ouro); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px;">OBTER PREMIUM 👑</button>
-                <button onclick="toggleCalc()" style="background:#222; color:white; border:none; padding:10px; border-radius:8px;">Calculadora Científica</button>
-                <button onclick="openWin('win-google')" style="background:white; color:black; border:none; padding:10px; border-radius:8px;">Entrar com Google</button>
-                <button onclick="clearCache()" style="color:var(--vermelho); background:none; border:none; font-size:12px;">Limpar Cache e Memória</button>
-            </div>
-        </center>
-    </div>
-
-    <div id="win-chat" class="win">
-        <button class="btn-v" onclick="closeWin('win-chat')">X</button>
-        <div class="chat-header" id="chat-aura-target">
-            <img id="g-chat-pfp" class="g-pfp-chat" src="https://via.placeholder.com/50" onclick="triggerFile('in-g-pfp')">
-            <span id="g-chat-name" style="font-weight:bold;">Nome do Grupo</span>
-            <div id="typing-status" style="font-size:10px; color:var(--azul-brilhante); height:12px;"></div>
-        </div>
-        <div class="chat-flow" id="chat-box"></div>
-        <div id="group-actions" style="background:#000; padding:10px; display:flex; align-items:center; gap:10px;">
-            <button onclick="openWin('win-stickers')" style="background:none; border:none; font-size:20px;">🎭</button>
-            <button id="mic-btn" onmousedown="startVoice()" onmouseup="stopVoice()" style="background:none; border:none; color:white; font-size:20px;">🎤</button>
-            <input type="text" id="msg-input" placeholder="Mensagem..." oninput="handleTyping()" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:20px; outline:none;">
-            <button onclick="sendMsg()" style="background:none; border:none; color:var(--azul-brilhante); font-size:24px;">➡️</button>
-        </div>
-    </div>
-
-    <div id="calc-sci">
-        <div style="background:#222; padding:5px; font-size:10px; text-align:center; border-radius:8px 8px 0 0;">CALCULADORA MASTER</div>
-        <input type="text" id="c-disp" class="calc-disp" readonly value="0">
-        <div class="calc-btns">
-            <button onclick="cVal('7')">7</button><button onclick="cVal('8')">8</button><button onclick="cVal('9')">9</button><button onclick="cVal('/')">÷</button>
-            <button onclick="cVal('4')">4</button><button onclick="cVal('5')">5</button><button onclick="cVal('6')">6</button><button onclick="cVal('*')">×</button>
-            <button onclick="cVal('1')">1</button><button onclick="cVal('2')">2</button><button onclick="cVal('3')">3</button><button onclick="cVal('-')">-</button>
-            <button onclick="cVal('0')">0</button><button onclick="cVal('Math.sqrt(')">√</button><button onclick="cRes()">=</button><button onclick="cVal('+')">+</button>
-            <button onclick="cVal('Math.PI')">π</button><button onclick="cVal('.')">.</button><button onclick="cVal('**')">^</button><button onclick="cVal('C')" style="color:red">C</button>
-        </div>
-    </div>
-
-    <div id="search-overlay" onclick="if(event.target==this) toggleSearch()">
-        <input type="text" class="search-box" id="search-q" placeholder="Digite para buscar..." onkeypress="if(event.key=='Enter') executeSearch()">
-    </div>
-
-    <input type="file" id="in-pfp" hidden onchange="readImg(this, 'p-img', 'user_pfp')">
-    <input type="file" id="in-banner" hidden onchange="readImg(this, 'p-banner', 'user_banner')">
-    <input type="file" id="in-g-pfp" hidden onchange="readImg(this, 'g-chat-pfp', 'group_pfp')">
-
-    <script>
-        let isPremium = false;
-        let activeG = null;
-        let myId = 22;
-        let mediaRec, chunks = [];
-
-        const materiasBase = [
-            {n: 'Matemática', l: 'https://youtube.com/playlist?list=PL83s8LGM84J4mRCdgGKJaZh8KWFU7GgcO'},
-            {n: 'Inglês', l: 'https://youtube.com/playlist?list=PLZ65xj2SRHQB0T2GGk-R7bYxorKUkcyoj'},
-            {n: 'História', l: 'https://youtube.com/playlist?list=PLGCGbN9NWTZBAYWoI5-afZG8bZgIzBoNs'},
-            {n: 'Geografia', l: 'https://youtube.com/playlist?list=PLNM2T4DNzmq7p-TtQPn3vjNU9t8M0Arxc'},
-            {n: 'Redação', l: 'https://youtube.com/playlist?list=PLPwuAOl5BHi8UTmce6l7kWwDVj2oMYPv2'}
-        ];
-    renderSubjects();
-    renderGroups();
-
-    let premium = localStorage.getItem('is_premium');
-    if(premium === 'true') {
-        ativarVisualPremium();
-    }
-    
-    let n = localStorage.getItem('saved_username');
-    if(n) {
-        if(document.getElementById('p-name-disp')) document.getElementById('p-name-disp').innerText = "@" + n;
-        if(document.getElementById('header-user-name')) document.getElementById('header-user-name').innerText = "@" + n;
+    // --- NAVEGAÇÃO ---
+    function showTab(tab) {
+        document.getElementById('tab-materias').style.display = tab === 'materias' ? 'block' : 'none';
+        document.getElementById('tab-comunidade').style.display = tab === 'comunidade' ? 'block' : 'none';
     }
 
-    // Atualiza o horário do visto por último
-    document.getElementById('seen-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-}
-        }
+    function openWin(id) { document.getElementById(id).style.display = 'block'; document.getElementById('overlay').style.display = 'block'; }
+    function closeWin(id) { document.getElementById(id).style.display = 'none'; document.getElementById('overlay').style.display = 'none'; }
+    function closeAll() { document.querySelectorAll('.win').forEach(w => w.style.display='none'); document.getElementById('overlay').style.display='none'; }
 
-        function openWin(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeWin(id) { document.getElementById(id).style.display = 'none'; }
-        function toggleSearch() { 
-            let s = document.getElementById('search-overlay');
-            s.style.display = (s.style.display == 'flex') ? 'none' : 'flex';
-            if(s.style.display == 'flex') document.getElementById('search-q').focus();
-        }
-
-        function renderMats() {
-            let container = document.getElementById('mat-list');
-            container.innerHTML = "";
-            let custom = JSON.parse(localStorage.getItem('custom_mats') || '[]');
-            [...materiasBase, ...custom].forEach(m => {
-                container.innerHTML += `
-                    <div class="mat-item">
-                        <span>${m.n}</span>
-                        <div onclick="window.open('${m.l}')" style="cursor:pointer; color:var(--azul-brilhante)">⋮</div>
-                    </div>`;
-            });
-        }
-
-        function renderGroups() {
-            let container = document.getElementById('group-list');
-            container.innerHTML = "";
-            let db = JSON.parse(localStorage.getItem('master_groups') || '[]');
-            db.forEach(g => {
-                container.innerHTML += `
-                    <div onclick="openChat(${g.id})" style="background:#111; padding:15px; border-radius:12px; margin-bottom:10px; display:flex; align-items:center; gap:12px; border:1px solid #222;">
-                        <img src="${g.pfp || 'https://via.placeholder.com/45'}" style="width:45px; height:45px; border-radius:50%;">
-                        <div>
-                            <div style="font-weight:bold;">${g.name}</div>
-                            <div style="font-size:11px; color:#666;">ID: ${g.id} #27</div>
-                        </div>
-                    </div>`;
-            });
-        }
-
-        function openChat(id) {
-            let db = JSON.parse(localStorage.getItem('master_groups') || '[]');
-            activeG = db.find(g => g.id === id);
-            if(activeG.banned && activeG.banned.includes(myId)) {
-                alert("Você foi banido do grupo " + activeG.name);
-                return;
-            }
-            document.getElementById('g-chat-name').innerText = activeG.name;
-            document.getElementById('g-chat-pfp').src = activeG.pfp || 'https://via.placeholder.com/50';
-            if(isPremium) document.getElementById('chat-aura-target').classList.add('premium-aura');
-            renderMsgs();
-            openWin('win-chat');
-        }
-
-        function sendMsg() {
-            let input = document.getElementById('msg-input');
-            if(!input.value) return;
-            let db = JSON.parse(localStorage.getItem('master_groups'));
-            let gIdx = db.findIndex(g => g.id === activeG.id);
-            let msg = {
-                u: "@Dono",
-                id: myId,
-                t: input.value,
-                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                type: 'text'
-            };
-            db[gIdx].msgs.push(msg);
-            localStorage.setItem('master_groups', JSON.stringify(db));
-            renderMsgs();
-            input.value = "";
-            stopTyping();
-        }
-
-        function renderMsgs() {
-            let box = document.getElementById('chat-box');
-            box.innerHTML = "";
-            let db = JSON.parse(localStorage.getItem('master_groups'));
-            let g = db.find(x => x.id === activeG.id);
-            g.msgs.forEach((m, idx) => {
-                let div = document.createElement('div');
-                div.className = (m.id == 22) ? "bubble b-out" : "bubble b-in";
-                let tag = (m.id == 22) ? `<small class="id-owner">${m.u} #22</small>` : `<small style="color:orange">${m.u} #27</small>`;
-                if(isPremium) tag = `<small class="fire-name">${m.u} #27</small>`;
-                
-                div.innerHTML = `${tag}<br>${m.t}<br><small style="font-size:9px; opacity:0.5; float:right;">${m.time}</small>`;
-                
-                // Opções ao segurar
-                let timer;
-                div.onmousedown = () => timer = setTimeout(() => {
-                    let op = prompt("1: Reagir | 2: Apagar | 3: Fixar");
-                    if(op == '2') { g.msgs.splice(idx, 1); localStorage.setItem('master_groups', JSON.stringify(db)); renderMsgs(); }
-                }, 800);
-                div.onmouseup = () => clearTimeout(timer);
-
-                box.appendChild(div);
-            });
-            box.scrollTop = box.scrollHeight;
-        }
-
-        // CALCULADORA LÓGICA
-        function toggleCalc() { let c = document.getElementById('calc-sci'); c.style.display = (c.style.display == 'block') ? 'none' : 'block'; }
-        function cVal(v) { let d = document.getElementById('c-disp'); if(v=='C') d.value='0'; else if(d.value=='0') d.value=v; else d.value+=v; }
-        function cRes() { try { let d = document.getElementById('c-disp'); d.value = eval(d.value); } catch { d.value='Erro'; } }
-
-        // ARRASTAR CALCULADORA
-        const calc = document.getElementById('calc-sci');
-        let isDragging = false;
-        calc.onmousedown = (e) => { isDragging = true; };
-        document.onmousemove = (e) => { if(isDragging) { calc.style.left = e.pageX - 110 + 'px'; calc.style.top = e.pageY - 50 + 'px'; } };
-        document.onmouseup = () => isDragging = false;
-
-        // MEDIA E PERFIL
-        function readImg(input, targetId, storageKey) {
-    if (input.files && input.files[0]) {
-        let reader = new FileReader();
-        reader.onload = (e) => {
-            // 1. Se for o Banner
-            if (targetId === 'p-banner') {
-                document.getElementById(targetId).style.backgroundImage = `url(${e.target.result})`;
-                localStorage.setItem('user_banner', e.target.result);
-            } 
-            // 2. Se for Foto de Perfil (Pessoal ou do Topo)
-            else {
-                // Atualiza a foto na Janela de Perfil
-                if(document.getElementById('p-img')) document.getElementById('p-img').src = e.target.result;
-                
-                // Atualiza a foto no Círculo do Topo Direito
-                if(document.getElementById('header-pfp')) document.getElementById('header-pfp').src = e.target.result;
-                
-                // Atualiza a foto dentro do Chat (se for o caso)
-                if(document.getElementById(targetId)) document.getElementById(targetId).src = e.target.result;
-
-                // Salva a imagem principal
-                localStorage.setItem('user_pfp', e.target.result);
-                
-                // Pergunta o nome e atualiza os textos
-                let novoNome = prompt("Digite seu novo nome de usuário:");
-                if (novoNome) {
-                    if(document.getElementById('header-user-name')) document.getElementById('header-user-name').innerText = "@" + novoNome;
-                    if(document.getElementById('p-name-disp')) document.getElementById('p-name-disp').innerText = "@" + novoNome;
-                    localStorage.setItem('saved_username', novoNome);
-                }
-            }
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-        function buyPremium() {
-    // Salva permanentemente que você é premium
-    localStorage.setItem('is_premium', 'true'); 
-    
-    // Ativa o visual na hora
-    ativarVisualPremium(); 
-    
-    alert("👑 Premium Ativado com Sucesso! Suas configurações foram salvas.");
-}
-// --- APAGUE O ANTIGO E COLE ESTE NO LUGAR ---
-
-function ativarVisualPremium() {
-    if(document.getElementById('p-crown')) document.getElementById('p-crown').style.display = 'block';
-    if(document.getElementById('header-premium-crown')) document.getElementById('header-premium-crown').style.display = 'block';
-    
-    if(document.getElementById('p-img')) document.getElementById('p-img').style.border = "3px solid #ffd700";
-    if(document.getElementById('header-pfp')) document.getElementById('header-pfp').style.border = "2px solid #ffd700";
-    
-    let idElement = document.querySelector('.id-owner');
-    if(idElement) {
-        idElement.style.color = "#1DA1F2";
-        idElement.style.textShadow = "0 0 15px #00ffff";
-    }
-}
-
-function buyPremium() {
-    localStorage.setItem('is_premium', 'true');
-    ativarVisualPremium();
-    alert("👑 Premium Ativado com Sucesso!");
-}
-
-function updateLastSeen() {
-    const agora = new Date();
-    const horas = agora.getHours().toString().padStart(2, '0');
-    const minutos = agora.getMinutes().toString().padStart(2, '0');
-    const display = document.getElementById('seen-time');
-    if(display) display.innerText = horas + ":" + minutos;
-}
-initApp(); 
-updateLastSeen();
-        function updateLastSeen() {
-    const display = document.getElementById('seen-time');
-    if(display) {
-        display.innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    }
-}
-        function handleTyping() {
-            document.getElementById('typing-status').innerText = "@Dono está escrevendo...";
-            clearTimeout(window.typeTimer);
-            window.typeTimer = setTimeout(stopTyping, 2000);
-        }
-        function stopTyping() { document.getElementById('typing-status').innerText = ""; }
-
-        function executeSearch() {
-            let q = document.getElementById('search-q').value;
-            window.open("https://www.google.com/search?q=" + q);
-            toggleSearch();
-        }
-
-        function clearCache() {
-            if(confirm("Deseja apagar todas as mensagens e grupos salvos?")) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
-
-        function triggerFile(id) { document.getElementById(id).click(); }
-        // Função para disparar o clique no input de arquivo
-function triggerProfileUpdate() {
-    document.getElementById('input-galeria-header').click();
-}
-
-// Função para ler a imagem da galeria e atualizar nome/foto
-function updateProfileFromHeader(input) {
-    if (input.files && input.files[0]) {
-        let reader = new FileReader();
+    // --- RENDERIZAÇÃO ---
+    function renderApp() {
+        const list = document.getElementById('subject-list');
+        let html = materias.map(m => `<div class="card"><h3>${m}</h3><p>Grupos ativos nesta matéria.</p></div>`).join('');
         
-        reader.onload = function(e) {
-            // 1. Atualiza a foto no cabeçalho
-            document.getElementById('header-pfp').src = e.target.result;
-            // 2. Atualiza a foto na janela de perfil principal (sincronização)
-            document.getElementById('p-img').src = e.target.result;
-            
-            // 3. Pede o novo nome de usuário
-            let novoNome = prompt("Enter your username:");
-            if (novoNome) {
-                document.getElementById('header-user-name').innerText = "@" + novoNome;
-                document.getElementById('p-name-disp').innerText = "@" + novoNome;
-                localStorage.setItem('saved_username', novoNome);
-            }
-            // 4. Salva a foto no banco de dados local (LocalStorage)
-            localStorage.setItem('pfp', e.target.result);
-        };
-        reader.readAsDataURL(input.files[0]);
+        // Adiciona grupos criados pelo usuário
+        grupos.forEach(g => {
+            html += `<div class="card" style="border-left-color: #0f0;"><h3>${g}</h3><p>Grupo criado por você.</p></div>`;
+        });
+        
+        list.innerHTML = html;
     }
-}
 
-// ADICIONE ISSO DENTRO DA SUA FUNÇÃO initApp() PARA CARREGAR AO ABRIR:
-// let savedName = localStorage.getItem('saved_username');
-// if(savedName) {
-//    document.getElementById('header-user-name').innerText = "@" + savedName;
-//    document.getElementById('p-name-disp').innerText = "@" + savedName;
-// }
-        // Função para mudar o nome (@)
-function changeName() {
-    let novo = prompt("Digite seu novo nome de usuário:");
-    if (novo) {
-        let formatado = "@" + novo.replace("@", "");
-        document.getElementById('p-name-disp').innerText = formatado;
-        if(document.getElementById('header-user-name')) {
-            document.getElementById('header-user-name').innerText = formatado;
+    function criarNovoGrupo() {
+        let nome = document.getElementById('group-name').value;
+        if(nome) {
+            grupos.push(nome);
+            localStorage.setItem('user_groups', JSON.stringify(grupos));
+            renderApp();
+            closeWin('win-criar-grupo');
+            alert("Grupo criado!");
         }
-        localStorage.setItem('saved_username', novo);
     }
-}
 
-// Função para mudar a Bio
-function changeBio() {
-    let novaBio = prompt("Escreva sua nova bio:");
-    if (novaBio) {
-        document.getElementById('p-bio-disp').innerText = novaBio;
-        localStorage.setItem('saved_bio', novaBio);
+    // --- PERFIL E PREMIUM ---
+    function initApp() {
+        renderApp();
+        
+        // Carregar Nome
+        let n = localStorage.getItem('saved_username');
+        if(n) {
+            document.getElementById('p-name-disp').innerText = "@" + n;
+            document.getElementById('header-user-name').innerText = "@" + n;
+        }
+
+        // Carregar Bio
+        let b = localStorage.getItem('saved_bio');
+        if(b) document.getElementById('p-bio-disp').innerText = b;
+
+        // Carregar Foto
+        let foto = localStorage.getItem('user_pfp');
+        if(foto) {
+            document.getElementById('p-img').src = foto;
+            document.getElementById('header-pfp').src = foto;
+        }
+
+        // Carregar Premium
+        if(localStorage.getItem('is_premium') === 'true') ativarVisualPremium();
+
+        // Relógio do Visto por Último
+        document.getElementById('seen-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
     }
-}
 
-// ADICIONE ISSO DENTRO DA SUA FUNÇÃO initApp() PARA CARREGAR TUDO:
-function loadBioAndName() {
-    let b = localStorage.getItem('saved_bio');
-    if(b) document.getElementById('p-bio-disp').innerText = b;
-    
-    let n = localStorage.getItem('saved_username');
-    if(n) {
-        document.getElementById('p-name-disp').innerText = "@" + n;
-        if(document.getElementById('header-user-name')) {
+    function changeName() {
+        let n = prompt("Seu nome de usuário:");
+        if(n) {
+            localStorage.setItem('saved_username', n);
+            document.getElementById('p-name-disp').innerText = "@" + n;
             document.getElementById('header-user-name').innerText = "@" + n;
         }
     }
-}
-// Chame loadBioAndName(); dentro do seu initApp()
 
-function changeName() {
-    let n = prompt("Novo nome de usuário:");
-    if(n) {
-        let nome = "@" + n.replace("@","");
-        document.getElementById('p-name-disp').innerText = nome;
-        if(document.getElementById('header-user-name')) document.getElementById('header-user-name').innerText = nome;
-        localStorage.setItem('saved_username', n);
+    function changeBio() {
+        let b = prompt("Sua bio:");
+        if(b) {
+            localStorage.setItem('saved_bio', b);
+            document.getElementById('p-bio-disp').innerText = b;
+        }
     }
-}
 
-function changeBio() {
-    let b = prompt("Escreva sua bio:");
-    if(b) {
-        document.getElementById('p-bio-disp').innerText = b;
-        localStorage.setItem('saved_bio', b);
+    function buyPremium() {
+        localStorage.setItem('is_premium', 'true');
+        ativarVisualPremium();
+        alert("👑 Agora você é Premium!");
     }
-}
 
-    </script>
+    function ativarVisualPremium() {
+        document.getElementById('p-crown').style.display = 'block';
+        document.getElementById('header-premium-crown').style.display = 'block';
+        document.getElementById('p-img').style.border = "3px solid var(--ouro)";
+        document.getElementById('header-pfp').style.border = "2px solid var(--ouro)";
+        document.getElementById('p-name-disp').style.color = var(--ouro);
+    }
+
+    function uploadImg(input) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('p-img').src = e.target.result;
+            document.getElementById('header-pfp').src = e.target.result;
+            localStorage.setItem('user_pfp', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
+    // Ligar tudo
+    initApp();
+</script>
+
 </body>
 </html>
-
