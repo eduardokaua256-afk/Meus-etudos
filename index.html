@@ -5,59 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Estudo Social Premium</title>
     <style>
-        :root { 
-            --preto: #0b0e14; --branco: #ffffff; --azul: #1DA1F2; --ouro: #ffd700; 
-            --chat-bg: #10171e; /* Cor para não cansar os olhos */
+        :root {
+            --preto: #000; --branco: #fff; --azul: #1DA1F2; --ouro: #ffd700;
+            --chat-bg: #12171e; /* Azul petróleo escuro para não cansar a vista */
             --msg-out: #056162; --msg-in: #262d31;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); margin: 0; padding: 0; user-select: none; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); margin: 0; padding: 0; overflow: hidden; }
 
-        /* HEADER E UI */
-        header { padding: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
-        .dots-btn { font-size: 16px; cursor: pointer; color: #888; }
-        
-        /* BOTÃO CRIAR GRUPO FLUTUANTE TRANSPARENTE */
-        #btn-float-create { position: fixed; bottom: 85px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: rgba(29, 161, 242, 0.2); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 28px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); z-index: 999; }
+        /* HEADER E UI PRINCIPAL */
+        header { padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; background: #000; }
+        .dots-btn { font-size: 14px; cursor: pointer; color: #888; border: 1px solid #333; padding: 2px 8px; border-radius: 4px; }
 
-        /* JANELA CHAT COM AURA DE FOGO (PREMIUM) */
-        .win-chat { display: none; position: fixed; top: 12%; left: 4%; right: 4%; height: 75vh; background: var(--chat-bg); border-radius: 20px; flex-direction: column; z-index: 2000; overflow: hidden; }
-        .aura-premium { border: 2px solid var(--ouro); box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); animation: aura-glow 1.5s infinite alternate; }
-        @keyframes aura-glow { from { box-shadow: 0 0 10px #ffcc00; } to { box-shadow: 0 0 25px #ff6600; } }
+        /* BOTÃO FLUTUANTE CRIAR GRUPO */
+        #btn-float-create { position: fixed; bottom: 80px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: rgba(29, 161, 242, 0.2); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 24px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); z-index: 999; }
 
-        /* PERFIL DO GRUPO (CENTRALIZADO) */
-        .g-header-pro { text-align: center; padding: 10px; background: rgba(0,0,0,0.3); border-bottom: 1px solid #333; }
-        .g-pfp-mid { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--azul); margin-bottom: 5px; }
+        /* JANELA CHAT COM AURA PREMIUM */
+        .win-chat { display: none; position: fixed; top: 10%; left: 3%; right: 3%; height: 80vh; background: var(--chat-bg); border-radius: 15px; flex-direction: column; z-index: 2000; overflow: hidden; border: 1px solid #333; }
+        .aura-premium { border: 2px solid var(--ouro); box-shadow: 0 0 25px rgba(255, 215, 0, 0.5); animation: burnAura 2s infinite alternate; }
+        @keyframes burnAura { from { box-shadow: 0 0 10px #ffaa00; } to { box-shadow: 0 0 30px #ffdd00; } }
+
+        /* PERFIL DO GRUPO CENTRALIZADO */
+        .g-header-pro { text-align: center; padding: 15px; background: rgba(0,0,0,0.4); border-bottom: 1px solid #333; position: relative; }
+        .g-pfp-mid { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--azul); margin-bottom: 5px; cursor: pointer; transition: 0.3s; }
+        .g-pfp-mid:active { transform: scale(1.1); }
+        .owner-tag { color: #ff3e3e; font-weight: bold; font-size: 14px; text-shadow: 1px 1px 3px #000; }
 
         /* MENSAGENS E REAÇÕES */
         .chat-box { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .msg-wrap { display: flex; flex-direction: column; position: relative; max-width: 80%; }
-        .msg-own { align-self: flex-end; }
-        .bubble { padding: 8px 12px; border-radius: 12px; font-size: 14px; color: white; position: relative; }
-        .owner-tag { color: #ff4757; font-weight: bold; font-size: 12px; text-shadow: 1px 1px 2px #000; margin-bottom: 2px; }
-        
-        .reactions-popup { display: none; position: absolute; top: -45px; background: #333; border-radius: 20px; padding: 5px; gap: 8px; z-index: 3000; box-shadow: 0 4px 15px #000; }
-        
-        /* CALCULADORA FLUTUANTE MELHORADA */
-        #calc-float { display: none; position: fixed; top: 150px; left: 50px; width: 200px; background: #1a1a1a; border-radius: 12px; padding: 8px; z-index: 5000; box-shadow: 0 10px 30px #000; cursor: move; border: 1px solid #444; }
-        .calc-display { width: 100%; background: #000; color: #0f0; border: none; text-align: right; padding: 8px; margin-bottom: 8px; border-radius: 5px; font-family: monospace; }
-        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-        .calc-grid button { padding: 8px; border: none; border-radius: 4px; background: #333; color: white; font-size: 14px; }
+        .msg-wrap { display: flex; flex-direction: column; position: relative; max-width: 85%; }
+        .bubble { padding: 8px 12px; border-radius: 12px; font-size: 14px; color: white; position: relative; cursor: pointer; }
+        .reactions-menu { display: none; position: absolute; top: -45px; background: #222; border-radius: 20px; padding: 5px 10px; gap: 10px; z-index: 3000; border: 1px solid #444; }
 
-        /* PERFIL / COROA */
-        .pfp-main { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #1c2128; }
-        .crown-mini { position: absolute; top: -12px; left: 28px; font-size: 20px; display: none; }
+        /* CALCULADORA FLUTUANTE */
+        #calc-win { display: none; position: fixed; top: 100px; left: 50px; width: 190px; background: #111; border-radius: 10px; padding: 10px; z-index: 5000; cursor: move; border: 1px solid #444; box-shadow: 0 10px 30px #000; }
+        .calc-disp { width: 100%; background: #000; color: #0f0; border: none; text-align: right; padding: 10px; margin-bottom: 10px; border-radius: 5px; font-family: monospace; font-size: 18px; }
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .calc-grid button { padding: 10px; border: none; border-radius: 5px; background: #222; color: white; cursor: pointer; }
+
+        /* PERFIL / CONFIGS */
+        .pfp-main { width: 70px; height: 70px; border-radius: 50%; border: 3px solid #000; }
+        .crown-small { position: absolute; top: -10px; left: 24px; font-size: 18px; display: none; z-index: 5; }
+        .last-seen { font-size: 10px; color: #888; margin-top: 2px; }
 
         /* INPUT RODAPÉ */
-        .chat-input-bar { background: #1c2128; padding: 10px; display: flex; align-items: center; gap: 10px; }
-        .in-msg { flex: 1; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 20px; }
+        .chat-input-bar { background: #1a1e23; padding: 10px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #333; }
+        .in-msg { flex: 1; background: #000; border: 1px solid #333; color: white; padding: 10px; border-radius: 20px; outline: none; }
+
+        /* BANNER */
+        .banner-box { height: 100px; background: var(--azul); cursor: pointer; overflow: hidden; }
     </style>
 </head>
-<body onload="initApp()">
+<body onload="loadApp()">
 
     <header>
-        <div>
+        <div onclick="openWin('win-materias')" style="cursor:pointer">
             <strong style="color: var(--azul);">Estudo Social</strong><br>
-            <small id="user-id-display">ID: 22</small>
+            <small id="my-id-label">ID: 22</small>
         </div>
         <div class="dots-btn" onclick="openWin('win-profile')">⋮</div>
     </header>
@@ -65,75 +68,66 @@
     <div id="btn-float-create" onclick="openWin('win-create-group')">+</div>
 
     <div id="win-create-group" class="win-chat" style="background: #fff; color: #000; padding: 20px;">
-        <h3>Novo Grupo</h3>
-        <input type="text" id="cg-name" placeholder="Nome do Grupo" style="width:90%; padding:10px; margin-bottom:10px;">
-        <textarea id="cg-desc" placeholder="Descrição do grupo..." style="width:90%; padding:10px; margin-bottom:10px;"></textarea>
+        <h3>Criar Grupo</h3>
+        <input type="text" id="cg-name" placeholder="Nome do Grupo" style="width:95%; padding:10px; margin-bottom:10px; border:1px solid #ddd;">
+        <textarea id="cg-desc" placeholder="Descrição do grupo..." style="width:95%; padding:10px; margin-bottom:10px; border:1px solid #ddd;"></textarea>
         <button onclick="document.getElementById('in-g-pfp').click()">Escolher Foto</button>
-        <button onclick="saveNewGroup()" style="background: var(--azul); color:white; width:100%; padding:15px; margin-top:20px; border:none; border-radius:10px;">CRIAR</button>
-        <button onclick="closeWin('win-create-group')" style="width:100%; margin-top:10px;">Cancelar</button>
+        <button onclick="saveNewGroup()" style="background: var(--azul); color:white; width:100%; padding:15px; margin-top:20px; border:none; border-radius:8px; font-weight:bold;">CRIAR AGORA</button>
+        <button onclick="closeWin('win-create-group')" style="width:100%; margin-top:10px; background:none; border:none; color:grey;">Cancelar</button>
     </div>
 
     <div id="win-chat" class="win-chat">
         <div class="g-header-pro">
             <img id="g-pfp-chat" src="https://via.placeholder.com/60" class="g-pfp-mid" onclick="openWin('win-g-manage')">
-            <h4 id="g-name-chat" style="margin: 0;">Grupo de Estudos #27</h4>
-            <small id="g-status" style="color: var(--azul); font-size: 10px; height: 12px; display: block;"></small>
+            <h4 id="g-name-chat" style="margin: 0; color: white;">Grupo de Estudos</h4>
+            <div id="g-status" style="color: var(--azul); font-size: 10px; height: 14px;"></div>
         </div>
         
         <div class="chat-box" id="chat-box"></div>
 
         <div class="chat-input-bar">
-            <button onclick="sendDiscordSticker()" style="background:none; border:none; font-size:22px;">🎭</button>
-            <button onclick="document.getElementById('in-chat-img').click()" style="background:none; border:none; font-size:22px;">🖼️</button>
-            <button id="btn-mic" onmousedown="startMic()" onmouseup="stopMic()" ontouchstart="startMic()" ontouchend="stopMic()" style="background:none; border:none; color: white; font-size: 22px;">🎤</button>
+            <button onclick="sendSticker()" style="background:none; border:none; font-size:20px;">🎭</button>
+            <button onclick="document.getElementById('in-chat-img').click()" style="background:none; border:none; font-size:20px;">🖼️</button>
+            <button id="btn-mic" onmousedown="startAudio()" onmouseup="stopAudio()" ontouchstart="startAudio()" ontouchend="stopAudio()" style="background:none; border:none; color: white; font-size: 20px;">🎤</button>
             <input type="text" id="chat-input" class="in-msg" placeholder="Mensagem..." oninput="isTyping()">
-            <button onclick="sendMessage()" style="background:none; border:none; color: var(--azul); font-size: 25px;">➡️</button>
+            <button onclick="sendMessage()" style="background:none; border:none; color: var(--azul); font-size: 24px;">➡️</button>
         </div>
     </div>
 
-    <div id="win-profile" class="win-chat" style="background: #0d1117; color: white;">
-        <div style="padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid #333;">
-            <span>Configurações Pessoais</span>
-            <button onclick="closeWin('win-profile')">✕</button>
-        </div>
-        <div style="padding: 20px; overflow-y: auto;">
-            <div style="position: relative; width: 80px; margin: 0 auto;">
-                <span id="u-crown" class="crown-mini">👑</span>
-                <img id="u-pfp" src="https://via.placeholder.com/80" class="pfp-main" onclick="document.getElementById('in-pfp').click()">
+    <div id="win-profile" class="win-chat" style="background: #000; color: white;">
+        <div class="banner-box" id="u-banner" onclick="document.getElementById('in-banner').click()"></div>
+        <div style="padding: 15px; text-align: center; position: relative; margin-top: -40px;">
+            <div style="position: relative; width: 70px; margin: 0 auto;">
+                <span id="u-crown" class="crown-small">👑</span>
+                <img id="u-pfp" src="https://via.placeholder.com/70" class="pfp-main" onclick="document.getElementById('in-pfp').click()">
             </div>
-            <div style="margin-top: 20px;">
-                <label>Mudar Nome (@):</label><br>
-                <input type="text" id="u-name" value="@Dono_22" style="width:90%; background:#000; color:white; border:1px solid #444; padding:8px;"><br><br>
-                <label>Mudar Bio:</label><br>
-                <textarea id="u-bio" style="width:90%; background:#000; color:white; border:1px solid #444; padding:8px;">Dono do Site</textarea>
+            <div class="last-seen">visto por último hoje às <span id="clock">--:--</span></div>
+            
+            <div style="margin-top: 15px; text-align: left;">
+                <label style="font-size: 12px; color: #888;">NOME (@):</label><br>
+                <input type="text" id="u-name" value="@Dono_22" style="width:95%; background:#111; color:white; border:1px solid #333; padding:8px; border-radius:5px;"><br><br>
+                <label style="font-size: 12px; color: #888;">BIO:</label><br>
+                <textarea id="u-bio" style="width:95%; background:#111; color:white; border:1px solid #333; padding:8px; border-radius:5px;">Dono do Site</textarea>
                 <p><strong>Meu ID: 22</strong></p>
-                <button onclick="alert('Conectando ao Google...')">Entrar com Google G</button>
+                <button onclick="alert('Login Google indisponível em modo local.')" style="width:100%; padding:10px;">Entrar com conta Google G</button>
             </div>
-            <hr>
-            <button onclick="activatePremium()" style="width:100%; background:var(--ouro); color:black; padding:12px; font-weight:bold; border:none; border-radius:5px;">COMPRAR PREMIUM 👑</button><br><br>
-            <button onclick="toggleCalc()">Calculadora Flutuante</button>
+            <hr style="border-color: #222;">
+            <div style="display: flex; justify-content: space-around; font-size: 12px;">
+                <span onclick="setStatus('green')" style="color: lime; cursor:pointer;">● Online</span>
+                <span onclick="setStatus('red')" style="color: red; cursor:pointer;">● Offline</span>
+            </div>
+            <br>
+            <button onclick="activatePremium()" style="width:100%; background:var(--ouro); color:black; padding:12px; font-weight:bold; border:none; border-radius:8px;">COMPRAR PREMIUM 👑</button>
+            <br><br>
+            <button onclick="toggleCalc()" style="width: 100%;">Calculadora Flutuante</button>
+            <br><br>
+            <button onclick="clearMemory()" style="color: red; font-size: 11px; background: none; border: none;">Limpar Cache e Memória</button>
         </div>
     </div>
 
-    <div id="win-g-manage" class="win-chat" style="background: #fff; color: #000; padding: 20px;">
-        <h3>Configurações do Grupo</h3>
-        <p id="mg-desc">Descrição: Foco total nos estudos.</p>
-        <hr>
-        <button onclick="addMember()">Adicionar Membro por ID</button><br><br>
-        <button onclick="groupAction('somente-adm')">Somente ADMs podem falar</button><br><br>
-        <button onclick="groupAction('trancado')">Trancar Grupo</button><br><br>
-        <div style="display: flex; gap: 10px;">
-            <label>Histórico Visível:</label>
-            <input type="checkbox" checked>
-        </div>
-        <hr>
-        <button onclick="deleteGroup()" style="background: red; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px;">APAGAR GRUPO</button>
-        <button onclick="closeWin('win-g-manage')" style="margin-top: 15px; width: 100%;">Voltar</button>
-    </div>
-
-    <div id="calc-float">
-        <div style="font-size: 10px; color: #888; text-align: center; margin-bottom: 5px;">CALC - ARRASTE</div>
-        <input type="text" id="calc-disp" class="calc-display" readonly>
+    <div id="calc-win">
+        <div id="calc-handle" style="font-size: 9px; color: #666; text-align: center; margin-bottom: 5px; background: #222; border-radius: 3px;">CALC (ARRASTE)</div>
+        <input type="text" id="calc-res" class="calc-disp" readonly>
         <div class="calc-grid">
             <button onclick="cIn('7')">7</button><button onclick="cIn('8')">8</button><button onclick="cIn('9')">9</button><button onclick="cIn('/')">/</button>
             <button onclick="cIn('4')">4</button><button onclick="cIn('5')">5</button><button onclick="cIn('6')">6</button><button onclick="cIn('*')">*</button>
@@ -142,7 +136,35 @@
         </div>
     </div>
 
+    <div id="win-g-manage" class="win-chat" style="background: #fff; color: #000; padding: 20px;">
+        <div style="text-align: center;">
+            <img id="g-pfp-manage" src="https://via.placeholder.com/60" style="width:60px; border-radius: 50%;">
+            <h3 id="g-name-manage">Grupo</h3>
+            <p id="g-desc-manage" style="font-size: 12px; color: #555;">Descrição...</p>
+        </div>
+        <hr>
+        <button onclick="addById()">Adicionar por ID ou Usuário</button><br><br>
+        <button onclick="groupConfig('adm')">Somente ADMs podem falar</button><br><br>
+        <button onclick="groupConfig('lock')">Trancar Grupo</button><br><br>
+        <button onclick="alert('Histórico para novos membros ativado!')">Opção: Memória Atemporal</button>
+        <hr>
+        <button onclick="deleteGroup()" style="background: #ff3e3e; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px;">APAGAR GRUPO</button>
+        <button onclick="closeWin('win-g-manage')" style="margin-top: 15px; width: 100%;">Fechar</button>
+    </div>
+
+    <div id="win-materias" class="win-chat" style="background:#000; padding:20px;">
+        <h2 style="color:var(--azul)">Estudos</h2>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+            <button onclick="alert('YouTube: Playlist Matemática Grátis')">Matemática ⋮</button>
+            <button onclick="alert('YouTube: Playlist Inglês Grátis')">Inglês ⋮</button>
+            <button onclick="alert('YouTube: Playlist História Grátis')">História ⋮</button>
+            <button onclick="alert('YouTube: Playlist Redação Grátis')">Redação ⋮</button>
+        </div>
+        <button onclick="closeWin('win-materias')" style="margin-top:20px;">Voltar</button>
+    </div>
+
     <input type="file" id="in-pfp" hidden onchange="readImg(this, 'u-pfp')">
+    <input type="file" id="in-banner" hidden onchange="readImg(this, 'u-banner', true)">
     <input type="file" id="in-g-pfp" hidden onchange="readImg(this, 'g-pfp-chat')">
     <input type="file" id="in-chat-img" hidden onchange="sendImg(this)">
 
@@ -154,16 +176,17 @@
         let audioChunks = [];
         let typingTimer;
 
-        // BANCO DE DADOS LOCAL
-        function initApp() {
-            let saved = JSON.parse(localStorage.getItem('msgs_v5') || '[]');
+        // SISTEMA DE BANCO DE MENSAGENS (LOCALSTORAGE)
+        function loadApp() {
+            let saved = JSON.parse(localStorage.getItem('msgs_db') || '[]');
             saved.forEach(m => renderMessage(m));
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         }
 
         function saveMsg(m) {
-            let saved = JSON.parse(localStorage.getItem('msgs_v5') || '[]');
+            let saved = JSON.parse(localStorage.getItem('msgs_db') || '[]');
             saved.push(m);
-            localStorage.setItem('msgs_v5', JSON.stringify(saved));
+            localStorage.setItem('msgs_db', JSON.stringify(saved));
         }
 
         function openWin(id) { document.getElementById(id).style.display = 'flex'; }
@@ -174,14 +197,14 @@
             isPremium = true;
             document.getElementById('u-crown').style.display = 'block';
             document.getElementById('win-chat').classList.add('aura-premium');
-            alert("👑 Premium Ativado! Aura de fogo e coroa liberadas.");
+            alert("👑 Modo Premium Ativado! Aura amarela liberada.");
         }
 
         // CHAT
         function sendMessage() {
             let input = document.getElementById('chat-input');
             if(!input.value) return;
-            let m = { type: 'text', content: input.value, owner: true, time: Date.now() };
+            let m = { type: 'text', content: input.value, owner: true, id: Date.now() };
             renderMessage(m);
             saveMsg(m);
             input.value = "";
@@ -190,64 +213,60 @@
         function renderMessage(m) {
             let box = document.getElementById('chat-box');
             let wrap = document.createElement('div');
-            wrap.className = m.owner ? "msg-wrap msg-own" : "msg-wrap";
+            wrap.className = "msg-wrap";
+            if(m.owner) wrap.style.alignSelf = "flex-end";
             
-            let ownerName = isPremium ? '<span class="owner-tag" style="text-shadow: 0 0 5px orange;">Dono #27</span>' : '<span class="owner-tag">Dono #27</span>';
+            let ownerName = isPremium ? '<span class="owner-tag" style="animation: flicker 0.5s infinite alternate;">Dono #27</span>' : '<span class="owner-tag">Dono #27</span>';
 
             wrap.innerHTML = `
-                <div class="reactions-popup">
-                    <span onclick="react(this, '❤️')">❤️</span><span onclick="react(this, '😂')">😂</span><span onclick="react(this, '🔥')">🔥</span><span onclick="deleteM(this)">🗑️</span>
+                <div class="reactions-menu">
+                    <span onclick="react(this, '❤️')">❤️</span><span onclick="react(this, '😂')">😂</span><span onclick="deleteM(this)">🗑️</span><span onclick="alert('Fixado!')">📌</span>
                 </div>
                 ${ownerName}
-                <div class="bubble" style="background:${m.owner ? 'var(--msg-out)' : 'var(--msg-in)'}" oncontextmenu="showPop(event)" onlongpress="showPop(event)">
-                    ${m.type === 'img' ? `<img src="${m.content}" style="max-width:100%; border-radius:8px;">` : m.content}
+                <div class="bubble" style="background:${m.owner ? 'var(--msg-out)' : 'var(--msg-in)'}" oncontextmenu="showMenu(event)" onlongpress="showMenu(event)">
+                    ${m.type === 'img' ? `<img src="${m.content}" style="max-width:200px; border-radius:8px;">` : m.content}
                 </div>`;
             
-            // Long Press para Reações
-            let press;
-            wrap.addEventListener('touchstart', (e) => press = setTimeout(() => showPop(e), 700));
-            wrap.addEventListener('touchend', () => clearTimeout(press));
-            wrap.addEventListener('mousedown', (e) => press = setTimeout(() => showPop(e), 700));
-            wrap.addEventListener('mouseup', () => clearTimeout(press));
+            // Suporte para clique longo
+            let pressTimer;
+            wrap.addEventListener('touchstart', (e) => pressTimer = setTimeout(() => showMenu(e), 800));
+            wrap.addEventListener('touchend', () => clearTimeout(pressTimer));
+            wrap.addEventListener('mousedown', (e) => pressTimer = setTimeout(() => showMenu(e), 800));
+            wrap.addEventListener('mouseup', () => clearTimeout(pressTimer));
 
             box.appendChild(wrap);
             box.scrollTop = box.scrollHeight;
         }
 
-        function showPop(e) {
+        function showMenu(e) {
             e.preventDefault();
-            let pop = e.currentTarget.parentElement.querySelector('.reactions-popup');
-            pop.style.display = pop.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        function react(el, emo) {
-            let b = el.parentElement.parentElement.querySelector('.bubble');
-            b.innerHTML += `<span style="font-size:10px; position:absolute; bottom:-5px; right:5px;">${emo}</span>`;
-            el.parentElement.style.display = 'none';
+            let menu = e.currentTarget.parentElement.querySelector('.reactions-menu');
+            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
         }
 
         function deleteM(el) { el.parentElement.parentElement.remove(); }
+        function react(el, emo) { el.parentElement.parentElement.querySelector('.bubble').innerHTML += `<small style="font-size:10px; position:absolute; bottom:-5px; right:5px;">${emo}</small>`; el.parentElement.style.display = 'none'; }
 
-        // ÁUDIO GRAVADO (REAL)
-        async function startMic() {
+        // ÁUDIO REAL (MICROFONE)
+        async function startAudio() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
                 mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
                 mediaRecorder.onstop = () => {
-                    renderMessage({ type: 'text', content: '🎤 Áudio Gravado com Sucesso', owner: true });
+                    renderMessage({ type: 'text', content: '🎤 Áudio Gravado (Qualidade Máxima)', owner: true });
                     audioChunks = [];
                 };
                 mediaRecorder.start();
-                document.getElementById('btn-mic').style.color = 'red';
+                document.getElementById('btn-mic').style.color = "red";
                 document.getElementById('g-status').innerText = "Dono gravando áudio...";
-            } catch (err) { alert("Permita o uso do microfone!"); }
+            } catch (err) { alert("Acesso ao microfone negado!"); }
         }
 
-        function stopMic() {
+        function stopAudio() {
             if(mediaRecorder) {
                 mediaRecorder.stop();
-                document.getElementById('btn-mic').style.color = 'white';
+                document.getElementById('btn-mic').style.color = "white";
                 document.getElementById('g-status').innerText = "";
             }
         }
@@ -255,34 +274,40 @@
         // FOTO
         function sendImg(input) {
             if (input.files && input.files[0]) {
-                let reader = new FileReader();
-                reader.onload = e => {
-                    let m = { type: 'img', content: e.target.result, owner: true };
-                    renderMessage(m);
-                    saveMsg(m);
-                };
-                reader.readAsDataURL(input.files[0]);
+                let r = new FileReader();
+                r.onload = e => { renderMessage({ type: 'img', content: e.target.result, owner: true }); saveMsg({ type: 'img', content: e.target.result, owner: true }); };
+                r.readAsDataURL(input.files[0]);
             }
         }
 
         // CALCULADORA FLUTUANTE
-        let calc = document.getElementById('calc-float');
-        calc.onmousedown = function(e) {
-            let shiftX = e.clientX - calc.getBoundingClientRect().left;
-            let shiftY = e.clientY - calc.getBoundingClientRect().top;
-            function move(e) { calc.style.left = e.pageX - shiftX + 'px'; calc.style.top = e.pageY - shiftY + 'px'; }
-            document.onmousemove = move;
-            document.onmouseup = () => document.onmousemove = null;
+        let calcWin = document.getElementById('calc-win');
+        let calcHandle = document.getElementById('calc-handle');
+        calcHandle.onmousedown = function(e) {
+            let shiftX = e.clientX - calcWin.getBoundingClientRect().left;
+            let shiftY = e.clientY - calcWin.getBoundingClientRect().top;
+            function moveAt(pageX, pageY) { calcWin.style.left = pageX - shiftX + 'px'; calcWin.style.top = pageY - shiftY + 'px'; }
+            function onMouseMove(e) { moveAt(e.pageX, e.pageY); }
+            document.addEventListener('mousemove', onMouseMove);
+            document.onmouseup = function() { document.removeEventListener('mousemove', onMouseMove); calcWin.onmouseup = null; };
         };
 
-        function toggleCalc() { calc.style.display = calc.style.display === 'block' ? 'none' : 'block'; }
-        function cIn(v) { let d = document.getElementById('calc-disp'); if(v==='C') d.value=''; else d.value+=v; }
-        function cRes() { try { let d = document.getElementById('calc-disp'); d.value = eval(d.value); } catch { d.value='Erro'; } }
+        function toggleCalc() { calcWin.style.display = calcWin.style.display === 'block' ? 'none' : 'block'; }
+        function cIn(v) { let d = document.getElementById('calc-res'); if(v==='C') d.value=''; else d.value+=v; }
+        function cRes() { try { let d = document.getElementById('calc-res'); d.value = eval(d.value); } catch { d.value='Erro'; } }
 
-        // GESTÃO
-        function groupAction(tipo) {
+        // GESTÃO DO GRUPO
+        function saveNewGroup() {
+            document.getElementById('g-name-chat').innerText = document.getElementById('cg-name').value + " #27";
+            document.getElementById('g-name-manage').innerText = document.getElementById('cg-name').value;
+            document.getElementById('g-desc-manage').innerText = document.getElementById('cg-desc').value;
+            closeWin('win-create-group');
+            openWin('win-chat');
+        }
+
+        function groupConfig(tipo) {
             let box = document.getElementById('chat-box');
-            let m = tipo === 'trancado' ? "O grupo está trancado, somente os adm podem remover essa função." : "Dono #27 alterou as configurações do grupo para somente adms podem mandar mensagem.";
+            let m = tipo === 'lock' ? "O grupo está trancado, somente os adm podem remover essa função." : "Adm Dono #27 alterou as configurações para somente adms.";
             box.innerHTML += `<div style="text-align:center; font-size:11px; color:orange; margin:10px;">${m}</div>`;
         }
 
@@ -292,18 +317,10 @@
             typingTimer = setTimeout(() => document.getElementById('g-status').innerText = "", 1500);
         }
 
-        function readImg(i, id) {
-            if (i.files && i.files[0]) {
-                let r = new FileReader();
-                r.onload = e => document.getElementById(id).src = e.target.result;
-                r.readAsDataURL(i.files[0]);
-            }
-        }
-        
-        function sendDiscordSticker() {
-            renderMessage({type: 'text', content: '🌟 (Sticker Premium Discord)', owner: true});
-        }
+        function setStatus(cor) { document.getElementById('my-id-label').style.color = cor; }
+        function clearMemory() { localStorage.removeItem('msgs_db'); location.reload(); }
+        function readImg(i, id, isBg = false) { if (i.files && i.files[0]) { let r = new FileReader(); r.onload = e => { if(isBg) document.getElementById(id).style.backgroundImage=`url(${e.target.result})`; else document.getElementById(id).src = e.target.result; }; r.readAsDataURL(i.files[0]); } }
+        function sendSticker() { renderMessage({type: 'text', content: '🎭 (Figurinha Discord Premium)', owner: true}); }
     </script>
 </body>
 </html>
-
