@@ -415,6 +415,7 @@ function togglePlus() {
 
 <script>
 // FUNÇÕES DE CONTROLE
+<script>
 function toggleMenuGeral() {
     var menu = document.getElementById('menuPrincipal');
     var btn = document.getElementById('btnPrincipal');
@@ -429,18 +430,27 @@ function toggleMenuGeral() {
 
 function fecharMenuGeral() {
     document.getElementById('menuPrincipal').style.display = 'none';
-    document.getElementById('btnPrincipal').style.transform = 'rotate(0deg)';
-    document.getElementById('btnPrincipal').style.background = '#007bff';
+    var btn = document.getElementById('btnPrincipal');
+    if(btn) {
+        btn.style.transform = 'rotate(0deg)';
+        btn.style.background = '#007bff';
+    }
 }
 
 function abrirJanelaGrupo() {
-    document.getElementById('janelaCriar').style.display = 'block';
-    fecharMenuGeral(); // Fecha o menu quando a aba abre
+    var janela = document.getElementById('janelaCriar');
+    if(janela) {
+        janela.style.display = 'block';
+        fecharMenuGeral();
+    }
 }
 
 function fecharJanelaGrupo() {
-    document.getElementById('janelaCriar').style.display = 'none';
-}
+    var janela = document.getElementById('janelaCriar');
+    if(janela) {
+        janela.style.display = 'none';
+    }
+} // AQUI ESTAVA O ERRO, AGORA ESTÁ FECHADO!
 </script>
 
 </body>
