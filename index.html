@@ -86,15 +86,21 @@
             <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none;">👑</span>
             <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--bright-blue); cursor:pointer;" onclick="document.getElementById('in-pfp').click()">
         </div>
-        <h2 id="p-name-disp" style="margin:10px 0;">@Usuario</h2>
-        <p id="p-bio-disp" style="color:#888; cursor:pointer;" onclick="changeBio()">Clique para mudar a bio...</p>
-        
-        <div id="status-box" style="color:#0f0; font-size:13px;">● Online</div>
-        <div style="color:#666; font-size:11px;">Visto por último hoje às <span id="seen-time">--:--</span></div>
+        <h2 id="p-name-disp" style="color: white; margin: 10px 0;">@Usuario</h2>
+<p id="p-bio-disp" style="color:#888; cursor:pointer; margin-bottom: 15px;" onclick="changeBio()">Clique para mudar a bio...</p>
 
-        <div style="margin:15px 0;">
-            <span style="font-weight:bold;">ID: </span><span class="id-owner">22</span>
-        </div>
+<div id="status-oficial" style="margin-bottom: 20px;">
+    <div style="color: #2ecc71; font-weight: bold; font-size: 14px; margin-bottom: 2px;">● Online</div>
+    <div style="color: #ff4b4b; font-weight: bold; font-size: 14px; margin-bottom: 8px;">● Offline</div>
+    <div style="color: white; font-size: 12px;">
+        visto por último hoje às <span id="real-time" style="color: white;">--:--</span>
+    </div>
+</div>
+
+<div style="margin:15px 0;">
+    <span style="font-weight:bold; color: white;">ID: </span><span class="id-owner">22</span>
+</div>
+
 
         <button class="btn-main" onclick="buyPremium()" style="background:var(--ouro); margin-bottom:10px;">OBTER PREMIUM 👑</button>
         <button onclick="changeName()" style="background:#222; color:white; width:100%; border:1px solid #444; padding:10px; border-radius:8px;">Configurar Perfil</button>
@@ -221,7 +227,27 @@
     }
 
     // Ligar tudo
-    initApp();
+    initApp();function initApp() {
+    // ... outros códigos que você já tem ...
+    
+    atualizarHorarioReal(); // Adicione apenas esta linha aqui dentro
+}
+
+    function atualizarHorarioReal() {
+    const agora = new Date();
+    const horas = agora.getHours().toString().padStart(2, '0');
+    const minutos = agora.getMinutes().toString().padStart(2, '0');
+    
+    // Procura o ID real-time e coloca o horário em branco
+    const elementoHora = document.getElementById('real-time');
+    if(elementoHora) {
+        elementoHora.innerText = horas + ":" + minutos;
+    }
+}
+
+// Executa a função assim que o site abre
+atualizarHorarioReal();
+
 </script>
 
 </body>
