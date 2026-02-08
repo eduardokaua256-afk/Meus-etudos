@@ -14,6 +14,24 @@
     display: inline-block;
     animation: moverTexto 2s ease-in-out infinite;
 }
+/* Animação de fogo com pulso para o número 22 */
+.numero-fogo {
+    display: inline-block;
+    color: var(--azul-brilhante) !important;
+    font-weight: bold;
+    animation: fogoPulsante 0.6s infinite alternate;
+}
+
+@keyframes fogoPulsante {
+    from { 
+        text-shadow: 0 0 5px #00f, 0 0 10px #0ff;
+        transform: scale(1);
+    }
+    to { 
+        text-shadow: 0 0 15px #00f, 0 0 30px #0ff, 0 0 40px #00ffff;
+        transform: scale(1.1); /* Faz o número crescer levemente */
+    }
+}
 
 @keyframes moverTexto {
     0%, 100% { transform: translateX(0); opacity: 0.8; }
@@ -93,7 +111,7 @@
     
     <div style="margin-top: 5px; font-size: 14px; font-weight: bold;">
         <span class="id-movimento" style="color: white;">ID — </span>
-        <span class="fire-name" style="color: var(--azul-brilhante); font-size: 16px;">22</span>
+        <span class="numero-fogo" style="font-size: 18px;">22</span>
     </div>
 </div>
 
