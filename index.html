@@ -15,32 +15,14 @@
         @keyframes fogoAzul { from { text-shadow: 0 0 5px #00f, 0 0 10px #0ff; } to { text-shadow: 0 0 10px #0ff, 0 0 20px #00f; } }
         @keyframes fogoOuro { from { box-shadow: 0 0 10px #ff0; border: 1px solid #ff0; } to { box-shadow: 0 0 25px #f60; border: 1px solid #f60; } }
         .id-owner { animation: fogoAzul 0.5s infinite alternate; color: var(--azul-brilhante); font-weight: bold; }
-        .premium-aura { animation: fogoOuro 0.6s infinite alternate !important; border: 2px solid var(--ouro) !important; }
-        .fire-name { animation: fogoAzul 0.4s infinite alternate; color: var(--ouro) !important; }
+        .premium-aura { animation: fogoOuro 0.6s infinite alternate !important; }
+        .fire-name { animation: fogoAzul 0.4s infinite alternate; }
 
-        /* GERAL */
         .win { display: none; position: fixed; inset: 0; background: var(--preto); flex-direction: column; z-index: 2000; }
-        .win-small { height: 80%; top: 10%; border-radius: 20px; border: 1px solid #333; overflow: hidden; }
+        .win-small { height: 80%; top: 10%; border-radius: 20px; border: 1px solid #333; overflow-y: auto; }
         .btn-v { position: absolute; top: 15px; right: 15px; background: var(--vermelho); color: white; border: none; border-radius: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 3000; }
         
-        /* CHAT */
-        .chat-header { display: flex; flex-direction: column; align-items: center; padding: 10px; border-bottom: 1px solid #222; background: #000a1a; transition: 0.3s; }
-        .g-pfp-chat { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; cursor: pointer; }
-        .chat-flow { flex: 1; overflow-y: auto; padding: 15px; background: linear-gradient(180deg, #000000 0%, #001122 100%); display: flex; flex-direction: column; gap: 8px; }
-        .bubble { max-width: 85%; padding: 10px; border-radius: 12px; font-size: 14px; position: relative; word-wrap: break-word; }
-        .b-out { align-self: flex-end; background: var(--msg-out); border-bottom-right-radius: 2px; }
-        .b-in { align-self: flex-start; background: var(--msg-in); border-bottom-left-radius: 2px; }
-
-        /* CALCULADORA */
-        #calc-sci { display: none; position: fixed; width: 220px; background: #000; border: 1px solid #444; border-radius: 12px; z-index: 9999; cursor: move; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .calc-disp { width: 100%; height: 40px; background: #111; color: #0f0; border: none; text-align: right; font-size: 20px; margin-bottom: 8px; padding: 5px; box-sizing: border-box; }
-        .calc-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-        .calc-btns button { padding: 10px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
-
-        #search-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 9000; align-items: center; justify-content: center; }
-        .search-box { width: 80%; background: transparent; border: none; border-bottom: 2px solid var(--azul-brilhante); color: white; font-size: 24px; text-align: center; outline: none; }
-
-        .mat-item { background: #111; padding: 15px; margin: 8px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .mat-item { background: #111; padding: 15px; margin: 8px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; }
         .float-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: rgba(29, 161, 242, 0.3); border: 1px solid var(--azul-brilhante); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 1000; backdrop-filter: blur(5px); }
     </style>
 </head>
@@ -53,318 +35,151 @@
                 <img id="top-pfp" src="https://via.placeholder.com/40" style="width:40px; height:40px; border-radius:50%; border:1px solid #333; object-fit: cover;">
             </div>
         </div>
-        
-        <div style="margin: 20px 0;">
-            <button onclick="toggleSearch()" style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid #333; border-radius:25px; color:#888; text-align:left;">🔍 Pesquisar na internet...</button>
-        </div>
 
-        <div id="materia-section">
-            <h3 style="color:var(--azul-brilhante)">Matérias</h3>
-            <div id="mat-list"></div>
-        </div>
+        <h3 style="color:var(--azul-brilhante); margin-top:20px;">Matérias</h3>
+        <div id="mat-list"></div>
 
-        <h3 style="margin-top:25px; color:var(--azul-brilhante)">Grupos e Comunidade</h3>
+        <h3 style="margin-top:25px; color:var(--azul-brilhante)">Grupos</h3>
         <div id="group-list"></div>
-
-        <div class="float-btn" onclick="openWin('win-chat')">💬</div>
     </div>
 
     <div id="win-profile" class="win win-small">
         <button class="btn-v" onclick="closeWin('win-profile')">X</button>
-        <div id="p-banner" onclick="triggerFile('in-banner')" style="width:100%; height:130px; background:#111; background-size:cover; background-position:center; cursor:pointer;"></div>
+        <div id="p-banner" onclick="triggerFile('in-banner')" style="width:100%; height:130px; background:#111; background-size:cover; cursor:pointer; background-position: center;"></div>
         <center>
             <div style="position:relative; width:90px; margin-top:-45px;">
-                <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none; z-index:10;">👑</span>
-                <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer; object-fit: cover; background: #000;" onclick="triggerFile('in-pfp')">
+                <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none;">👑</span>
+                <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer; object-fit: cover;" onclick="triggerFile('in-pfp')">
             </div>
             <h2 id="p-name" onclick="editName()" style="margin:10px 0; cursor:pointer;">@Usuario</h2>
-            <center>
-    <div style="position:relative; width:90px; margin-top:-45px;">
-        <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none; z-index:10;">👑</span>
-        <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer; object-fit: cover; background: #000;" onclick="triggerFile('in-pfp')">
-    </div>
-    <h2 id="p-name" onclick="editName()" style="margin:10px 0; cursor:pointer;">@Usuario</h2>
-
-    <div id="status-box" style="margin-bottom: 15px;">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-          <div id="status-box" style="margin-bottom: 15px;">
-    <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-        <span id="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #00ff00;"></span>
-        <span id="status-text" style="font-weight: bold; color: #00ff00;">Online</span>
-    </div>
-    <div style="color: white; font-size: 11px; margin-top: 4px;">
-        visto por último hoje às <span id="last-time" style="color: white;">--:--</span>
-    </div>
-</div>
-
-<div style="display: flex; gap: 5px; padding: 0 20px 10px 20px;">
-    <button onclick="setStatus('online')" style="flex:1; background:#004400; color:#0f0; border:1px solid #0f0; padding:5px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR ONLINE</button>
-    <button onclick="setStatus('offline')" style="flex:1; background:#440000; color:#f00; border:1px solid #f00; padding:5px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR OFFLINE</button>
-</div>
-  
-    </div>
-
-    <div style="padding:0 20px; display:flex; flex-direction:column; gap:10px;">
-        <div style="display: flex; gap: 5px;">
-            <button onclick="setStatus('online')" style="flex:1; background:#004400; color:#0f0; border:1px solid #0f0; padding:8px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR ONLINE</button>
-            <button onclick="setStatus('offline')" style="flex:1; background:#440000; color:#f00; border:1px solid #f00; padding:8px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR OFFLINE</button>
-        </div>
-        
-        <button id="btn-premium" onclick="buyPremium()" style="background:var(--ouro); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px; cursor:pointer;">OBTER PREMIUM 👑</button>
-        <button onclick="toggleCalc()" style="background:#222; color:white; border:none; padding:10px; border-radius:8px;">Calculadora Científica</button>
-        <button onclick="clearCache()" style="color:var(--vermelho); background:none; border:none; font-size:12px; cursor:pointer; margin-top:10px;">Limpar Cache e Memória</button>
-    </div>
-</center>
-
+            
+            <div id="status-box" style="margin-bottom: 15px;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <span id="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #00ff00;"></span>
+                    <span id="status-text" style="font-weight: bold; color: #00ff00;">Online</span>
+                </div>
+                <div style="color: white; font-size: 11px; margin-top: 4px;">
+                    visto por último hoje às <span id="last-time" style="color: white;">--:--</span>
+                </div>
             </div>
+
+            <div style="display: flex; gap: 5px; padding: 0 20px 15px 20px;">
+                <button onclick="setStatus('online')" style="flex:1; background:#004400; color:#0f0; border:1px solid #0f0; padding:8px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR ONLINE</button>
+                <button onclick="setStatus('offline')" style="flex:1; background:#440000; color:#f00; border:1px solid #f00; padding:8px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR OFFLINE</button>
+            </div>
+            
+            <button id="btn-premium" onclick="buyPremium()" style="width:80%; background:var(--ouro); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px; cursor:pointer;">OBTER PREMIUM 👑</button>
+            <br><br>
+            <button onclick="clearCache()" style="color:var(--vermelho); background:none; border:none; font-size:12px; cursor:pointer;">Limpar Tudo</button>
         </center>
-    </div>
-
-    <div id="win-chat" class="win">
-        <button class="btn-v" onclick="closeWin('win-chat')">X</button>
-        <div class="chat-header" id="chat-aura-target">
-            <img id="g-chat-pfp" class="g-pfp-chat" src="https://via.placeholder.com/50">
-            <span id="g-chat-name" style="font-weight:bold;">Grupo de Estudos</span>
-            <div id="typing-status" style="font-size:10px; color:var(--azul-brilhante); height:12px;"></div>
-        </div>
-        <div class="chat-flow" id="chat-box"></div>
-        <div style="background:#000; padding:10px; display:flex; align-items:center; gap:10px;">
-            <input type="text" id="msg-input" placeholder="Mensagem..." oninput="handleTyping()" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:20px; outline:none;">
-            <button onclick="sendMsg()" style="background:none; border:none; color:var(--azul-brilhante); font-size:24px; cursor:pointer;">➡️</button>
-        </div>
-    </div>
-
-    <div id="calc-sci">
-        <input type="text" id="c-disp" class="calc-disp" readonly value="0">
-        <div class="calc-btns">
-            <button onclick="cVal('7')">7</button><button onclick="cVal('8')">8</button><button onclick="cVal('9')">9</button><button onclick="cVal('/')">÷</button>
-            <button onclick="cVal('4')">4</button><button onclick="cVal('5')">5</button><button onclick="cVal('6')">6</button><button onclick="cVal('*')">×</button>
-            <button onclick="cVal('1')">1</button><button onclick="cVal('2')">2</button><button onclick="cVal('3')">3</button><button onclick="cVal('-')">-</button>
-            <button onclick="cVal('0')">0</button><button onclick="cVal('.')">.</button><button onclick="cRes()" style="background:var(--azul-brilhante)">=</button><button onclick="cVal('+')">+</button>
-            <button onclick="cVal('C')" style="color:red; grid-column: span 4;">LIMPAR</button>
-        </div>
-    </div>
-
-    <div id="search-overlay" onclick="if(event.target==this) toggleSearch()">
-        <input type="text" class="search-box" id="search-q" placeholder="Digite para buscar..." onkeypress="if(event.key=='Enter') executeSearch()">
     </div>
 
     <input type="file" id="in-pfp" hidden onchange="readImg(this, 'p-img', 'user_pfp')">
     <input type="file" id="in-banner" hidden onchange="readImg(this, 'p-banner', 'user_banner')">
 
     <script>
-        let isPremium = false;
-        const myId = 22;
-
         function initApp() {
-        renderMats();
-        renderGroups();
-        loadProfile();
-        loadStatus();
-        setupDraggable();
-}
-
-            
+            renderMats();
+            renderGroups();
+            loadProfile(); // Carrega fotos e nome
+            loadStatus();  // Carrega status e horário
         }
 
-        // CARREGAR E SALVAR PERFIL
+        // CARREGA NOME E FOTOS SALVAS
         function loadProfile() {
             const savedName = localStorage.getItem('user_name') || '@Usuario';
             const savedPfp = localStorage.getItem('user_pfp') || 'https://via.placeholder.com/90';
-            const savedBanner = localStorage.getItem('user_banner') || '#111';
-            const savedPremium = localStorage.getItem('is_premium') === 'true';
+            const savedBanner = localStorage.getItem('user_banner') || '';
+            const isPremium = localStorage.getItem('is_premium') === 'true';
 
             document.getElementById('p-name').innerText = savedName;
             document.getElementById('p-img').src = savedPfp;
             document.getElementById('top-pfp').src = savedPfp;
-            
-            if(savedBanner.startsWith('data:image')) {
-                document.getElementById('p-banner').style.backgroundImage = `url(${savedBanner})`;
-            } else {
-                document.getElementById('p-banner').style.background = savedBanner;
+            if(savedBanner) document.getElementById('p-banner').style.backgroundImage = `url(${savedBanner})`;
+            if(isPremium) {
+                document.getElementById('p-crown').style.display = 'block';
+                document.getElementById('p-img').style.border = "3px solid var(--ouro)";
             }
-
-            if(savedPremium) applyPremiumStyles();
         }
 
         function editName() {
-            const newName = prompt("Digite seu novo nome:", document.getElementById('p-name').innerText);
-            if(newName) {
-                document.getElementById('p-name').innerText = newName;
-                localStorage.setItem('user_name', newName);
+            let n = prompt("Novo nome:", document.getElementById('p-name').innerText);
+            if(n) {
+                document.getElementById('p-name').innerText = n;
+                localStorage.setItem('user_name', n);
             }
         }
 
-        function buyPremium() {
-            isPremium = true;
-            localStorage.setItem('is_premium', 'true');
-            applyPremiumStyles();
-            alert("👑 Premium Ativado com Sucesso!");
+        // SISTEMA DE STATUS (VERDE/VERMELHO)
+        function setStatus(estado) {
+            const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
+            const timeSpan = document.getElementById('last-time');
+            const agora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            if (estado === 'online') {
+                dot.style.background = '#00ff00';
+                text.innerText = 'Online';
+                text.style.color = '#00ff00';
+                localStorage.setItem('user_status', 'online');
+            } else {
+                dot.style.background = '#ff3b3b';
+                text.innerText = 'Offline';
+                text.style.color = '#ff3b3b';
+                localStorage.setItem('user_status', 'offline');
+            }
+            timeSpan.innerText = agora;
+            localStorage.setItem('last_seen_time', agora);
         }
 
-        function applyPremiumStyles() {
-            isPremium = true;
-            document.getElementById('p-crown').style.display = 'block';
-            document.getElementById('p-img').style.border = "3px solid var(--ouro)";
-            document.getElementById('chat-aura-target').classList.add('premium-aura');
-            document.getElementById('btn-premium').innerText = "VOCÊ É PREMIUM 👑";
-            document.getElementById('btn-premium').style.opacity = "0.5";
-            document.getElementById('btn-premium').disabled = true;
+        function loadStatus() {
+            const statusSalvo = localStorage.getItem('user_status') || 'online';
+            const horaSalva = localStorage.getItem('last_seen_time') || '--:--';
+            setStatus(statusSalvo);
+            document.getElementById('last-time').innerText = horaSalva;
+        }
+
+        function renderMats() {
+            const container = document.getElementById('mat-list');
+            const mats = ['Matemática', 'Inglês', 'História', 'Geografia', 'Redação'];
+            container.innerHTML = mats.map(m => `
+                <div class="mat-item">
+                    <span>${m}</span>
+                    <span style="color:var(--azul-brilhante)">📚</span>
+                </div>`).join('');
+        }
+
+        function renderGroups() {
+            document.getElementById('group-list').innerHTML = `
+                <div style="background:#111; padding:15px; border-radius:12px; border:1px solid #222;">
+                    <b>Comunidade Geral</b><br><small>22 membros online</small>
+                </div>`;
         }
 
         function readImg(input, targetId, storageKey) {
             if(input.files[0]) {
                 let reader = new FileReader();
                 reader.onload = (e) => {
-                    const result = e.target.result;
-                    if(targetId === 'p-banner') document.getElementById(targetId).style.backgroundImage = `url(${result})`;
+                    if(targetId === 'p-banner') document.getElementById(targetId).style.backgroundImage = `url(${e.target.result})`;
                     else {
-                        document.getElementById(targetId).src = result;
-                        document.getElementById('top-pfp').src = result;
+                        document.getElementById(targetId).src = e.target.result;
+                        document.getElementById('top-pfp').src = e.target.result;
                     }
-                    localStorage.setItem(storageKey, result);
+                    localStorage.setItem(storageKey, e.target.result);
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // MENSAGENS E GRUPOS
-        function renderGroups() {
-            const container = document.getElementById('group-list');
-            container.innerHTML = `
-                <div onclick="openWin('win-chat')" style="background:#111; padding:15px; border-radius:12px; display:flex; align-items:center; gap:12px; border:1px solid #222; cursor:pointer;">
-                    <img src="https://via.placeholder.com/45" style="width:45px; height:45px; border-radius:50%;">
-                    <div>
-                        <div style="font-weight:bold;">Grupo de Estudos Geral</div>
-                        <div style="font-size:11px; color:#666;">Clique para entrar no chat</div>
-                    </div>
-                </div>`;
+        function buyPremium() {
+            localStorage.setItem('is_premium', 'true');
+            location.reload();
         }
 
-        function sendMsg() {
-            const input = document.getElementById('msg-input');
-            if(!input.value) return;
-            
-            const box = document.getElementById('chat-box');
-            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            const userName = localStorage.getItem('user_name') || '@Usuario';
-            
-            const div = document.createElement('div');
-            div.className = "bubble b-out";
-            const nameClass = isPremium ? "fire-name" : "id-owner";
-            
-            div.innerHTML = `<small class="${nameClass}">${userName} #${myId}</small><br>${input.value}<br>
-                             <small style="font-size:9px; opacity:0.5; float:right;">${time}</small>`;
-            
-            box.appendChild(div);
-            input.value = "";
-            box.scrollTop = box.scrollHeight;
-            stopTyping();
-        }
-
-        // FUNÇÕES DE UI
         function openWin(id) { document.getElementById(id).style.display = 'flex'; }
         function closeWin(id) { document.getElementById(id).style.display = 'none'; }
-        
-        function toggleSearch() { 
-            let s = document.getElementById('search-overlay');
-            s.style.display = (s.style.display == 'flex') ? 'none' : 'flex';
-            if(s.style.display == 'flex') document.getElementById('search-q').focus();
-        }
-
-        function executeSearch() {
-            let q = document.getElementById('search-q').value;
-            window.open("https://www.google.com/search?q=" + q);
-            toggleSearch();
-        }
-
-        function renderMats() {
-            const container = document.getElementById('mat-list');
-            const mats = ['Matemática', 'Inglês', 'História', 'Geografia'];
-            container.innerHTML = mats.map(m => `
-                <div class="mat-item">
-                    <span>${m}</span>
-                    <div style="color:var(--azul-brilhante)">📚</div>
-                </div>`).join('');
-        }
-
-        // CALCULADORA
-        function toggleCalc() { 
-            const c = document.getElementById('calc-sci');
-            c.style.display = (c.style.display == 'block') ? 'none' : 'block';
-            c.style.left = '50px'; c.style.top = '100px';
-        }
-        function cVal(v) { 
-            let d = document.getElementById('c-disp'); 
-            if(v=='C') d.value='0'; 
-            else if(d.value=='0') d.value=v; 
-            else d.value+=v; 
-        }
-        function cRes() { 
-            try { 
-                let d = document.getElementById('c-disp'); 
-                d.value = eval(d.value); 
-            } catch { document.getElementById('c-disp').value='Erro'; } 
-        }
-
-        function setupDraggable() {
-            const calc = document.getElementById('calc-sci');
-            let isDragging = false;
-            calc.onmousedown = (e) => { if(e.target.tagName !== 'BUTTON') isDragging = true; };
-            document.onmousemove = (e) => { 
-                if(isDragging) { 
-                    calc.style.left = e.pageX - 110 + 'px'; 
-                    calc.style.top = e.pageY - 20 + 'px'; 
-                } 
-            };
-            document.onmouseup = () => isDragging = false;
-        }
-
-        function handleTyping() {
-            const name = localStorage.getItem('user_name') || '@Usuario';
-            document.getElementById('typing-status').innerText = name + " está escrevendo...";
-            clearTimeout(window.typeTimer);
-            window.typeTimer = setTimeout(() => { document.getElementById('typing-status').innerText = ""; }, 2000);
-        }
-
-        function clearCache() {
-            if(confirm("Isso apagará seu perfil e dados salvos. Continuar?")) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
-
         function triggerFile(id) { document.getElementById(id).click(); }
-        function setStatus(estado) {
-    const dot = document.getElementById('status-dot');
-    const text = document.getElementById('status-text');
-    const agora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-    if (estado === 'online') {
-        dot.style.background = '#00ff00'; // Bolinha Verde
-        text.innerText = 'Online';
-        text.style.color = '#00ff00';     // Texto Verde
-        localStorage.setItem('user_status', 'online');
-    } else {
-        dot.style.background = '#ff3b3b'; // Bolinha Vermelha
-        text.innerText = 'Offline';
-        text.style.color = '#ff3b3b';     // Texto Vermelho
-        localStorage.setItem('user_status', 'offline');
-    }
-
-    // O horário do visto por último sempre fica em branco
-    document.getElementById('last-time').innerText = agora;
-    localStorage.setItem('last_seen_time', agora);
-}
-
-// Essa função faz o site lembrar do seu status quando você atualizar a página
-function loadStatus() {
-    const statusSalvo = localStorage.getItem('user_status') || 'online';
-    const horaSalva = localStorage.getItem('last_seen_time') || '--:--';
-    setStatus(statusSalvo);
-    document.getElementById('last-time').innerText = horaSalva;
-}
-
+        function clearCache() { if(confirm("Limpar tudo?")) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
 </html>
