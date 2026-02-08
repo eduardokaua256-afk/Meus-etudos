@@ -9,6 +9,19 @@
     color: var(--ouro) !important;
     text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
 }
+        /* Movimento suave de vai e vem para o texto "ID" */
+.id-movimento {
+    display: inline-block;
+    animation: moverTexto 2s ease-in-out infinite;
+}
+
+@keyframes moverTexto {
+    0%, 100% { transform: translateX(0); opacity: 0.8; }
+    50% { transform: translateX(5px); opacity: 1; }
+}
+
+/* O número 22 já usará a animação 'fire-name' ou 'fogoAzul' que você já tem */
+
         .linha-movimentada {
     background: linear-gradient(90deg, transparent, var(--ouro), transparent);
     background-size: 200% 100%;
@@ -75,7 +88,20 @@
         <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer; object-fit: cover;" onclick="triggerFile('in-pfp')">
     </div>
 
-    <h2 id="p-name" onclick="editName()" style="margin:10px 0; cursor:pointer;">@Usuario</h2>
+    <div style="margin: 10px 0;">
+    <h2 id="p-name" onclick="editName()" style="margin: 0; cursor:pointer; display: inline-block;">@Usuario</h2>
+    
+    <div style="margin-top: 5px; font-size: 14px; font-weight: bold;">
+        <span class="id-movimento" style="color: white;">ID — </span>
+        <span class="fire-name" style="color: var(--azul-brilhante); font-size: 16px;">22</span>
+    </div>
+</div>
+
+<div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; width: 85%; margin: 10px auto; border-left: 3px solid var(--azul-brilhante);">
+    <small style="color: #666; display: block; font-size: 9px; text-align: left; margin-bottom: 3px;">BIO</small>
+    <p style="margin: 0; font-size: 13px; color: #ddd; font-style: italic;">Fundador do Site Estudo Social</p>
+</div>
+
 
     <div id="status-box" style="margin-bottom: 15px;">
         <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
