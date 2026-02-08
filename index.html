@@ -3,175 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudos Social Pro</title>
+    <title>Estudos Social Max</title>
     <style>
-        :root { --preto: #0b0b0b; --branco: #ffffff; --azul: #007bff; --ouro: #ffd700; --adm: #00ffcc; --dono: #ff4757; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); margin: 0; padding: 20px; }
+        :root { --preto: #000000; --branco: #ffffff; --azul: #1DA1F2; --ouro: #ffd700; --cinza: #16181c; --dono: #ff4757; --adm: #00ffcc; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); margin: 0; padding: 10px; overflow-x: hidden; }
         
-        /* Cabeçalho e Perfil */
-        header { display: flex; justify-content: space-between; align-items: center; background: var(--azul); padding: 15px; border-radius: 15px; }
-        #user-profile-bar { display: flex; align-items: center; gap: 10px; background: #1e1e1e; padding: 10px; border-radius: 10px; margin-top: 10px; border: 1px solid #333; }
-        .pfp-oficial { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--azul); object-fit: cover; }
-
-        /* Janela Flutuante Estilo "Abas" */
-        #chat-window { 
-            display: none; position: fixed; bottom: 85px; right: 10px; left: 10px; 
-            height: 75vh; background: var(--branco); color: var(--preto); 
-            border-radius: 20px; flex-direction: column; overflow: hidden; z-index: 1001;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        /* Cabeçalho */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #333; }
+        
+        /* Janelas Flutuantes */
+        .window { 
+            display: none; position: fixed; top: 10%; left: 5%; right: 5%; bottom: 10%; 
+            background: var(--branco); color: #000; border-radius: 20px; flex-direction: column; 
+            z-index: 2000; box-shadow: 0 0 30px rgba(255,255,255,0.2); overflow: hidden;
         }
-
-        /* Abas Internas */
-        .tab-bar { display: flex; background: #eee; border-bottom: 1px solid #ddd; }
-        .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; font-weight: bold; font-size: 13px; }
-        .tab.active { background: var(--branco); border-bottom: 3px solid var(--azul); }
-
-        /* Chat e Membros */
-        .content-area { flex: 1; overflow-y: auto; padding: 15px; display: none; background: #f0f2f5; }
-        .content-area.active { display: block; }
+        .win-header { background: var(--cinza); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
         
-        /* Cargos e Efeitos */
-        .badge-dono { color: var(--dono); font-weight: bold; text-shadow: 0 0 5px rgba(255,71,87,0.5); }
-        .badge-adm { color: var(--azul); font-weight: bold; animation: pulse-adm 2s infinite; }
-        @keyframes pulse-adm { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+        /* Perfil Estilo X */
+        .x-profile { background: var(--preto); color: white; height: 100%; overflow-y: auto; }
+        .x-banner { height: 100px; background: var(--azul); }
+        .x-pfp-container { position: relative; margin-top: -50px; padding-left: 20px; }
+        .x-pfp { width: 80px; height: 80px; border-radius: 50%; border: 4px solid var(--preto); object-fit: cover; }
+        .crown-icon { position: absolute; top: -15px; left: 45px; font-size: 25px; display: none; }
+        .x-info { padding: 15px; }
+        .x-bio { color: #71767b; margin: 10px 0; }
 
-        .member-item { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        /* Chat Estilo WhatsApp */
+        .chat-area { flex: 1; overflow-y: auto; background: #e5ddd5; padding: 10px; }
+        .msg { display: flex; align-items: center; margin-bottom: 10px; gap: 8px; }
+        .msg-pfp { width: 30px; height: 30px; border-radius: 50%; }
+        .msg-bubble { background: white; padding: 8px 12px; border-radius: 15px; max-width: 70%; position: relative; }
         
-        /* Botão Redondo Long Press */
-        .btn-photo-round { 
-            width: 45px; height: 45px; border-radius: 50%; background: var(--azul); 
-            color: white; border: none; font-size: 20px; display: flex; 
-            align-items: center; justify-content: center; cursor: pointer;
-        }
+        /* Badges e Efeitos */
+        .badge-dono { color: var(--dono); font-weight: bold; text-shadow: 0 0 8px var(--dono); }
+        .badge-adm { color: var(--azul); font-weight: bold; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .anim-dino { display: inline-block; animation: jump 0.5s infinite alternate; }
+        @keyframes jump { from { transform: translateY(0); } to { transform: translateY(-10px); } }
 
-        #book-icon { position: fixed; bottom: 20px; right: 20px; font-size: 45px; cursor: move; z-index: 1000; touch-action: none; }
+        /* Widgets Flutuantes */
+        .widget { position: fixed; width: 150px; background: var(--cinza); border: 1px solid var(--azul); border-radius: 10px; padding: 10px; z-index: 3000; display: none; cursor: move; }
+        
+        /* Botão Redondo */
+        .btn-round { width: 50px; height: 50px; border-radius: 50%; background: var(--azul); border: none; color: white; font-size: 24px; }
     </style>
 </head>
 <body>
 
     <header>
-        <span>📚 Central de Estudos</span>
-        <div onclick="toggleWindow('settings-panel')" style="cursor:pointer">⋮</div>
+        <span style="font-weight:bold; font-size:20px;">Estudos Social</span>
+        <div onclick="openWindow('win-profile')" style="cursor:pointer">⋮</div>
     </header>
 
-    <div id="user-profile-bar">
-        <img id="pfp-display" class="pfp-oficial" src="https://via.placeholder.com/150" onclick="document.getElementById('input-pfp').click()">
-        <input type="file" id="input-pfp" hidden accept="image/*" onchange="updatePFP(this)">
-        <div>
-            <small>Perfil Oficial</small><br>
-            <strong id="user-name">Estudante</strong>
-        </div>
-    </div>
+    <div id="book-icon" onclick="openWindow('win-chat')" style="position:fixed; bottom:20px; right:20px; font-size:50px; z-index:1000;">📖</div>
 
-    <div id="chat-window">
-        <div class="tab-bar">
-            <div class="tab active" onclick="showTab('tab-chat')">Chat</div>
-            <div class="tab" onclick="showTab('tab-membros')">Participantes</div>
-            <div class="tab" onclick="showTab('tab-premium')">Premium 👑</div>
+    <div id="win-profile" class="window">
+        <div class="win-header">
+            <span>Perfil</span>
+            <button onclick="closeWindow('win-profile')">✕</button>
         </div>
-
-        <div id="tab-chat" class="content-area active">
-            <div id="chat-messages">
-                <p><span class="badge-dono">[DONO] Admin:</span> Bem-vindos ao grupo!</p>
+        <div class="x-profile">
+            <div class="x-banner"></div>
+            <div class="x-pfp-container">
+                <span id="pfp-crown" class="crown-icon">👑</span>
+                <img id="main-pfp" class="x-pfp" src="https://via.placeholder.com/100" onclick="document.getElementById('input-file-pfp').click()">
             </div>
-        </div>
-
-        <div id="tab-membros" class="content-area">
-            <h4>Participantes</h4>
-            <div id="members-list">
-                <div class="member-item">
-                    <span>👑 <span class="badge-dono">Você (Dono)</span></span>
-                </div>
-                <div class="member-item">
-                    <span>👤 João Silva</span>
-                    <button onclick="makeAdm('João Silva')">Dar ADM</button>
+            <div class="x-info">
+                <h3>@Estudante_Pro</h3>
+                <div class="x-bio">Bio: Focado nos estudos e na programação via celular. 🚀</div>
+                <small>Visto por último: Hoje às 08:30</small>
+                <hr style="border-color:#333">
+                <button onclick="buyPremium()" style="background:var(--ouro); color:black; border:none; padding:10px; width:100%; border-radius:20px; font-weight:bold">Comprar Premium 👑</button>
+                <div style="margin-top:20px">
+                    <label><input type="checkbox"> Esconder Modo Online</label><br><br>
+                    <button onclick="toggleWidget('widget-calc')">Ativar Calculadora</button>
+                    <button onclick="toggleWidget('widget-search')">Ativar Pesquisa</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="tab-premium" class="content-area">
-            <p style="color:var(--ouro)">Segure o botão de foto no chat para ativar!</p>
-            <div id="premium-tools" style="display:none">
-                <button onclick="addEffect('sparkles')">Efeito Brilho no Nome</button>
-                <button onclick="alert('Capacidade Máxima!')">Liberar 5k Membros</button>
+    <div id="win-chat" class="window">
+        <div class="win-header" style="background:#075e54">
+            <div onclick="openWindow('win-group-info')" style="cursor:pointer">
+                <strong id="group-name-display">Grupo de Estudos ⚙️</strong><br>
+                <small>Clique para info do grupo</small>
+            </div>
+            <button onclick="closeWindow('win-chat')">✕</button>
+        </div>
+        <div class="chat-area" id="chat-box">
+            <div class="msg">
+                <img src="https://via.placeholder.com/30" class="msg-pfp">
+                <div class="msg-bubble">
+                    <small class="badge-dono">CRIADOR</small><br>
+                    Bem-vindos! Use o modo Premium para ver o <span class="anim-dino">🦖</span>
+                </div>
             </div>
         </div>
-
-        <div id="chat-controls" style="display:flex; padding:10px; background:#fff; gap:10px; border-top:1px solid #ddd">
-            <button class="btn-photo-round" id="btn-photo" 
-                    onmousedown="startPress()" onmouseup="endPress()" 
-                    ontouchstart="startPress()" ontouchend="endPress()">🖼️</button>
-            <input type="text" id="msg-input" placeholder="Mensagem..." style="flex:1; border-radius:20px; border:1px solid #ddd; padding:10px;">
-            <button onclick="sendMsg()" style="border:none; background:none; font-size:24px;">➡️</button>
+        <div style="padding:10px; display:flex; gap:10px; background:#f0f0f0">
+            <button class="btn-round" onclick="document.getElementById('chat-img').click()">🖼️</button>
+            <input type="text" id="chat-input" placeholder="Mensagem..." style="flex:1; border-radius:20px; border:1px solid #ddd; padding:10px;">
+            <button onclick="sendMsg()" style="border:none; background:none; font-size:30px;">➡️</button>
         </div>
     </div>
 
-    <div id="book-icon" onclick="toggleChat()">📖</div>
+    <div id="win-group-info" class="window">
+        <div class="win-header">
+            <span>Membros & Gestão</span>
+            <button onclick="closeWindow('win-group-info')">✕</button>
+        </div>
+        <div style="padding:20px;">
+            <div style="text-align:center">
+                <img src="https://via.placeholder.com/80" class="x-pfp" id="group-pfp">
+                <h4>Configurações do Grupo</h4>
+                <button onclick="document.getElementById('group-img-input').click()">Mudar Foto ⚙️</button>
+            </div>
+            <hr>
+            <div id="member-list">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px">
+                    <span>👑 <b class="badge-dono">Você (Criador)</b></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px">
+                    <span>👤 João Aluno</span>
+                    <button onclick="makeAdm()">Dar ADM</button>
+                </div>
+            </div>
+            <hr>
+            <button style="color:red" onclick="confirm('Apagar grupo?')">Apagar Grupo</button>
+            <button onclick="alert('Grupo Trancado!')">Trancar Grupo</button>
+        </div>
+    </div>
+
+    <div id="widget-calc" class="widget" style="top:50px; left:20px;">
+        <small>Calculadora</small>
+        <input type="number" id="n1" style="width:40px"> + <input type="number" id="n2" style="width:40px">
+        <button onclick="alert(Number(document.getElementById('n1').value)+Number(document.getElementById('n2').value))">=</button>
+    </div>
+
+    <div id="widget-search" class="widget" style="top:150px; left:20px;">
+        <small>Pesquisa Google</small>
+        <input type="text" id="q" style="width:80%">
+        <button onclick="window.open('https://google.com/search?q='+document.getElementById('q').value)">🔍</button>
+    </div>
+
+    <input type="file" id="input-file-pfp" hidden onchange="updateImage(this, 'main-pfp')">
+    <input type="file" id="chat-img" hidden onchange="sendPhoto(this)">
+    <input type="file" id="group-img-input" hidden onchange="updateImage(this, 'group-pfp')">
 
     <script>
         let isPremium = false;
-        let pressTimer;
 
-        function toggleChat() {
-            const win = document.getElementById('chat-window');
-            win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
+        function openWindow(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeWindow(id) { document.getElementById(id).style.display = 'none'; }
+        
+        function toggleWidget(id) {
+            const w = document.getElementById(id);
+            w.style.display = w.style.display === 'block' ? 'none' : 'block';
         }
 
-        function showTab(tabId) {
-            document.querySelectorAll('.content-area').forEach(a => a.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+        function buyPremium() {
+            isPremium = true;
+            document.getElementById('pfp-crown').style.display = 'block';
+            alert("👑 Premium Ativado! Coroa liberada e Efeitos Especiais ativos!");
         }
 
-        // Perfil Oficial
-        function updatePFP(input) {
+        function updateImage(input, targetId) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = e => document.getElementById('pfp-display').src = e.target.result;
+                reader.onload = e => document.getElementById(targetId).src = e.target.result;
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // Sistema de ADM
-        function makeAdm(nome) {
-            const list = document.getElementById('members-list');
-            const p = document.createElement('div');
-            p.className = 'member-item';
-            p.innerHTML = `<span>⚡ <span class="badge-adm">${nome} (ADM)</span></span> <small>Efeito: Pulsar</small>`;
-            list.appendChild(p);
-            alert(nome + " agora é Administrador!");
-        }
-
-        // Mensagens com Cores
         function sendMsg() {
-            const val = document.getElementById('msg-input').value;
+            const val = document.getElementById('chat-input').value;
             if(!val) return;
-            const box = document.getElementById('chat-messages');
-            const colorClass = isPremium ? 'badge-dono' : '';
-            box.innerHTML += `<p><span class="${colorClass}">Você:</span> ${val}</p>`;
-            document.getElementById('msg-input').value = "";
-            box.scrollTop = box.scrollHeight;
+            const chat = document.getElementById('chat-box');
+            const pfp = document.getElementById('main-pfp').src;
+            const effect = isPremium ? 'anim-dino' : '';
+            const role = isPremium ? '<small class="badge-dono">DONO</small>' : '<small>Membro</small>';
+            
+            chat.innerHTML += `
+                <div class="msg">
+                    <img src="${pfp}" class="msg-pfp">
+                    <div class="msg-bubble">
+                        ${role}<br>
+                        <span class="${effect}">${val}</span>
+                    </div>
+                </div>`;
+            document.getElementById('chat-input').value = "";
+            chat.scrollTop = chat.scrollHeight;
         }
 
-        // Long Press Premium
-        function startPress() { pressTimer = window.setTimeout(activatePremium, 1500); }
-        function endPress() { clearTimeout(pressTimer); }
-
-        function activatePremium() {
-            isPremium = true;
-            document.getElementById('premium-tools').style.display = 'block';
-            document.getElementById('chat-window').style.border = "2px solid gold";
-            alert("👑 Premium Ativado! Funções de Dono e ADM liberadas.");
+        function sendPhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const chat = document.getElementById('chat-box');
+                    chat.innerHTML += `<div class="msg"><img src="${e.target.result}" style="max-width:150px; border-radius:10px"></div>`;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
-        // Arrastar Livro
-        const icon = document.getElementById('book-icon');
-        icon.addEventListener('touchmove', e => {
-            let t = e.targetTouches[0];
-            icon.style.left = t.pageX - 25 + 'px';
-            icon.style.top = t.pageY - 25 + 'px';
-            e.preventDefault();
+        function makeAdm() {
+            const list = document.getElementById('member-list');
+            list.innerHTML += `<div style="margin-top:10px">⚡ <b class="badge-adm">Novo ADM (Pulsante)</b></div>`;
+        }
+
+        // Permitir arrastar Widgets
+        document.querySelectorAll('.widget').forEach(w => {
+            w.addEventListener('touchmove', e => {
+                let t = e.targetTouches[0];
+                w.style.left = t.pageX - 75 + 'px';
+                w.style.top = t.pageY - 25 + 'px';
+            });
         });
     </script>
 </body>
