@@ -3,248 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Estudo Social Premium v5</title>
+    <title>Estudo Social Premium</title>
     <style>
         :root { 
-            --preto: #0e1117; --branco: #ffffff; --azul: #1DA1F2; --ouro: #ffd700; 
-            --chat-bg: #151921; --msg-in: #ffffff; --msg-out: #dcf8c6;
+            --preto: #0b0e14; --branco: #ffffff; --azul: #1DA1F2; --ouro: #ffd700; 
+            --chat-bg: #10171e; /* Cor para não cansar os olhos */
+            --msg-out: #056162; --msg-in: #262d31;
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); margin: 0; padding: 0; user-select: none; }
 
-        /* HEADER */
-        header { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
+        /* HEADER E UI */
+        header { padding: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
+        .dots-btn { font-size: 16px; cursor: pointer; color: #888; }
         
-        /* BOTÃO CRIAR GRUPO FLUTUANTE */
-        #btn-floating-create { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: rgba(29, 161, 242, 0.3); border: 1px solid var(--azul); color: white; font-size: 30px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); z-index: 999; }
+        /* BOTÃO CRIAR GRUPO FLUTUANTE TRANSPARENTE */
+        #btn-float-create { position: fixed; bottom: 85px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: rgba(29, 161, 242, 0.2); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 28px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); z-index: 999; }
 
-        /* JANELA CHAT AURA PREMIUM */
-        .win-chat { display: none; position: fixed; top: 5%; left: 5%; right: 5%; height: 85vh; background: var(--chat-bg); border-radius: 15px; flex-direction: column; z-index: 2000; overflow: hidden; }
-        .premium-aura { border: 2px solid var(--ouro); box-shadow: 0 0 20px var(--ouro); }
+        /* JANELA CHAT COM AURA DE FOGO (PREMIUM) */
+        .win-chat { display: none; position: fixed; top: 12%; left: 4%; right: 4%; height: 75vh; background: var(--chat-bg); border-radius: 20px; flex-direction: column; z-index: 2000; overflow: hidden; }
+        .aura-premium { border: 2px solid var(--ouro); box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); animation: aura-glow 1.5s infinite alternate; }
+        @keyframes aura-glow { from { box-shadow: 0 0 10px #ffcc00; } to { box-shadow: 0 0 25px #ff6600; } }
+
+        /* PERFIL DO GRUPO (CENTRALIZADO) */
+        .g-header-pro { text-align: center; padding: 10px; background: rgba(0,0,0,0.3); border-bottom: 1px solid #333; }
+        .g-pfp-mid { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--azul); margin-bottom: 5px; }
 
         /* MENSAGENS E REAÇÕES */
-        .chat-messages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .msg-bubble { padding: 10px; border-radius: 12px; color: #000; max-width: 75%; position: relative; word-wrap: break-word; }
-        .reactions-bar { display: none; position: absolute; top: -40px; left: 0; background: white; border-radius: 20px; padding: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 10; gap: 5px; }
-        .reaction-emoji { cursor: pointer; font-size: 18px; }
+        .chat-box { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg-wrap { display: flex; flex-direction: column; position: relative; max-width: 80%; }
+        .msg-own { align-self: flex-end; }
+        .bubble { padding: 8px 12px; border-radius: 12px; font-size: 14px; color: white; position: relative; }
+        .owner-tag { color: #ff4757; font-weight: bold; font-size: 12px; text-shadow: 1px 1px 2px #000; margin-bottom: 2px; }
+        
+        .reactions-popup { display: none; position: absolute; top: -45px; background: #333; border-radius: 20px; padding: 5px; gap: 8px; z-index: 3000; box-shadow: 0 4px 15px #000; }
+        
+        /* CALCULADORA FLUTUANTE MELHORADA */
+        #calc-float { display: none; position: fixed; top: 150px; left: 50px; width: 200px; background: #1a1a1a; border-radius: 12px; padding: 8px; z-index: 5000; box-shadow: 0 10px 30px #000; cursor: move; border: 1px solid #444; }
+        .calc-display { width: 100%; background: #000; color: #0f0; border: none; text-align: right; padding: 8px; margin-bottom: 8px; border-radius: 5px; font-family: monospace; }
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+        .calc-grid button { padding: 8px; border: none; border-radius: 4px; background: #333; color: white; font-size: 14px; }
 
-        /* CALCULADORA FLUTUANTE */
-        #calc-win { display: none; position: fixed; top: 100px; left: 50px; width: 220px; background: #1a1a1a; border: 1px solid #444; border-radius: 10px; padding: 10px; z-index: 3000; cursor: move; }
-        .calc-screen { width: 90%; background: #000; color: #0f0; text-align: right; padding: 10px; margin-bottom: 10px; }
-        .calc-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-        .calc-btns button { padding: 10px; background: #333; color: white; border: none; border-radius: 4px; }
+        /* PERFIL / COROA */
+        .pfp-main { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #1c2128; }
+        .crown-mini { position: absolute; top: -12px; left: 28px; font-size: 20px; display: none; }
 
-        /* PERFIL DO GRUPO (CENTRO) */
-        .group-header-info { text-align: center; padding: 15px; background: rgba(0,0,0,0.2); border-bottom: 1px solid #333; }
-        .group-pfp-center { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--azul); object-fit: cover; }
-        .owner-name { color: #ff4757; font-weight: bold; font-size: 14px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
-
-        /* FIGURINHAS DISCORD */
-        .sticker-discord { width: 80px; height: 80px; }
-
-        /* RODAPÉ INPUT */
-        .footer-input { background: #1c2128; padding: 10px; display: flex; align-items: center; gap: 10px; }
-        .in-txt { flex: 1; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 20px; }
+        /* INPUT RODAPÉ */
+        .chat-input-bar { background: #1c2128; padding: 10px; display: flex; align-items: center; gap: 10px; }
+        .in-msg { flex: 1; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 20px; }
     </style>
 </head>
-<body onload="loadMessages()">
+<body onload="initApp()">
 
     <header>
-        <div><strong style="color: var(--azul);">Estudo Social</strong><br><small>ID: 22</small></div>
-        <div onclick="openWin('win-profile')" style="cursor:pointer">⋮</div>
+        <div>
+            <strong style="color: var(--azul);">Estudo Social</strong><br>
+            <small id="user-id-display">ID: 22</small>
+        </div>
+        <div class="dots-btn" onclick="openWin('win-profile')">⋮</div>
     </header>
 
-    <div id="btn-floating-create" onclick="openWin('win-create-group')">+</div>
+    <div id="btn-float-create" onclick="openWin('win-create-group')">+</div>
 
     <div id="win-create-group" class="win-chat" style="background: #fff; color: #000; padding: 20px;">
-        <h3>Criar Novo Grupo</h3>
-        <input type="text" id="new-g-name" placeholder="Nome do Grupo" style="width:90%; padding:10px; margin-bottom:10px;">
-        <textarea id="new-g-desc" placeholder="Descrição" style="width:90%; padding:10px;"></textarea>
-        <button onclick="document.getElementById('in-g-pfp').click()" style="margin: 10px 0;">Escolher Foto de Perfil</button>
-        <button onclick="createNewGroup()" style="background: var(--azul); color: white; width: 100%; padding: 15px; border: none; border-radius: 10px;">CRIAR GRUPO</button>
-        <button onclick="closeWin('win-create-group')" style="margin-top: 10px; width: 100%;">Cancelar</button>
+        <h3>Novo Grupo</h3>
+        <input type="text" id="cg-name" placeholder="Nome do Grupo" style="width:90%; padding:10px; margin-bottom:10px;">
+        <textarea id="cg-desc" placeholder="Descrição do grupo..." style="width:90%; padding:10px; margin-bottom:10px;"></textarea>
+        <button onclick="document.getElementById('in-g-pfp').click()">Escolher Foto</button>
+        <button onclick="saveNewGroup()" style="background: var(--azul); color:white; width:100%; padding:15px; margin-top:20px; border:none; border-radius:10px;">CRIAR</button>
+        <button onclick="closeWin('win-create-group')" style="width:100%; margin-top:10px;">Cancelar</button>
     </div>
 
     <div id="win-chat" class="win-chat">
-        <div class="group-header-info">
-            <img id="g-display-pfp" src="https://via.placeholder.com/70" class="group-pfp-center" onclick="openWin('win-group-manage')">
-            <h4 id="g-display-name" style="margin: 5px 0; color: white;">Grupo #27</h4>
-            <small id="typing-status" style="color:var(--azul); height: 15px; display: block;"></small>
+        <div class="g-header-pro">
+            <img id="g-pfp-chat" src="https://via.placeholder.com/60" class="g-pfp-mid" onclick="openWin('win-g-manage')">
+            <h4 id="g-name-chat" style="margin: 0;">Grupo de Estudos #27</h4>
+            <small id="g-status" style="color: var(--azul); font-size: 10px; height: 12px; display: block;"></small>
         </div>
         
-        <div class="chat-messages" id="chat-box"></div>
+        <div class="chat-box" id="chat-box"></div>
 
-        <div class="footer-input">
-            <button onclick="openStickers()" style="background:none; border:none; font-size:22px;">🎭</button>
-            <button onclick="document.getElementById('in-chat-file').click()" style="background:none; border:none; font-size:22px;">🖼️</button>
-            <button id="btn-audio" onmousedown="startRecording()" onmouseup="stopRecording()" ontouchstart="startRecording()" ontouchend="stopRecording()" style="background:none; border:none; font-size:22px; color: white;">🎤</button>
-            <input type="text" id="chat-in" class="in-txt" placeholder="Mensagem..." oninput="isTyping()">
-            <button onclick="sendMsg()" style="background:none; border:none; color:var(--azul); font-size:26px;">➡️</button>
+        <div class="chat-input-bar">
+            <button onclick="sendDiscordSticker()" style="background:none; border:none; font-size:22px;">🎭</button>
+            <button onclick="document.getElementById('in-chat-img').click()" style="background:none; border:none; font-size:22px;">🖼️</button>
+            <button id="btn-mic" onmousedown="startMic()" onmouseup="stopMic()" ontouchstart="startMic()" ontouchend="stopMic()" style="background:none; border:none; color: white; font-size: 22px;">🎤</button>
+            <input type="text" id="chat-input" class="in-msg" placeholder="Mensagem..." oninput="isTyping()">
+            <button onclick="sendMessage()" style="background:none; border:none; color: var(--azul); font-size: 25px;">➡️</button>
         </div>
     </div>
 
-    <div id="calc-win">
-        <div style="background:#333; padding:5px; cursor:move; font-size:10px; text-align:center;">CALCULADORA (Arraste aqui)</div>
-        <input type="text" id="calc-screen" class="calc-screen" readonly>
-        <div class="calc-btns">
-            <button onclick="cVal('7')">7</button><button onclick="cVal('8')">8</button><button onclick="cVal('9')">9</button><button onclick="cVal('/')">/</button>
-            <button onclick="cVal('4')">4</button><button onclick="cVal('5')">5</button><button onclick="cVal('6')">6</button><button onclick="cVal('*')">*</button>
-            <button onclick="cVal('1')">1</button><button onclick="cVal('2')">2</button><button onclick="cVal('3')">3</button><button onclick="cVal('-')">-</button>
-            <button onclick="cVal('0')">0</button><button onclick="cVal('C')">C</button><button onclick="cRes()">=</button><button onclick="cVal('+')">+</button>
+    <div id="win-profile" class="win-chat" style="background: #0d1117; color: white;">
+        <div style="padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid #333;">
+            <span>Configurações Pessoais</span>
+            <button onclick="closeWin('win-profile')">✕</button>
         </div>
-        <button onclick="closeCalc()" style="width:100%; margin-top:10px;">Fechar</button>
+        <div style="padding: 20px; overflow-y: auto;">
+            <div style="position: relative; width: 80px; margin: 0 auto;">
+                <span id="u-crown" class="crown-mini">👑</span>
+                <img id="u-pfp" src="https://via.placeholder.com/80" class="pfp-main" onclick="document.getElementById('in-pfp').click()">
+            </div>
+            <div style="margin-top: 20px;">
+                <label>Mudar Nome (@):</label><br>
+                <input type="text" id="u-name" value="@Dono_22" style="width:90%; background:#000; color:white; border:1px solid #444; padding:8px;"><br><br>
+                <label>Mudar Bio:</label><br>
+                <textarea id="u-bio" style="width:90%; background:#000; color:white; border:1px solid #444; padding:8px;">Dono do Site</textarea>
+                <p><strong>Meu ID: 22</strong></p>
+                <button onclick="alert('Conectando ao Google...')">Entrar com Google G</button>
+            </div>
+            <hr>
+            <button onclick="activatePremium()" style="width:100%; background:var(--ouro); color:black; padding:12px; font-weight:bold; border:none; border-radius:5px;">COMPRAR PREMIUM 👑</button><br><br>
+            <button onclick="toggleCalc()">Calculadora Flutuante</button>
+        </div>
     </div>
 
-    <div id="win-group-manage" class="win-chat" style="background:#fff; color:#000; padding:20px;">
+    <div id="win-g-manage" class="win-chat" style="background: #fff; color: #000; padding: 20px;">
         <h3>Configurações do Grupo</h3>
-        <p id="manage-g-desc">Descrição: Estudo e Foco.</p>
+        <p id="mg-desc">Descrição: Foco total nos estudos.</p>
         <hr>
-        <button onclick="addByID()" style="width:100%; padding:10px; margin-bottom:10px;">Adicionar por ID/Nome</button>
-        <button onclick="toggleLock('somente-adm')" style="width:100%; padding:10px; margin-bottom:10px;">Somente ADMs</button>
-        <button onclick="toggleLock('trancado')" style="width:100%; padding:10px; margin-bottom:10px;">Trancar Grupo</button>
-        <button onclick="deleteGroup()" style="width:100%; padding:15px; background: red; color: white; border: none; border-radius: 8px;">APAGAR GRUPO</button>
-        <button onclick="closeWin('win-group-manage')" style="margin-top:20px;">Voltar</button>
+        <button onclick="addMember()">Adicionar Membro por ID</button><br><br>
+        <button onclick="groupAction('somente-adm')">Somente ADMs podem falar</button><br><br>
+        <button onclick="groupAction('trancado')">Trancar Grupo</button><br><br>
+        <div style="display: flex; gap: 10px;">
+            <label>Histórico Visível:</label>
+            <input type="checkbox" checked>
+        </div>
+        <hr>
+        <button onclick="deleteGroup()" style="background: red; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px;">APAGAR GRUPO</button>
+        <button onclick="closeWin('win-g-manage')" style="margin-top: 15px; width: 100%;">Voltar</button>
     </div>
 
-    <input type="file" id="in-g-pfp" hidden onchange="readImg(this, 'g-display-pfp')">
-    <input type="file" id="in-chat-file" hidden onchange="sendImg(this)">
+    <div id="calc-float">
+        <div style="font-size: 10px; color: #888; text-align: center; margin-bottom: 5px;">CALC - ARRASTE</div>
+        <input type="text" id="calc-disp" class="calc-display" readonly>
+        <div class="calc-grid">
+            <button onclick="cIn('7')">7</button><button onclick="cIn('8')">8</button><button onclick="cIn('9')">9</button><button onclick="cIn('/')">/</button>
+            <button onclick="cIn('4')">4</button><button onclick="cIn('5')">5</button><button onclick="cIn('6')">6</button><button onclick="cIn('*')">*</button>
+            <button onclick="cIn('1')">1</button><button onclick="cIn('2')">2</button><button onclick="cIn('3')">3</button><button onclick="cIn('-')">-</button>
+            <button onclick="cIn('0')">0</button><button onclick="cIn('C')">C</button><button onclick="cRes()">=</button><button onclick="cIn('+')">+</button>
+        </div>
+    </div>
 
-    <div onclick="openWin('win-chat')" style="position:fixed; bottom:20px; right:20px; font-size:50px;">📖</div>
+    <input type="file" id="in-pfp" hidden onchange="readImg(this, 'u-pfp')">
+    <input type="file" id="in-g-pfp" hidden onchange="readImg(this, 'g-pfp-chat')">
+    <input type="file" id="in-chat-img" hidden onchange="sendImg(this)">
+
+    <div onclick="openWin('win-chat')" style="position:fixed; bottom:20px; right:20px; font-size:45px;">📖</div>
 
     <script>
         let isPremium = false;
-        let audioTimer;
+        let mediaRecorder;
+        let audioChunks = [];
         let typingTimer;
 
-        // SISTEMA DE BANCO DE DADOS (LOCALSTORAGE)
-        function saveMessage(data) {
-            let history = JSON.parse(localStorage.getItem('chat_history') || '[]');
-            history.push(data);
-            localStorage.setItem('chat_history', JSON.stringify(history));
+        // BANCO DE DADOS LOCAL
+        function initApp() {
+            let saved = JSON.parse(localStorage.getItem('msgs_v5') || '[]');
+            saved.forEach(m => renderMessage(m));
         }
 
-        function loadMessages() {
-            let history = JSON.parse(localStorage.getItem('chat_history') || '[]');
-            history.forEach(m => renderMessage(m));
+        function saveMsg(m) {
+            let saved = JSON.parse(localStorage.getItem('msgs_v5') || '[]');
+            saved.push(m);
+            localStorage.setItem('msgs_v5', JSON.stringify(saved));
         }
 
         function openWin(id) { document.getElementById(id).style.display = 'flex'; }
         function closeWin(id) { document.getElementById(id).style.display = 'none'; }
 
-        // MENSAGENS E REAÇÕES
-        function sendMsg() {
-            let input = document.getElementById('chat-in');
+        // PREMIUM
+        function activatePremium() {
+            isPremium = true;
+            document.getElementById('u-crown').style.display = 'block';
+            document.getElementById('win-chat').classList.add('aura-premium');
+            alert("👑 Premium Ativado! Aura de fogo e coroa liberadas.");
+        }
+
+        // CHAT
+        function sendMessage() {
+            let input = document.getElementById('chat-input');
             if(!input.value) return;
-            let data = { type: 'text', content: input.value, owner: true, id: Date.now() };
-            renderMessage(data);
-            saveMessage(data);
+            let m = { type: 'text', content: input.value, owner: true, time: Date.now() };
+            renderMessage(m);
+            saveMsg(m);
             input.value = "";
         }
 
-        function renderMessage(data) {
+        function renderMessage(m) {
             let box = document.getElementById('chat-box');
-            let div = document.createElement('div');
-            div.style = data.owner ? "align-self: flex-end; position:relative;" : "align-self: flex-start; position:relative;";
+            let wrap = document.createElement('div');
+            wrap.className = m.owner ? "msg-wrap msg-own" : "msg-wrap";
             
-            let nameHtml = data.owner ? `<small class="owner-name">Dono #27</small><br>` : '';
-            
-            div.innerHTML = `
-                <div class="reactions-bar">
-                    <span class="reaction-emoji" onclick="react(this, '❤️')">❤️</span>
-                    <span class="reaction-emoji" onclick="react(this, '😂')">😂</span>
-                    <span class="reaction-emoji" onclick="react(this, '🔥')">🔥</span>
-                    <span class="reaction-emoji" onclick="deleteMsg(this)">🗑️</span>
+            let ownerName = isPremium ? '<span class="owner-tag" style="text-shadow: 0 0 5px orange;">Dono #27</span>' : '<span class="owner-tag">Dono #27</span>';
+
+            wrap.innerHTML = `
+                <div class="reactions-popup">
+                    <span onclick="react(this, '❤️')">❤️</span><span onclick="react(this, '😂')">😂</span><span onclick="react(this, '🔥')">🔥</span><span onclick="deleteM(this)">🗑️</span>
                 </div>
-                <div class="msg-bubble" style="background:${data.owner ? 'var(--msg-out)' : 'white'}" oncontextmenu="showReactions(event)" onlongpress="showReactions(event)">
-                    ${nameHtml} ${data.content}
+                ${ownerName}
+                <div class="bubble" style="background:${m.owner ? 'var(--msg-out)' : 'var(--msg-in)'}" oncontextmenu="showPop(event)" onlongpress="showPop(event)">
+                    ${m.type === 'img' ? `<img src="${m.content}" style="max-width:100%; border-radius:8px;">` : m.content}
                 </div>`;
             
-            // Suporte para Long Press (Segurar)
-            let timer;
-            div.addEventListener('touchstart', (e) => { timer = setTimeout(() => showReactions(e), 800); });
-            div.addEventListener('touchend', () => clearTimeout(timer));
-            div.addEventListener('mousedown', (e) => { timer = setTimeout(() => showReactions(e), 800); });
-            div.addEventListener('mouseup', () => clearTimeout(timer));
+            // Long Press para Reações
+            let press;
+            wrap.addEventListener('touchstart', (e) => press = setTimeout(() => showPop(e), 700));
+            wrap.addEventListener('touchend', () => clearTimeout(press));
+            wrap.addEventListener('mousedown', (e) => press = setTimeout(() => showPop(e), 700));
+            wrap.addEventListener('mouseup', () => clearTimeout(press));
 
-            box.appendChild(div);
+            box.appendChild(wrap);
             box.scrollTop = box.scrollHeight;
         }
 
-        function showReactions(e) {
+        function showPop(e) {
             e.preventDefault();
-            let bar = e.currentTarget.parentElement.querySelector('.reactions-bar');
-            bar.style.display = bar.style.display === 'flex' ? 'none' : 'flex';
+            let pop = e.currentTarget.parentElement.querySelector('.reactions-popup');
+            pop.style.display = pop.style.display === 'flex' ? 'none' : 'flex';
         }
 
         function react(el, emo) {
-            let bubble = el.parentElement.parentElement.querySelector('.msg-bubble');
-            bubble.innerHTML += `<span style="font-size:12px; position:absolute; bottom:-10px; right:5px;">${emo}</span>`;
+            let b = el.parentElement.parentElement.querySelector('.bubble');
+            b.innerHTML += `<span style="font-size:10px; position:absolute; bottom:-5px; right:5px;">${emo}</span>`;
             el.parentElement.style.display = 'none';
         }
 
-        function deleteMsg(el) {
-            el.parentElement.parentElement.remove();
-            alert("Mensagem apagada!");
+        function deleteM(el) { el.parentElement.parentElement.remove(); }
+
+        // ÁUDIO GRAVADO (REAL)
+        async function startMic() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    renderMessage({ type: 'text', content: '🎤 Áudio Gravado com Sucesso', owner: true });
+                    audioChunks = [];
+                };
+                mediaRecorder.start();
+                document.getElementById('btn-mic').style.color = 'red';
+                document.getElementById('g-status').innerText = "Dono gravando áudio...";
+            } catch (err) { alert("Permita o uso do microfone!"); }
         }
 
-        // ÁUDIO (SEGURAR)
-        function startRecording() {
-            document.getElementById('btn-audio').style.color = "red";
-            document.getElementById('typing-status').innerText = "Gravando áudio...";
-        }
-        function stopRecording() {
-            document.getElementById('btn-audio').style.color = "white";
-            document.getElementById('typing-status').innerText = "";
-            let data = { type: 'audio', content: '🎵 Áudio Gravado (0:04)', owner: true };
-            renderMessage(data);
-            saveMessage(data);
-        }
-
-        // FIGURINHAS (Discord Emojis)
-        function openStickers() {
-            let data = { type: 'sticker', content: '🔥 (Figurinha Discord)', owner: true };
-            renderMessage(data);
-            saveMessage(data);
-        }
-
-        // ADICIONAR ID
-        function addByID() {
-            let val = prompt("Digite o ID ou Nome do Usuário:");
-            if(val) {
-                let conf = confirm(`Usuário encontrado: ${val}. Adicionar ao grupo?`);
-                if(conf) alert("Usuário adicionado com sucesso!");
+        function stopMic() {
+            if(mediaRecorder) {
+                mediaRecorder.stop();
+                document.getElementById('btn-mic').style.color = 'white';
+                document.getElementById('g-status').innerText = "";
             }
         }
 
-        // CALCULADORA ARRASTÁVEL
-        const calc = document.getElementById('calc-win');
-        let isDragging = false;
-        calc.addEventListener('mousedown', () => isDragging = true);
-        window.addEventListener('mousemove', (e) => {
-            if(isDragging) {
-                calc.style.left = e.pageX - 100 + 'px';
-                calc.style.top = e.pageY - 20 + 'px';
-                calc.style.display = 'block';
+        // FOTO
+        function sendImg(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = e => {
+                    let m = { type: 'img', content: e.target.result, owner: true };
+                    renderMessage(m);
+                    saveMsg(m);
+                };
+                reader.readAsDataURL(input.files[0]);
             }
-        });
-        window.addEventListener('mouseup', () => isDragging = false);
+        }
 
-        function cVal(v) { let s = document.getElementById('calc-screen'); if(v==='C') s.value=""; else s.value+=v; }
-        function cRes() { try { document.getElementById('calc-screen').value = eval(document.getElementById('calc-screen').value); } catch { alert("Erro"); } }
-        function closeCalc() { calc.style.display = 'none'; }
+        // CALCULADORA FLUTUANTE
+        let calc = document.getElementById('calc-float');
+        calc.onmousedown = function(e) {
+            let shiftX = e.clientX - calc.getBoundingClientRect().left;
+            let shiftY = e.clientY - calc.getBoundingClientRect().top;
+            function move(e) { calc.style.left = e.pageX - shiftX + 'px'; calc.style.top = e.pageY - shiftY + 'px'; }
+            document.onmousemove = move;
+            document.onmouseup = () => document.onmousemove = null;
+        };
+
+        function toggleCalc() { calc.style.display = calc.style.display === 'block' ? 'none' : 'block'; }
+        function cIn(v) { let d = document.getElementById('calc-disp'); if(v==='C') d.value=''; else d.value+=v; }
+        function cRes() { try { let d = document.getElementById('calc-disp'); d.value = eval(d.value); } catch { d.value='Erro'; } }
 
         // GESTÃO
-        function createNewGroup() {
-            let name = document.getElementById('new-g-name').value;
-            document.getElementById('g-display-name').innerText = name + " #27";
-            document.getElementById('manage-g-desc').innerText = "Descrição: " + document.getElementById('new-g-desc').value;
-            closeWin('win-create-group');
-            openWin('win-chat');
+        function groupAction(tipo) {
+            let box = document.getElementById('chat-box');
+            let m = tipo === 'trancado' ? "O grupo está trancado, somente os adm podem remover essa função." : "Dono #27 alterou as configurações do grupo para somente adms podem mandar mensagem.";
+            box.innerHTML += `<div style="text-align:center; font-size:11px; color:orange; margin:10px;">${m}</div>`;
         }
 
-        function toggleLock(tipo) {
-            let box = document.getElementById('chat-box');
-            let msg = tipo === 'trancado' ? "O grupo está trancado, somente os adm podem remover essa função." : "Adm Dono #27 alterou para somente ADMs.";
-            box.innerHTML += `<div style="text-align:center; font-size:11px; color:orange; margin:10px;">${msg}</div>`;
+        function isTyping() {
+            document.getElementById('g-status').innerText = "Dono escrevendo...";
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => document.getElementById('g-status').innerText = "", 1500);
         }
 
         function readImg(i, id) {
@@ -254,6 +299,11 @@
                 r.readAsDataURL(i.files[0]);
             }
         }
+        
+        function sendDiscordSticker() {
+            renderMessage({type: 'text', content: '🌟 (Sticker Premium Discord)', owner: true});
+        }
     </script>
 </body>
 </html>
+
