@@ -120,6 +120,16 @@
     <div id="screen-home" style="padding: 20px; height: 100vh; overflow-y: auto;">
         <div style="display:flex; justify-content: space-between; align-items: center;">
             <h1 style="margin:0; font-size:22px; color:var(--azul-brilhante)">Estudo Social</h1>
+            <div style="display:flex; justify-content: space-between; align-items: center;">
+    <h1 style="margin:0; font-size:22px; color:var(--bright-blue)">Social Study</h1>
+    <div class="user-header-profile" onclick="openWin('win-profile')">
+        <span id="header-user-name">@User</span>
+        <div class="profile-circle" style="position: relative;">
+            <span id="header-premium-crown" style="display:none; position:absolute; top:-12px; left:50%; transform:translateX(-50%); font-size:18px; z-index:10;">👑</span>
+            <img id="header-pfp" src="https://via.placeholder.com/40">
+        </div>
+    </div>
+    </div>
             <div onclick="openWin('win-profile')" style="cursor:pointer;">
             </div>
         </div>
@@ -236,10 +246,65 @@
         ];
 
         function initApp() {
-            renderMats();
-            renderGroups();
-            updateLastSeen();
-            loadProfile();
+    // 1. Carrega as matérias e grupos
+    renderSubjects();
+    renderGroups();
+
+    // 2. BUSCA O NOME SALVO (Pra não voltar para @User)
+    let n = localStorage.getItem('saved_username');
+    if(n) {
+        if(document.getElementById('p-name-disp')) document.getElementById('p-name-disp').innerText = "@" + n;
+        if(document.getElementById('header-user-name')) document.getElementById('header-user-name').innerText = "@" + n;
+    }
+
+    // 3. BUSCA A BIO SALVA
+    let b = localStorage.getItem('saved_bio');
+    if(b && document.getElementById('p-bio-disp')) {
+        document.getElementById('p-bio-disp').innerText = b;
+    }
+
+    // 4. BUSCA A FOTO SALVA (Topo e Perfil)
+    let foto = localStorage.getItem('user_pfp');
+    if(foto) {
+        if(document.getElementById('p-img')) document.getElementById('p-img').src = foto;
+        if(document.getElementById('header-pfp')) document.getElementById('header-pfp').src = foto;
+    }
+
+    // 5. BUSCA O PREMIUM (O que você me perguntou!)
+    // Se o navegador disser que é true, ele ativa a coroa e as chamas sozinho
+    let premium = localStorage.getItem('is_premium');
+    if(premium === 'true') {
+        ativarVisualPremium();
+    }
+}
+
+    // CARREGAR NOME
+    let n = localStorage.getItem('saved_username');
+    if(n) {
+        document.getElementById('p-name-disp').innerText = "@" + n;
+        document.getElementById('header-user-name').innerText = "@" + n;
+    }
+
+    // CARREGAR BIO
+    let b = localStorage.getItem('saved_bio');
+    if(b) document.getElementById('p-bio-disp').innerText = b;
+
+    // CARREGAR FOTO DE PERFIL
+    let foto = localStorage.getItem('user_pfp');
+    if(foto) {
+        document.getElementById('p-img').src = foto;
+        document.getElementById('header-pfp').src = foto;
+    }
+
+    // CARREGAR STATUS PREMIUM
+    let premium = localStorage.getItem('is_premium');
+    if(premium === 'true') {
+        ativarVisualPremium();
+    }
+    
+    // Atualiza o horário do visto por último
+    document.getElementById('seen-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+}
         }
 
         function openWin(id) { document.getElementById(id).style.display = 'flex'; }
@@ -386,15 +451,29 @@
         reader.readAsDataURL(input.files[0]);
     }
 }
-
-
         function buyPremium() {
-            isPremium = true;
-            document.getElementById('p-crown').style.display = 'block';
-            document.getElementById('p-img').style.border = "3px solid #ffcc00";
-            alert("👑 Premium Ativado! Aura amarela liberada.");
-        }
+    // Salva permanentemente que você é premium
+    localStorage.setItem('is_premium', 'true'); 
+    
+    // Ativa o visual na hora
+    ativarVisualPremium(); 
+    
+    alert("👑 Premium Ativado com Sucesso! Suas configurações foram salvas.");
+}
 
+function ativarVisualPremium() {
+    // Mostra a coroa no perfil e no topo
+    if(document.getElementById('p-crown')) document.getElementById('p-crown').style.display = 'block';
+    if(document.getElementById('header-premium-crown')) document.getElementById('header-premium-crown').style.display = 'block';
+    
+    // Borda dourada (Aura Premium)
+    if(document.getElementById('p-img')) document.getElementById('p-img').style.border = "3px solid #ffd700";
+    if(document.getElementById('header-pfp')) document.getElementById('header-pfp').style.border = "2px solid #ffd700";
+    
+    // Deixa o ID 22 pegando fogo azul (chamando a classe que criamos)
+    let idElement = document.querySelector('.id-owner');
+    if(idElement) idElement.classList.add('premium-active');
+}
         function updateLastSeen() {
             document.getElementById('last-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         }
