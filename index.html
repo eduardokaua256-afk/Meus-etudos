@@ -1,175 +1,210 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Social Study Master v17</title>
+    <title>Estudo Social Master v16</title>
     <style>
         :root {
-            --black: #000000; --deep-blue: #001a33; --bright-blue: #1DA1F2;
-            --msg-out: #004d99; --msg-in: #1a1a1a; --gold: #ffd700; --red: #ff3b3b;
+            --preto: #000000; --azul-profundo: #001a33; --azul-brilhante: #1DA1F2;
+            --msg-out: #004d99; --msg-in: #1a1a1a; --ouro: #ffd700; --vermelho: #ff3b3b;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--black); color: white; margin: 0; overflow: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: white; margin: 0; overflow: hidden; }
 
-        /* PREMIUM ANIMATIONS */
-        @keyframes fireBlue { from { text-shadow: 0 0 5px #00f, 0 0 10px #0ff; } to { text-shadow: 0 0 10px #0ff, 0 0 20px #00f; } }
-        @keyframes fireYellow { from { box-shadow: 0 0 10px #ff0; border: 1px solid #ff0; } to { box-shadow: 0 0 25px #f60; border: 1px solid #f60; } }
-        .id-owner { animation: fireBlue 0.5s infinite alternate; color: var(--bright-blue); font-weight: bold; }
-        .premium-aura { animation: fireYellow 0.6s infinite alternate !important; border-radius: 20px; }
-        .crown-small { width: 25px; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); }
+        /* ANIMAÇÕES PREMIUM */
+        @keyframes fogoAzul { from { text-shadow: 0 0 5px #00f, 0 0 10px #0ff; } to { text-shadow: 0 0 10px #0ff, 0 0 20px #00f; } }
+        @keyframes fogoOuro { from { box-shadow: 0 0 10px #ff0; border: 1px solid #ff0; } to { box-shadow: 0 0 25px #f60; border: 1px solid #f60; } }
+        .id-owner { animation: fogoAzul 0.5s infinite alternate; color: var(--azul-brilhante); font-weight: bold; }
+        .premium-aura { animation: fogoOuro 0.6s infinite alternate !important; }
+        .fire-name { animation: fogoAzul 0.4s infinite alternate; }
 
-        /* UI COMPONENTS */
-        .win { display: none; position: fixed; inset: 0; background: var(--black); flex-direction: column; z-index: 2000; }
-        .win-small { height: 80%; top: 10%; border-radius: 20px; border: 1px solid #333; overflow-y: auto; }
-        .btn-back { position: absolute; top: 15px; right: 15px; background: var(--red); color: white; border: none; border-radius: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 3000; font-weight: bold; }
+        /* GERAL */
+        .win { display: none; position: fixed; inset: 0; background: var(--preto); flex-direction: column; z-index: 2000; }
+        .win-small { height: 80%; top: 10%; border-radius: 20px; border: 1px solid #333; }
+        .btn-v { position: absolute; top: 15px; right: 15px; background: var(--vermelho); color: white; border: none; border-radius: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 3000; }
         
-        /* CHAT */
-        .chat-header { display: flex; flex-direction: column; align-items: center; padding: 10px; border-bottom: 1px solid #222; }
-        .chat-flow { flex: 1; overflow-y: auto; padding: 15px; background: linear-gradient(180deg, #000, #001122); display: flex; flex-direction: column; gap: 8px; }
-        .bubble { max-width: 80%; padding: 10px; border-radius: 12px; font-size: 14px; position: relative; }
-        .b-out { align-self: flex-end; background: var(--msg-out); }
-        .b-in { align-self: flex-start; background: var(--msg-in); }
+        /* CHAT ESTILO WHATSAPP/DISCORD */
+        .chat-header { display: flex; flex-direction: column; align-items: center; padding: 10px; border-bottom: 1px solid #222; background: #000a1a; }
+        .g-pfp-chat { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; cursor: pointer; }
+        .chat-flow { flex: 1; overflow-y: auto; padding: 15px; background: linear-gradient(180deg, #000000 0%, #001122 100%); display: flex; flex-direction: column; gap: 8px; }
+        .bubble { max-width: 85%; padding: 10px; border-radius: 12px; font-size: 14px; position: relative; }
+        .b-out { align-self: flex-end; background: var(--msg-out); border-bottom-right-radius: 2px; }
+        .b-in { align-self: flex-start; background: var(--msg-in); border-bottom-left-radius: 2px; }
 
-        /* DRAGGABLE CALCULATOR */
-        #calc-box { display: none; position: fixed; width: 200px; background: #000; border: 1px solid #444; border-radius: 10px; z-index: 9999; cursor: move; padding: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
-        .calc-screen { width: 100%; height: 35px; background: #111; color: #0f0; border: none; text-align: right; font-size: 18px; margin-bottom: 5px; }
-        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-        .calc-grid button { padding: 8px; background: #222; color: white; border: none; border-radius: 5px; }
+        /* CALCULADORA CIENTÍFICA FLUTUANTE */
+        #calc-sci { display: none; position: fixed; width: 220px; background: #000; border: 1px solid #444; border-radius: 12px; z-index: 9999; cursor: move; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .calc-disp { width: 100%; height: 40px; background: #111; color: #0f0; border: none; text-align: right; font-size: 20px; margin-bottom: 8px; padding: 5px; box-sizing: border-box; }
+        .calc-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .calc-btns button { padding: 10px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        .calc-btns button:active { background: #444; }
 
-        /* SUBJECTS */
-        .subject-card { background: #111; padding: 15px; margin: 5px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        /* PESQUISA TRANSPARENTE */
+        #search-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 9000; align-items: center; justify-content: center; }
+        .search-box { width: 80%; background: transparent; border: none; border-bottom: 2px solid var(--azul-brilhante); color: white; font-size: 24px; text-align: center; outline: none; }
 
-        /* SEARCH BAR */
-        #search-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); z-index: 9000; align-items: center; justify-content: center; }
-        .search-bar { width: 85%; background: transparent; border: none; border-bottom: 2px solid white; color: white; font-size: 26px; text-align: center; outline: none; }
-
-        .float-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: rgba(29,161,242,0.2); border: 1px solid var(--bright-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 1000; }
+        /* MATÉRIAS */
+        .mat-item { background: #111; padding: 15px; margin: 8px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .float-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: rgba(29, 161, 242, 0.3); border: 1px solid var(--azul-brilhante); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 1000; backdrop-filter: blur(5px); }
+        .last-seen { font-size: 10px; color: #bbb; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; }
     </style>
 </head>
 <body onload="initApp()">
 
     <div id="screen-home" style="padding: 20px; height: 100vh; overflow-y: auto;">
         <div style="display:flex; justify-content: space-between; align-items: center;">
-            <h1 style="margin:0; font-size:22px; color:var(--bright-blue)">Social Study</h1>
-            <div onclick="openWin('win-profile')" style="cursor:pointer;">👤</div>
+            <h1 style="margin:0; font-size:22px; color:var(--azul-brilhante)">Estudo Social</h1>
+            <div onclick="openWin('win-profile')" style="cursor:pointer;">
+                <img id="top-pfp" src="https://via.placeholder.com/40" style="width:40px; height:40px; border-radius:50%; border:1px solid #333;">
+            </div>
         </div>
         
-        <button onclick="toggleSearch()" style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid #333; border-radius:25px; color:#888; text-align:left; margin: 20px 0;">🔍 Search the Internet...</button>
-
-        <div id="subject-section">
-            <h3 style="color:var(--bright-blue)">Subjects</h3>
-            <div id="subject-list"></div>
+        <div style="margin: 20px 0;">
+            <button onclick="toggleSearch()" style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid #333; border-radius:25px; color:#888; text-align:left;">🔍 Pesquisar na internet...</button>
         </div>
 
-        <h3 style="margin-top:25px; color:var(--bright-blue)">Groups / Community</h3>
+        <div id="materia-section">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="color:var(--azul-brilhante)">Matérias</h3>
+                <button onclick="addMateriaPrompt()" style="background:none; border:1px solid #444; color:white; border-radius:15px; padding:2px 10px; font-size:11px;">+ Adicionar</button>
+            </div>
+            <div id="mat-list"></div>
+        </div>
+
+        <h3 style="margin-top:25px; color:var(--azul-brilhante)">Grupos e Comunidade</h3>
         <div id="group-list"></div>
 
         <div class="float-btn" onclick="openWin('win-create-group')">+</div>
-        <div onclick="openWin('win-find-user')" style="position:fixed; bottom:20px; left:20px; background:#111; border-radius:50%; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border:1px solid #333;">👤</div>
+        <div onclick="openWin('win-find-user')" style="position:fixed; bottom:20px; left:20px; width:50px; height:50px; background:#111; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; border:1px solid #333;">👤</div>
     </div>
 
     <div id="win-profile" class="win win-small">
-        <button class="btn-back" onclick="closeWin('win-profile')">X</button>
+        <button class="btn-v" onclick="closeWin('win-profile')">X</button>
         <div id="p-banner" onclick="triggerFile('in-banner')" style="width:100%; height:130px; background:#111; background-size:cover; cursor:pointer;"></div>
         <center>
             <div style="position:relative; width:90px; margin-top:-45px;">
-                <img id="p-crown-img" class="crown-small" src="https://cdn-icons-png.flaticon.com/512/1152/1152912.png" style="display:none;">
-                <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--bright-blue);" onclick="triggerFile('in-pfp')">
+                <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none;">👑</span>
+                <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer;" onclick="triggerFile('in-pfp')">
             </div>
-            <h2 id="p-name-disp">@User</h2>
-            <div id="p-status"><span style="color:#00ff00">●</span> Online</div>
-            <small class="last-seen">Last seen: <span id="seen-time"></span></small>
-            <p>ID: <span class="id-owner" id="p-id-num">22</span></p>
-
-            <button onclick="buyPremium()" style="width:90%; background:var(--gold); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px;">GET PREMIUM 👑</button>
-            <button onclick="toggleCalc()" style="width:90%; margin-top:10px;">Calculator</button>
-            <button onclick="openWin('win-login')" style="width:90%; margin-top:10px; background:white; color:black;">Login with Google</button>
+            <h2 id="p-name" style="margin:10px 0;">@Usuario</h2>
+            <div id="p-status"><span class="status-dot" style="background:#00ff00;"></span>Online</div>
+            <div class="last-seen">visto por último hoje às <span id="last-time">--:--</span></div>
+            <p style="font-size:12px;">ID: <span id="my-id-display">22</span></p>
+            
+            <div style="padding:20px; display:flex; flex-direction:column; gap:10px;">
+                <button onclick="buyPremium()" style="background:var(--ouro); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px;">OBTER PREMIUM 👑</button>
+                <button onclick="toggleCalc()" style="background:#222; color:white; border:none; padding:10px; border-radius:8px;">Calculadora Científica</button>
+                <button onclick="openWin('win-google')" style="background:white; color:black; border:none; padding:10px; border-radius:8px;">Entrar com Google</button>
+                <button onclick="clearCache()" style="color:var(--vermelho); background:none; border:none; font-size:12px;">Limpar Cache e Memória</button>
+            </div>
         </center>
     </div>
 
     <div id="win-chat" class="win">
-        <button class="btn-back" onclick="closeWin('win-chat'); stopMedia();">X</button>
-        <div class="chat-header" id="chat-aura">
-            <img id="g-pfp" src="https://via.placeholder.com/50" style="width:50px; height:50px; border-radius:50%; cursor:pointer;" onclick="triggerFile('in-g-pfp')">
-            <h4 id="g-name" style="margin:5px 0;">Group Name</h4>
-            <div id="typing-box" style="font-size:10px; color:cyan; height:12px;"></div>
-            <button onclick="openWin('win-g-settings')" style="position:absolute; left:15px; top:15px; background:none; border:none; color:white;">⚙️</button>
+        <button class="btn-v" onclick="closeWin('win-chat')">X</button>
+        <div class="chat-header" id="chat-aura-target">
+            <img id="g-chat-pfp" class="g-pfp-chat" src="https://via.placeholder.com/50" onclick="triggerFile('in-g-pfp')">
+            <span id="g-chat-name" style="font-weight:bold;">Nome do Grupo</span>
+            <div id="typing-status" style="font-size:10px; color:var(--azul-brilhante); height:12px;"></div>
         </div>
         <div class="chat-flow" id="chat-box"></div>
-        <div style="background:#000; padding:10px; display:flex; gap:8px; align-items:center;">
-            <button onclick="openWin('win-stickers')">🎭</button>
-            <button id="mic-btn" onmousedown="startVoice()" onmouseup="stopVoice()" style="font-size:20px; background:none; border:none; color:white;">🎤</button>
-            <input type="text" id="msg-input" placeholder="Message..." oninput="isTyping()" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:20px;">
-            <button onclick="sendMsg()" style="color:var(--bright-blue); font-size:24px; background:none; border:none;">➡️</button>
+        <div id="group-actions" style="background:#000; padding:10px; display:flex; align-items:center; gap:10px;">
+            <button onclick="openWin('win-stickers')" style="background:none; border:none; font-size:20px;">🎭</button>
+            <button id="mic-btn" onmousedown="startVoice()" onmouseup="stopVoice()" style="background:none; border:none; color:white; font-size:20px;">🎤</button>
+            <input type="text" id="msg-input" placeholder="Mensagem..." oninput="handleTyping()" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:20px; outline:none;">
+            <button onclick="sendMsg()" style="background:none; border:none; color:var(--azul-brilhante); font-size:24px;">➡️</button>
         </div>
     </div>
 
-    <div id="calc-box">
-        <input type="text" id="c-screen" class="calc-screen" readonly value="0">
-        <div class="calc-grid">
+    <div id="calc-sci">
+        <div style="background:#222; padding:5px; font-size:10px; text-align:center; border-radius:8px 8px 0 0;">CALCULADORA MASTER</div>
+        <input type="text" id="c-disp" class="calc-disp" readonly value="0">
+        <div class="calc-btns">
             <button onclick="cVal('7')">7</button><button onclick="cVal('8')">8</button><button onclick="cVal('9')">9</button><button onclick="cVal('/')">÷</button>
             <button onclick="cVal('4')">4</button><button onclick="cVal('5')">5</button><button onclick="cVal('6')">6</button><button onclick="cVal('*')">×</button>
             <button onclick="cVal('1')">1</button><button onclick="cVal('2')">2</button><button onclick="cVal('3')">3</button><button onclick="cVal('-')">-</button>
             <button onclick="cVal('0')">0</button><button onclick="cVal('Math.sqrt(')">√</button><button onclick="cRes()">=</button><button onclick="cVal('+')">+</button>
-            <button onclick="cVal('Math.PI')">π</button><button onclick="cVal('C')" style="color:red">C</button>
+            <button onclick="cVal('Math.PI')">π</button><button onclick="cVal('.')">.</button><button onclick="cVal('**')">^</button><button onclick="cVal('C')" style="color:red">C</button>
         </div>
     </div>
 
     <div id="search-overlay" onclick="if(event.target==this) toggleSearch()">
-        <input type="text" id="sq" class="search-bar" placeholder="Search..." onkeypress="if(event.key=='Enter') window.open('https://google.com/search?q='+this.value)">
+        <input type="text" class="search-box" id="search-q" placeholder="Digite para buscar..." onkeypress="if(event.key=='Enter') executeSearch()">
     </div>
 
-    <input type="file" id="in-pfp" hidden onchange="readImg(this, 'p-img', 'pfp')">
-    <input type="file" id="in-banner" hidden onchange="readImg(this, 'p-banner', 'banner')">
-    <input type="file" id="in-g-pfp" hidden onchange="readImg(this, 'g-pfp', 'gpfp')">
+    <input type="file" id="in-pfp" hidden onchange="readImg(this, 'p-img', 'user_pfp')">
+    <input type="file" id="in-banner" hidden onchange="readImg(this, 'p-banner', 'user_banner')">
+    <input type="file" id="in-g-pfp" hidden onchange="readImg(this, 'g-chat-pfp', 'group_pfp')">
 
     <script>
         let isPremium = false;
         let activeG = null;
+        let myId = 22;
         let mediaRec, chunks = [];
 
-        const subjects = [
-            {n: 'Mathematics', l: 'https://youtube.com/playlist?list=PL83s8LGM84J4mRCdgGKJaZh8KWFU7GgcO'},
-            {n: 'English', l: 'https://youtube.com/playlist?list=PLZ65xj2SRHQB0T2GGk-R7bYxorKUkcyoj'},
-            {n: 'History', l: 'https://youtube.com/playlist?list=PLGCGbN9NWTZBAYWoI5-afZG8bZgIzBoNs'},
-            {n: 'Geography', l: 'https://youtube.com/playlist?list=PLNM2T4DNzmq7p-TtQPn3vjNU9t8M0Arxc'},
-            {n: 'Writing', l: 'https://youtube.com/playlist?list=PLPwuAOl5BHi8UTmce6l7kWwDVj2oMYPv2'}
+        const materiasBase = [
+            {n: 'Matemática', l: 'https://youtube.com/playlist?list=PL83s8LGM84J4mRCdgGKJaZh8KWFU7GgcO'},
+            {n: 'Inglês', l: 'https://youtube.com/playlist?list=PLZ65xj2SRHQB0T2GGk-R7bYxorKUkcyoj'},
+            {n: 'História', l: 'https://youtube.com/playlist?list=PLGCGbN9NWTZBAYWoI5-afZG8bZgIzBoNs'},
+            {n: 'Geografia', l: 'https://youtube.com/playlist?list=PLNM2T4DNzmq7p-TtQPn3vjNU9t8M0Arxc'},
+            {n: 'Redação', l: 'https://youtube.com/playlist?list=PLPwuAOl5BHi8UTmce6l7kWwDVj2oMYPv2'}
         ];
 
         function initApp() {
-            renderSubjects();
+            renderMats();
             renderGroups();
-            loadProfileData();
-            document.getElementById('seen-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            updateLastSeen();
+            loadProfile();
         }
 
         function openWin(id) { document.getElementById(id).style.display = 'flex'; }
         function closeWin(id) { document.getElementById(id).style.display = 'none'; }
-        function toggleSearch() { let s = document.getElementById('search-overlay'); s.style.display = (s.style.display == 'flex') ? 'none' : 'flex'; }
+        function toggleSearch() { 
+            let s = document.getElementById('search-overlay');
+            s.style.display = (s.style.display == 'flex') ? 'none' : 'flex';
+            if(s.style.display == 'flex') document.getElementById('search-q').focus();
+        }
 
-        function renderSubjects() {
-            let list = document.getElementById('subject-list');
-            list.innerHTML = "";
-            subjects.forEach(s => {
-                list.innerHTML += `<div class="subject-card"><span>${s.n}</span><button onclick="window.open('${s.l}')" style="background:none; border:none; color:white;">⋮</button></div>`;
+        function renderMats() {
+            let container = document.getElementById('mat-list');
+            container.innerHTML = "";
+            let custom = JSON.parse(localStorage.getItem('custom_mats') || '[]');
+            [...materiasBase, ...custom].forEach(m => {
+                container.innerHTML += `
+                    <div class="mat-item">
+                        <span>${m.n}</span>
+                        <div onclick="window.open('${m.l}')" style="cursor:pointer; color:var(--azul-brilhante)">⋮</div>
+                    </div>`;
             });
         }
 
         function renderGroups() {
-            let list = document.getElementById('group-list');
-            list.innerHTML = "";
-            let db = JSON.parse(localStorage.getItem('groups_v17') || '[]');
+            let container = document.getElementById('group-list');
+            container.innerHTML = "";
+            let db = JSON.parse(localStorage.getItem('master_groups') || '[]');
             db.forEach(g => {
-                list.innerHTML += `<div onclick="openChat(${g.id})" style="background:#111; padding:15px; border-radius:12px; margin-bottom:10px; border:1px solid #333;">👥 ${g.name} <small>#27</small></div>`;
+                container.innerHTML += `
+                    <div onclick="openChat(${g.id})" style="background:#111; padding:15px; border-radius:12px; margin-bottom:10px; display:flex; align-items:center; gap:12px; border:1px solid #222;">
+                        <img src="${g.pfp || 'https://via.placeholder.com/45'}" style="width:45px; height:45px; border-radius:50%;">
+                        <div>
+                            <div style="font-weight:bold;">${g.name}</div>
+                            <div style="font-size:11px; color:#666;">ID: ${g.id} #27</div>
+                        </div>
+                    </div>`;
             });
         }
 
         function openChat(id) {
-            activeG = id;
-            let db = JSON.parse(localStorage.getItem('groups_v17'));
-            let g = db.find(x => x.id === id);
-            document.getElementById('g-name').innerText = g.name;
-            if(isPremium) document.getElementById('chat-aura').classList.add('premium-aura');
+            let db = JSON.parse(localStorage.getItem('master_groups') || '[]');
+            activeG = db.find(g => g.id === id);
+            if(activeG.banned && activeG.banned.includes(myId)) {
+                alert("Você foi banido do grupo " + activeG.name);
+                return;
+            }
+            document.getElementById('g-chat-name').innerText = activeG.name;
+            document.getElementById('g-chat-pfp').src = activeG.pfp || 'https://via.placeholder.com/50';
+            if(isPremium) document.getElementById('chat-aura-target').classList.add('premium-aura');
             renderMsgs();
             openWin('win-chat');
         }
@@ -177,67 +212,106 @@
         function sendMsg() {
             let input = document.getElementById('msg-input');
             if(!input.value) return;
-            saveMsg({ u: "@Owner", id: 22, t: input.value, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
-            input.value = "";
-        }
-
-        function saveMsg(m) {
-            let db = JSON.parse(localStorage.getItem('groups_v17'));
-            let idx = db.findIndex(x => x.id === activeG);
-            db[idx].msgs.push(m);
-            localStorage.setItem('groups_v17', JSON.stringify(db));
+            let db = JSON.parse(localStorage.getItem('master_groups'));
+            let gIdx = db.findIndex(g => g.id === activeG.id);
+            let msg = {
+                u: "@Dono",
+                id: myId,
+                t: input.value,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                type: 'text'
+            };
+            db[gIdx].msgs.push(msg);
+            localStorage.setItem('master_groups', JSON.stringify(db));
             renderMsgs();
+            input.value = "";
+            stopTyping();
         }
 
         function renderMsgs() {
             let box = document.getElementById('chat-box');
             box.innerHTML = "";
-            let g = JSON.parse(localStorage.getItem('groups_v17')).find(x => x.id === activeG);
-            g.msgs.forEach(m => {
+            let db = JSON.parse(localStorage.getItem('master_groups'));
+            let g = db.find(x => x.id === activeG.id);
+            g.msgs.forEach((m, idx) => {
                 let div = document.createElement('div');
                 div.className = (m.id == 22) ? "bubble b-out" : "bubble b-in";
                 let tag = (m.id == 22) ? `<small class="id-owner">${m.u} #22</small>` : `<small style="color:orange">${m.u} #27</small>`;
+                if(isPremium) tag = `<small class="fire-name">${m.u} #27</small>`;
+                
                 div.innerHTML = `${tag}<br>${m.t}<br><small style="font-size:9px; opacity:0.5; float:right;">${m.time}</small>`;
+                
+                // Opções ao segurar
+                let timer;
+                div.onmousedown = () => timer = setTimeout(() => {
+                    let op = prompt("1: Reagir | 2: Apagar | 3: Fixar");
+                    if(op == '2') { g.msgs.splice(idx, 1); localStorage.setItem('master_groups', JSON.stringify(db)); renderMsgs(); }
+                }, 800);
+                div.onmouseup = () => clearTimeout(timer);
+
                 box.appendChild(div);
             });
             box.scrollTop = box.scrollHeight;
         }
 
-        // DRAGGABLE CALC
-        const calc = document.getElementById('calc-box');
-        let isDrag = false;
-        calc.onmousedown = () => isDrag = true;
-        document.onmousemove = (e) => { if(isDrag) { calc.style.left = e.pageX - 100 + 'px'; calc.style.top = e.pageY - 50 + 'px'; } };
-        document.onmouseup = () => isDrag = false;
+        // CALCULADORA LÓGICA
+        function toggleCalc() { let c = document.getElementById('calc-sci'); c.style.display = (c.style.display == 'block') ? 'none' : 'block'; }
+        function cVal(v) { let d = document.getElementById('c-disp'); if(v=='C') d.value='0'; else if(d.value=='0') d.value=v; else d.value+=v; }
+        function cRes() { try { let d = document.getElementById('c-disp'); d.value = eval(d.value); } catch { d.value='Erro'; } }
 
-        function toggleCalc() { calc.style.display = (calc.style.display == 'block') ? 'none' : 'block'; }
-        function cVal(v) { let s = document.getElementById('c-screen'); if(v=='C') s.value='0'; else s.value+=v; }
-        function cRes() { try { let s = document.getElementById('c-screen'); s.value = eval(s.value); } catch { s.value = 'Error'; } }
+        // ARRASTAR CALCULADORA
+        const calc = document.getElementById('calc-sci');
+        let isDragging = false;
+        calc.onmousedown = (e) => { isDragging = true; };
+        document.onmousemove = (e) => { if(isDragging) { calc.style.left = e.pageX - 110 + 'px'; calc.style.top = e.pageY - 50 + 'px'; } };
+        document.onmouseup = () => isDragging = false;
 
-        function buyPremium() {
-            isPremium = true;
-            document.getElementById('p-crown-img').style.display = 'block';
-            alert("👑 Premium Unlocked! Fiery Aura Enabled.");
-        }
-
-        function readImg(i, id, key) {
-            if(i.files[0]) {
-                let r = new FileReader();
-                r.onload = e => {
-                    if(id == 'p-banner') document.getElementById(id).style.backgroundImage = `url(${e.target.result})`;
-                    else document.getElementById(id).src = e.target.result;
-                    localStorage.setItem(key, e.target.result);
+        // MEDIA E PERFIL
+        function readImg(input, targetId, storageKey) {
+            if(input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    if(targetId == 'p-banner') document.getElementById(targetId).style.backgroundImage = `url(${e.target.result})`;
+                    else document.getElementById(targetId).src = e.target.result;
+                    localStorage.setItem(storageKey, e.target.result);
                 };
-                r.readAsDataURL(i.files[0]);
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        function loadProfileData() {
-            if(localStorage.getItem('pfp')) document.getElementById('p-img').src = localStorage.getItem('pfp');
-            if(localStorage.getItem('banner')) document.getElementById('p-banner').style.backgroundImage = `url(${localStorage.getItem('banner')})`;
+        function buyPremium() {
+            isPremium = true;
+            document.getElementById('p-crown').style.display = 'block';
+            document.getElementById('p-img').style.border = "3px solid #ffcc00";
+            alert("👑 Premium Ativado! Aura amarela liberada.");
+        }
+
+        function updateLastSeen() {
+            document.getElementById('last-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function handleTyping() {
+            document.getElementById('typing-status').innerText = "@Dono está escrevendo...";
+            clearTimeout(window.typeTimer);
+            window.typeTimer = setTimeout(stopTyping, 2000);
+        }
+        function stopTyping() { document.getElementById('typing-status').innerText = ""; }
+
+        function executeSearch() {
+            let q = document.getElementById('search-q').value;
+            window.open("https://www.google.com/search?q=" + q);
+            toggleSearch();
+        }
+
+        function clearCache() {
+            if(confirm("Deseja apagar todas as mensagens e grupos salvos?")) {
+                localStorage.clear();
+                location.reload();
+            }
         }
 
         function triggerFile(id) { document.getElementById(id).click(); }
     </script>
 </body>
 </html>
+
