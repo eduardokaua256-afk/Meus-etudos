@@ -90,11 +90,17 @@
 <p id="p-bio-disp" style="color:#888; cursor:pointer; margin-bottom: 15px;" onclick="changeBio()">Clique para mudar a bio...</p>
 
 <div id="status-oficial" style="margin-bottom: 20px;">
-    <div style="color: #2ecc71; font-weight: bold; font-size: 14px; margin-bottom: 2px;">● Online</div>
-    <div style="color: #ff4b4b; font-weight: bold; font-size: 14px; margin-bottom: 8px;">● Offline</div>
-    <div style="color: white; font-size: 12px;">
+    <div style="color: #2ecc71; font-weight: bold; font-size: 14px;">● Online</div>
+    <div style="color: #ff4b4b; font-weight: bold; font-size: 14px;">● Offline</div>
+    <div style="color: white; font-size: 12px; margin-top: 5px;">
         visto por último hoje às <span id="real-time" style="color: white;">--:--</span>
     </div>
+</div>
+
+<div style="margin:15px 0;">
+    <span style="font-weight:bold; color: white;">ID: </span><span class="id-owner">22</span>
+</div>
+
 </div>
 
 <div style="margin:15px 0;">
@@ -155,35 +161,29 @@
             alert("Grupo criado!");
         }
     }
+function initApp() {
+    // 1. Tenta carregar as matérias (Se as matérias sumiram, isso aqui traz de volta)
+    if (typeof renderSubjects === "function") renderSubjects();
+    if (typeof renderGroups === "function") renderGroups();
 
-    // --- PERFIL E PREMIUM ---
-    function initApp() {
-        renderApp();
-        
-        // Carregar Nome
-        let n = localStorage.getItem('saved_username');
-        if(n) {
-            document.getElementById('p-name-disp').innerText = "@" + n;
-            document.getElementById('header-user-name').innerText = "@" + n;
-        }
-
-        // Carregar Bio
-        let b = localStorage.getItem('saved_bio');
-        if(b) document.getElementById('p-bio-disp').innerText = b;
-
-        // Carregar Foto
-        let foto = localStorage.getItem('user_pfp');
-        if(foto) {
-            document.getElementById('p-img').src = foto;
-            document.getElementById('header-pfp').src = foto;
-        }
-
-        // Carregar Premium
-        if(localStorage.getItem('is_premium') === 'true') ativarVisualPremium();
-
-        // Relógio do Visto por Último
-        document.getElementById('seen-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    // 2. Carrega o Horário Real (Branco)
+    const agora = new Date();
+    const h = agora.getHours().toString().padStart(2, '0');
+    const m = agora.getMinutes().toString().padStart(2, '0');
+    if(document.getElementById('real-time')) {
+        document.getElementById('real-time').innerText = h + ":" + m;
     }
+
+    // 3. Carrega o Nome Salvo
+    let n = localStorage.getItem('saved_username');
+    if(n) {
+        if(document.getElementById('p-name-disp')) document.getElementById('p-name-disp').innerText = "@" + n;
+        if(document.getElementById('header-user-name')) document.getElementById('header-user-name').innerText = "@" + n;
+    }
+}
+
+// 4. ESSA LINHA PRECISA EXISTIR PARA O SITE LIGAR
+initApp();
 
     function changeName() {
         let n = prompt("Seu nome de usuário:");
