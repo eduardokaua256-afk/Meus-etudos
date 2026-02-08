@@ -3,162 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central de Estudos</title>
+    <title>Central de Estudos Pro</title>
     <style>
-        :root {
-            --preto: #1a1a1a;
-            --branco: #ffffff;
-            --azul: #007bff;
-            --cinza: #f4f4f4;
+        :root { --preto: #121212; --branco: #ffffff; --azul: #007bff; --cinza: #2a2a2a; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); margin: 0; padding: 20px; transition: 0.3s; }
+        
+        /* Header */
+        header { display: flex; justify-content: space-between; align-items: center; background: var(--azul); padding: 15px; border-radius: 12px; }
+        .dots-menu { cursor: pointer; font-size: 24px; padding: 0 10px; }
+
+        /* Configurações */
+        #settings-panel { display: none; background: var(--branco); color: var(--preto); padding: 15px; border-radius: 8px; margin-top: 10px; }
+
+        /* Janela do Livro (Chat e Grupos) */
+        #book-icon { position: fixed; bottom: 20px; right: 20px; font-size: 45px; cursor: move; z-index: 1000; touch-action: none; filter: drop-shadow(0 0 10px var(--azul)); }
+        
+        #chat-window { 
+            display: none; position: fixed; bottom: 85px; right: 10px; left: 10px; 
+            height: 80vh; background: var(--branco); color: var(--preto); 
+            border-radius: 20px; flex-direction: column; overflow: hidden; z-index: 1001;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: var(--preto); 
-            color: var(--branco); 
-            margin: 0; padding: 20px;
-            transition: font-size 0.3s;
-        }
+        .chat-header { background: var(--azul); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; }
+        .chat-content { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; }
 
-        /* Header e Menu */
-        header { 
-            display: flex; justify-content: space-between; align-items: center;
-            background: var(--azul); padding: 15px; border-radius: 12px; margin-bottom: 20px;
-        }
+        /* Formulário de Criação de Grupo */
+        .group-form { background: #eee; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; }
+        .group-form input, .group-form select { width: 100%; margin: 5px 0; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
+        
+        /* Estilo das Mensagens e Fotos */
+        .msg-img { max-width: 100%; border-radius: 10px; margin-top: 5px; display: block; }
+        .group-item { display: flex; align-items: center; background: white; padding: 10px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; }
+        .group-thumb { width: 40px; height: 40px; border-radius: 50%; background: var(--azul); margin-right: 10px; object-fit: cover; }
 
-        .dots-menu { cursor: pointer; font-size: 24px; font-weight: bold; }
-
-        /* Configurações (Escondido por padrão) */
-        #settings-panel {
-            display: none; background: var(--branco); color: var(--preto);
-            padding: 15px; border-radius: 8px; margin-bottom: 20px;
-        }
-
-        /* Cards de Conteúdo */
-        .card { 
-            background: var(--branco); color: var(--preto); 
-            padding: 20px; border-radius: 12px; margin-bottom: 15px;
-            border-left: 8px solid var(--azul);
-        }
-
-        /* Ícone do Livro Flutuante e Janela */
-        #book-icon {
-            position: fixed; bottom: 20px; right: 20px;
-            font-size: 40px; cursor: move; z-index: 1000;
-            filter: drop-shadow(0 0 10px var(--azul));
-            touch-action: none; /* Necessário para arrastar no celular */
-        }
-
-        #chat-window {
-            display: none; position: fixed; bottom: 80px; right: 20px;
-            width: 300px; height: 400px; background: var(--branco);
-            color: var(--preto); border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            flex-direction: column; overflow: hidden; z-index: 1001;
-        }
-
-        .chat-header { background: var(--azul); color: white; padding: 10px; font-weight: bold; }
-        .chat-content { flex: 1; padding: 10px; overflow-y: auto; font-size: 14px; }
-        .chat-input { display: flex; border-top: 1px solid #ddd; }
-        .chat-input input { flex: 1; border: none; padding: 10px; }
-        .chat-input button { background: var(--azul); color: white; border: none; padding: 10px; }
-
-        button.btn-group { width: 100%; margin-top: 5px; cursor: pointer; }
+        /* Input de Mensagem */
+        .chat-input-area { display: flex; align-items: center; padding: 10px; border-top: 1px solid #ddd; background: white; }
+        .chat-input-area input { flex: 1; border: none; padding: 10px; outline: none; }
+        .btn-action { background: none; border: none; font-size: 20px; cursor: pointer; margin: 0 5px; }
+        
+        /* Esconder input de arquivo real */
+        #file-input, #group-file-input { display: none; }
     </style>
 </head>
 <body>
 
     <header>
-        <span>Central de Estudos</span>
+        <span>📚 Meus Estudos</span>
         <div class="dots-menu" onclick="toggleSettings()">⋮</div>
     </header>
 
     <div id="settings-panel">
-        <strong>Configurações</strong><br>
-        Tamanho da Letra: 
-        <button onclick="changeFontSize('small')">A-</button>
-        <button onclick="changeFontSize('large')">A+</button>
-        <br><br>
-        Qualidade do Texto: <button onclick="improveQuality()">Alta Nitidez</button>
+        <strong>Ajustes de Texto</strong><br>
+        <button onclick="changeFontSize('small')">Letra Pequena</button>
+        <button onclick="changeFontSize('large')">Letra Grande</button>
+        <hr>
+        <strong>Privacidade</strong><br>
+        <button onclick="alert('Galeria Conectada!')">Permitir Acesso à Galeria</button>
     </div>
 
-    <div class="card">
-        <h2>Matéria 1: Matemática</h2>
-        <p>Resumos de álgebra e geometria.</p>
-        <a href="#" style="color: var(--azul)">Abrir PDF</a>
-    </div>
+    <p>Bem-vindo ao seu portal de estudos via GitHub!</p>
 
     <div id="book-icon" onclick="toggleChat()">📖</div>
 
     <div id="chat-window">
-        <div class="chat-header">Grupos de Estudo</div>
-        <div class="chat-content" id="chat-box">
-            <p><strong>Sistema:</strong> Bem-vindo ao grupo de estudos!</p>
-            <hr>
-            <input type="text" id="group-name" placeholder="Nome do novo grupo...">
-            <button class="btn-group" onclick="createGroup()">Criar Grupo</button>
-            <div id="groups-list"></div>
+        <div class="chat-header">
+            <span>Comunidade de Estudos</span>
+            <span onclick="toggleChat()" style="cursor:pointer">✕</span>
         </div>
-        <div class="chat-input">
-            <input type="text" id="msg-input" placeholder="Mensagem ou link da foto...">
-            <button onclick="sendMsg()">Enviar</button>
+
+        <div class="chat-content" id="main-content">
+            <div class="group-form">
+                <strong>Novo Grupo</strong>
+                <input type="text" id="g-name" placeholder="Nome do Grupo">
+                
+                <label>Foto de Perfil:</label>
+                <button onclick="document.getElementById('group-file-input').click()">Escolher Foto</button>
+                <input type="file" id="group-file-input" accept="image/*" onchange="previewThumb(this)">
+                <img id="thumb-preview" class="group-thumb" style="display:none; margin-top:5px">
+
+                <select id="g-type">
+                    <option value="completo">Completo (Texto + Foto)</option>
+                    <option value="texto">Apenas Texto</option>
+                </select>
+                <button onclick="createGroup()" style="width:100%; background:var(--azul); color:white; border:none; padding:10px; border-radius:5px; margin-top:10px">Criar Agora</button>
+            </div>
+
+            <div id="groups-list">
+                </div>
+        </div>
+
+        <div class="chat-input-area" id="input-area" style="display:none">
+            <button class="btn-action" onclick="document.getElementById('file-input').click()">🖼️</button>
+            <input type="file" id="file-input" accept="image/*" onchange="sendPhoto(this)">
+            <input type="text" id="msg-input" placeholder="Digite uma mensagem...">
+            <button class="btn-action" onclick="sendText()">➡️</button>
         </div>
     </div>
 
     <script>
-        // Função Abrir/Fechar Configurações
+        let currentGroupType = 'completo';
+        let groupImageData = "";
+
         function toggleSettings() {
-            const panel = document.getElementById('settings-panel');
-            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+            const p = document.getElementById('settings-panel');
+            p.style.display = p.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Tamanho da Letra
-        function changeFontSize(type) {
-            document.body.style.fontSize = type === 'large' ? '22px' : '16px';
+        function changeFontSize(s) {
+            document.body.style.fontSize = s === 'large' ? '20px' : '16px';
         }
 
-        // Qualidade de Texto (Filtro de contraste)
-        function improveQuality() {
-            document.body.style.textShadow = "0.5px 0.5px 0px #000";
-            alert("Nitidez aumentada!");
-        }
-
-        // Abrir/Fechar Janela do Livro
         function toggleChat() {
-            const chat = document.getElementById('chat-window');
-            chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
+            const w = document.getElementById('chat-window');
+            w.style.display = w.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        // Simular Envio de Mensagem
-        function sendMsg() {
-            const input = document.getElementById('msg-input');
-            if(input.value) {
-                const p = document.createElement('p');
-                p.innerHTML = `<b>Você:</b> ${input.value}`;
-                document.getElementById('chat-box').appendChild(p);
-                input.value = '';
+        // Preview da foto de perfil do grupo
+        function previewThumb(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('thumb-preview');
+                    img.src = e.target.result;
+                    img.style.display = "block";
+                    groupImageData = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // Criar Grupo
         function createGroup() {
-            const name = document.getElementById('group-name').value;
-            if(name) {
-                const div = document.createElement('div');
-                div.innerHTML = `📁 Grupo: ${name}`;
-                div.style.padding = "5px";
-                div.style.borderBottom = "1px solid #eee";
-                document.getElementById('groups-list').appendChild(div);
-                document.getElementById('group-name').value = '';
+            const name = document.getElementById('g-name').value;
+            const type = document.getElementById('g-type').value;
+            if(!name) return alert("Dê um nome ao grupo");
+
+            const list = document.getElementById('groups-list');
+            const item = document.createElement('div');
+            item.className = 'group-item';
+            
+            const imgHtml = groupImageData ? `<img src="${groupImageData}" class="group-thumb">` : `<div class="group-thumb" style="display:flex; align-items:center; justify-content:center; color:white">📚</div>`;
+            
+            item.innerHTML = `
+                ${imgHtml}
+                <div style="flex:1">
+                    <strong>${name}</strong><br>
+                    <small>${type === 'completo' ? 'Texto e Fotos' : 'Somente Texto'}</small>
+                </div>
+                <button onclick="enterGroup('${type}')">Entrar</button>
+            `;
+            list.appendChild(item);
+            
+            // Limpar campos
+            document.getElementById('g-name').value = "";
+            document.getElementById('thumb-preview').style.display = "none";
+            groupImageData = "";
+        }
+
+        function enterGroup(type) {
+            currentGroupType = type;
+            document.getElementById('groups-list').style.display = "none";
+            document.querySelector('.group-form').style.display = "none";
+            document.getElementById('input-area').style.display = "flex";
+            
+            // Se for apenas texto, esconde o botão de foto
+            document.querySelector('.btn-action').style.display = type === 'texto' ? 'none' : 'block';
+            
+            const box = document.getElementById('main-content');
+            box.innerHTML += `<p style="text-align:center; color:#888">Você entrou no grupo (${type})</p>`;
+        }
+
+        function sendText() {
+            const val = document.getElementById('msg-input').value;
+            if(!val) return;
+            const p = document.createElement('p');
+            p.innerHTML = `<b>Você:</b> ${val}`;
+            document.getElementById('main-content').appendChild(p);
+            document.getElementById('msg-input').value = "";
+        }
+
+        function sendPhoto(input) {
+            if (currentGroupType === 'texto') return;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const p = document.createElement('div');
+                    p.innerHTML = `<b>Você enviou uma foto:</b><img src="${e.target.result}" class="msg-img">`;
+                    document.getElementById('main-content').appendChild(p);
+                };
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // Lógica simples para arrastar o ícone no celular
+        // Arrastar Ícone (Mobile)
         const icon = document.getElementById('book-icon');
         icon.addEventListener('touchmove', function(e) {
-            var touchLocation = e.targetTouches[0];
-            icon.style.left = touchLocation.pageX + 'px';
-            icon.style.top = touchLocation.pageY + 'px';
-        });
+            let t = e.targetTouches[0];
+            icon.style.left = t.pageX - 25 + 'px';
+            icon.style.top = t.pageY - 25 + 'px';
+            e.preventDefault();
+        }, false);
     </script>
 </body>
 </html>
