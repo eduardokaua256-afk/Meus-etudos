@@ -3,204 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central de Estudos Pro</title>
+    <title>Estudos Premium</title>
     <style>
-        :root { --preto: #121212; --branco: #ffffff; --azul: #007bff; --cinza: #2a2a2a; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); margin: 0; padding: 20px; transition: 0.3s; }
+        :root { --preto: #0b0b0b; --branco: #ffffff; --azul: #007bff; --ouro: #ffd700; --cinza: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); margin: 0; padding: 20px; overflow-x: hidden; }
         
-        /* Header */
-        header { display: flex; justify-content: space-between; align-items: center; background: var(--azul); padding: 15px; border-radius: 12px; }
-        .dots-menu { cursor: pointer; font-size: 24px; padding: 0 10px; }
+        /* Layout */
+        header { display: flex; justify-content: space-between; align-items: center; background: var(--azul); padding: 15px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,123,255,0.3); }
+        .card { background: var(--cinza); padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #333; }
 
-        /* Configurações */
-        #settings-panel { display: none; background: var(--branco); color: var(--preto); padding: 15px; border-radius: 8px; margin-top: 10px; }
-
-        /* Janela do Livro (Chat e Grupos) */
-        #book-icon { position: fixed; bottom: 20px; right: 20px; font-size: 45px; cursor: move; z-index: 1000; touch-action: none; filter: drop-shadow(0 0 10px var(--azul)); }
-        
+        /* Janela Flutuante (Mantida Aberta) */
         #chat-window { 
-            display: none; position: fixed; bottom: 85px; right: 10px; left: 10px; 
-            height: 80vh; background: var(--branco); color: var(--preto); 
-            border-radius: 20px; flex-direction: column; overflow: hidden; z-index: 1001;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; position: fixed; bottom: 85px; right: 10px; left: 10px; 
+            height: 70vh; background: var(--branco); color: var(--preto); 
+            border-radius: 25px; flex-direction: column; overflow: hidden; z-index: 1001;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8); border: 2px solid transparent;
         }
 
-        .chat-header { background: var(--azul); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; }
-        .chat-content { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; }
+        /* Estilo Premium */
+        .premium-border { border: 2px solid var(--ouro) !important; animation: glow 2s infinite; }
+        @keyframes glow { 0% { box-shadow: 0 0 5px var(--ouro); } 50% { box-shadow: 0 0 20px var(--ouro); } 100% { box-shadow: 0 0 5px var(--ouro); } }
 
-        /* Formulário de Criação de Grupo */
-        .group-form { background: #eee; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; }
-        .group-form input, .group-form select { width: 100%; margin: 5px 0; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
-        
-        /* Estilo das Mensagens e Fotos */
-        .msg-img { max-width: 100%; border-radius: 10px; margin-top: 5px; display: block; }
-        .group-item { display: flex; align-items: center; background: white; padding: 10px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; }
-        .group-thumb { width: 40px; height: 40px; border-radius: 50%; background: var(--azul); margin-right: 10px; object-fit: cover; }
+        .crown { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-size: 20px; display: none; }
+        .premium-only { display: none; color: var(--ouro); font-weight: bold; font-size: 12px; }
 
-        /* Input de Mensagem */
-        .chat-input-area { display: flex; align-items: center; padding: 10px; border-top: 1px solid #ddd; background: white; }
-        .chat-input-area input { flex: 1; border: none; padding: 10px; outline: none; }
-        .btn-action { background: none; border: none; font-size: 20px; cursor: pointer; margin: 0 5px; }
+        /* Icones e Fotos */
+        .group-thumb-container { position: relative; width: 50px; height: 50px; }
+        .group-thumb { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #ddd; border: 2px solid var(--azul); }
         
-        /* Esconder input de arquivo real */
-        #file-input, #group-file-input { display: none; }
+        /* Botão Redondo de Foto (Com Long Press) */
+        .btn-photo-round { 
+            width: 45px; height: 45px; border-radius: 50%; background: var(--azul); 
+            color: white; border: none; font-size: 20px; display: flex; 
+            align-items: center; justify-content: center; cursor: pointer;
+            transition: transform 0.2s; -webkit-user-select: none;
+        }
+
+        /* Animações Premium */
+        .anim-float { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+
+        .chat-content { flex: 1; padding: 15px; overflow-y: auto; background: #f0f2f5; }
+        .chat-input-area { display: flex; align-items: center; padding: 10px; background: white; gap: 10px; }
+        
+        /* Banner Premium */
+        #premium-banner { display: none; background: linear-gradient(90deg, #000, #444); color: var(--ouro); padding: 5px; text-align: center; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <header>
-        <span>📚 Meus Estudos</span>
-        <div class="dots-menu" onclick="toggleSettings()">⋮</div>
+        <span>📚 Central Pro</span>
+        <div onclick="toggleSettings()" style="cursor:pointer">⋮</div>
     </header>
 
-    <div id="settings-panel">
-        <strong>Ajustes de Texto</strong><br>
-        <button onclick="changeFontSize('small')">Letra Pequena</button>
-        <button onclick="changeFontSize('large')">Letra Grande</button>
-        <hr>
-        <strong>Privacidade</strong><br>
-        <button onclick="alert('Galeria Conectada!')">Permitir Acesso à Galeria</button>
+    <div id="premium-banner">✨ MODO PREMIUM ATIVADO: Figurinhas e Vídeos Liberados ✨</div>
+
+    <div class="card">
+        <h3>Minhas Matérias</h3>
+        <p>O chat flutuante agora permanece aberto para facilitar seus estudos.</p>
     </div>
 
-    <p>Bem-vindo ao seu portal de estudos via GitHub!</p>
-
-    <div id="book-icon" onclick="toggleChat()">📖</div>
-
     <div id="chat-window">
-        <div class="chat-header">
-            <span>Comunidade de Estudos</span>
-            <span onclick="toggleChat()" style="cursor:pointer">✕</span>
+        <div id="premium-tab" style="display:none; background: #fff8e1; padding: 10px; border-bottom: 1px solid var(--ouro);">
+            <small>👑 <b>Configurações Premium:</b></small><br>
+            <button onclick="alert('Capacidade aumentada para 5000 membros!')">Aumentar Limite do Grupo</button>
+            <button onclick="addAnim('coracao')">Efeito ❤️</button>
+            <button onclick="addAnim('dino')">Efeito 🦖</button>
         </div>
 
-        <div class="chat-content" id="main-content">
-            <div class="group-form">
-                <strong>Novo Grupo</strong>
-                <input type="text" id="g-name" placeholder="Nome do Grupo">
-                
-                <label>Foto de Perfil:</label>
-                <button onclick="document.getElementById('group-file-input').click()">Escolher Foto</button>
-                <input type="file" id="group-file-input" accept="image/*" onchange="previewThumb(this)">
-                <img id="thumb-preview" class="group-thumb" style="display:none; margin-top:5px">
-
-                <select id="g-type">
-                    <option value="completo">Completo (Texto + Foto)</option>
-                    <option value="texto">Apenas Texto</option>
-                </select>
-                <button onclick="createGroup()" style="width:100%; background:var(--azul); color:white; border:none; padding:10px; border-radius:5px; margin-top:10px">Criar Agora</button>
+        <div class="chat-content" id="chat-box">
+            <div id="setup-group">
+                <h4>Criar Grupo de Estudos</h4>
+                <input type="text" id="g-name" placeholder="Nome do Grupo" style="width:90%; padding:8px; margin-bottom:10px;">
+                <br>
+                <small>Foto/Vídeo de Perfil:</small>
+                <input type="file" id="g-file" accept="image/*,video/*" style="font-size:10px">
+                <button onclick="createProGroup()" style="width:100%; margin-top:10px; background:var(--azul); color:white; border:none; padding:10px; border-radius:10px;">Criar Grupo</button>
             </div>
-
-            <div id="groups-list">
-                </div>
+            <div id="active-groups"></div>
         </div>
 
         <div class="chat-input-area" id="input-area" style="display:none">
-            <button class="btn-action" onclick="document.getElementById('file-input').click()">🖼️</button>
-            <input type="file" id="file-input" accept="image/*" onchange="sendPhoto(this)">
-            <input type="text" id="msg-input" placeholder="Digite uma mensagem...">
-            <button class="btn-action" onclick="sendText()">➡️</button>
+            <button class="btn-photo-round" id="btn-photo" 
+                    onmousedown="startPress()" onmouseup="endPress()" 
+                    ontouchstart="startPress()" ontouchend="endPress()">
+                🖼️
+            </button>
+            <input type="text" id="msg-input" placeholder="Sua mensagem..." style="flex:1; border:none; background:#eee; padding:10px; border-radius:20px;">
+            <button onclick="sendMsg()" style="border:none; background:none; font-size:24px;">➡️</button>
         </div>
     </div>
 
+    <div id="book-icon" style="position:fixed; bottom:20px; right:20px; font-size:40px; cursor:move; touch-action:none;">📖</div>
+
     <script>
-        let currentGroupType = 'completo';
-        let groupImageData = "";
+        let isPremium = false;
+        let pressTimer;
 
-        function toggleSettings() {
-            const p = document.getElementById('settings-panel');
-            p.style.display = p.style.display === 'block' ? 'none' : 'block';
+        // Sistema de Segurar (Long Press) para Modo Premium
+        function startPress() {
+            pressTimer = window.setTimeout(function() {
+                activatePremium();
+            }, 1500); // Segure por 1.5 segundos
         }
 
-        function changeFontSize(s) {
-            document.body.style.fontSize = s === 'large' ? '20px' : '16px';
+        function endPress() {
+            clearTimeout(pressTimer);
+            if(!isPremium) document.getElementById('g-file').click(); 
         }
 
-        function toggleChat() {
-            const w = document.getElementById('chat-window');
-            w.style.display = w.style.display === 'flex' ? 'none' : 'flex';
+        function activatePremium() {
+            isPremium = true;
+            document.getElementById('chat-window').classList.add('premium-border');
+            document.getElementById('premium-banner').style.display = 'block';
+            document.getElementById('premium-tab').style.display = 'block';
+            alert("👑 MODO PREMIUM DESBLOQUEADO!\n- Vídeos de 5s na bio liberados\n- Figurinhas liberadas\n- Ícones de Coroa ativos");
         }
 
-        // Preview da foto de perfil do grupo
-        function previewThumb(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.getElementById('thumb-preview');
-                    img.src = e.target.result;
-                    img.style.display = "block";
-                    groupImageData = e.target.result;
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function createGroup() {
+        function createProGroup() {
             const name = document.getElementById('g-name').value;
-            const type = document.getElementById('g-type').value;
-            if(!name) return alert("Dê um nome ao grupo");
+            if(!name) return;
 
-            const list = document.getElementById('groups-list');
-            const item = document.createElement('div');
-            item.className = 'group-item';
+            const list = document.getElementById('active-groups');
+            const container = document.createElement('div');
+            container.style = "display:flex; align-items:center; margin-bottom:15px; position:relative;";
             
-            const imgHtml = groupImageData ? `<img src="${groupImageData}" class="group-thumb">` : `<div class="group-thumb" style="display:flex; align-items:center; justify-content:center; color:white">📚</div>`;
-            
-            item.innerHTML = `
-                ${imgHtml}
-                <div style="flex:1">
-                    <strong>${name}</strong><br>
-                    <small>${type === 'completo' ? 'Texto e Fotos' : 'Somente Texto'}</small>
+            // Adiciona Coroa se for Premium
+            const crownHtml = isPremium ? '<div class="crown" style="display:block">👑</div>' : '';
+            const animClass = isPremium ? 'anim-float' : '';
+
+            container.innerHTML = `
+                <div class="group-thumb-container ${animClass}">
+                    ${crownHtml}
+                    <div class="group-thumb" id="thumb-display" style="display:flex; align-items:center; justify-content:center; background:#007bff; color:white">📚</div>
                 </div>
-                <button onclick="enterGroup('${type}')">Entrar</button>
+                <div style="margin-left:15px">
+                    <strong>${name}</strong><br>
+                    <button onclick="enterChat()" style="font-size:10px">Abrir Chat</button>
+                </div>
             `;
-            list.appendChild(item);
-            
-            // Limpar campos
-            document.getElementById('g-name').value = "";
-            document.getElementById('thumb-preview').style.display = "none";
-            groupImageData = "";
+            list.appendChild(container);
+            document.getElementById('setup-group').style.display = 'none';
         }
 
-        function enterGroup(type) {
-            currentGroupType = type;
-            document.getElementById('groups-list').style.display = "none";
-            document.querySelector('.group-form').style.display = "none";
-            document.getElementById('input-area').style.display = "flex";
-            
-            // Se for apenas texto, esconde o botão de foto
-            document.querySelector('.btn-action').style.display = type === 'texto' ? 'none' : 'block';
-            
-            const box = document.getElementById('main-content');
-            box.innerHTML += `<p style="text-align:center; color:#888">Você entrou no grupo (${type})</p>`;
+        function enterChat() {
+            document.getElementById('active-groups').style.display = 'none';
+            document.getElementById('input-area').style.display = 'flex';
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<p style="text-align:center; font-size:12px;">Chat de Estudos Iniciado</p>`;
         }
 
-        function sendText() {
-            const val = document.getElementById('msg-input').value;
-            if(!val) return;
-            const p = document.createElement('p');
-            p.innerHTML = `<b>Você:</b> ${val}`;
-            document.getElementById('main-content').appendChild(p);
-            document.getElementById('msg-input').value = "";
+        function sendMsg() {
+            const input = document.getElementById('msg-input');
+            if(!input.value) return;
+            const msg = document.createElement('div');
+            msg.innerHTML = `<b>Você:</b> ${input.value}`;
+            document.getElementById('chat-box').appendChild(msg);
+            input.value = "";
         }
 
-        function sendPhoto(input) {
-            if (currentGroupType === 'texto') return;
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const p = document.createElement('div');
-                    p.innerHTML = `<b>Você enviou uma foto:</b><img src="${e.target.result}" class="msg-img">`;
-                    document.getElementById('main-content').appendChild(p);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
+        function addAnim(tipo) {
+            const chat = document.getElementById('chat-box');
+            const icons = { 'coracao': '❤️', 'dino': '🦖', 'urso': '🐻' };
+            chat.innerHTML += `<div class="anim-float" style="text-align:center; font-size:30px">${icons[tipo]}</div>`;
         }
 
-        // Arrastar Ícone (Mobile)
+        // Arrastar Ícone
         const icon = document.getElementById('book-icon');
         icon.addEventListener('touchmove', function(e) {
             let t = e.targetTouches[0];
-            icon.style.left = t.pageX - 25 + 'px';
-            icon.style.top = t.pageY - 25 + 'px';
+            icon.style.left = t.pageX - 20 + 'px';
+            icon.style.top = t.pageY - 20 + 'px';
             e.preventDefault();
         }, false);
     </script>
