@@ -314,19 +314,41 @@
 
         // MEDIA E PERFIL
         function readImg(input, targetId, storageKey) {
-            if(input.files[0]) {
-                let reader = new FileReader();
-                reader.onload = (e) => {
-                    if(targetId == 'p-banner') document.getElementById(targetId).style.backgroundImage = `url(${e.target.result})`;
-                    else {document.getElementById(id).src = e.target.result; 
-    document.getElementById('header-pfp').src = e.target.result; // Esta linha faz a mágica
-    if(t == 'pfp') localStorage.setItem('pfp', e.target.result); 
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            // 1. Se for o Banner
+            if (targetId === 'p-banner') {
+                document.getElementById(targetId).style.backgroundImage = `url(${e.target.result})`;
+                localStorage.setItem('user_banner', e.target.result);
+            } 
+            // 2. Se for Foto de Perfil (Pessoal ou do Topo)
+            else {
+                // Atualiza a foto na Janela de Perfil
+                if(document.getElementById('p-img')) document.getElementById('p-img').src = e.target.result;
+                
+                // Atualiza a foto no Círculo do Topo Direito
+                if(document.getElementById('header-pfp')) document.getElementById('header-pfp').src = e.target.result;
+                
+                // Atualiza a foto dentro do Chat (se for o caso)
+                if(document.getElementById(targetId)) document.getElementById(targetId).src = e.target.result;
+
+                // Salva a imagem principal
+                localStorage.setItem('user_pfp', e.target.result);
+                
+                // Pergunta o nome e atualiza os textos
+                let novoNome = prompt("Digite seu novo nome de usuário:");
+                if (novoNome) {
+                    if(document.getElementById('header-user-name')) document.getElementById('header-user-name').innerText = "@" + novoNome;
+                    if(document.getElementById('p-name-disp')) document.getElementById('p-name-disp').innerText = "@" + novoNome;
+                    localStorage.setItem('saved_username', novoNome);
+                }
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
 
         function buyPremium() {
             isPremium = true;
