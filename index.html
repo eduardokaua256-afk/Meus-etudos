@@ -3,197 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Estudo Social - Premium v9</title>
+    <title>Estudo Social - Master Ultra v11</title>
     <style>
         :root {
-            --preto: #000000; --azul-profundo: #001220; --azul-brilhante: #1DA1F2;
-            --msg-out: #003a6b; --msg-in: #161b22; --ouro: #ffd700; --vermelho: #ff3b3b;
+            --preto: #000000; --azul-chat: #0a192f; --azul-msg: #004d99;
+            --verde: #00ff00; --vermelho: #ff0000; --ouro: #ffd700;
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: white; margin: 0; overflow: hidden; }
 
-        /* BOTÃO VOLTAR GLOBAL (X VERMELHO) */
-        .btn-back-x { position: absolute; top: 10px; right: 10px; background: var(--vermelho); color: white; border: none; border-radius: 5px; width: 28px; height: 28px; cursor: pointer; z-index: 9999; font-weight: bold; }
+        /* HEADER & UI */
+        .btn-x-global { position: fixed; top: 10px; right: 10px; background: var(--vermelho); color: white; border: none; border-radius: 5px; width: 28px; height: 28px; cursor: pointer; z-index: 10000; font-weight: bold; }
+        .win { display: none; position: fixed; inset: 0; background: var(--preto); flex-direction: column; z-index: 2000; }
+        .win-small { height: 70%; top: 15%; border: 1px solid #333; border-radius: 15px; }
 
-        /* ANIMAÇÕES PREMIUM */
-        @keyframes fogo { from { text-shadow: 0 0 8px #ff0, 0 0 12px #f60; } to { text-shadow: 0 0 12px #f60, 0 0 25px #f00; } }
-        .fire-text { animation: fogo 0.4s infinite alternate; color: #ffcc00 !important; }
-        .aura-fire { border: 2px solid var(--ouro) !important; box-shadow: 0 0 20px #ffaa00; }
+        /* PREMIUM & ANIMAÇÕES */
+        @keyframes fire { from { text-shadow: 0 0 5px #ff0; } to { text-shadow: 0 0 20px #f00; } }
+        .fire-text { animation: fire 0.5s infinite alternate; color: #ffcc00 !important; }
+        .aura-fire { border: 2px solid var(--ouro) !important; box-shadow: 0 0 25px #ffaa00; }
+        .premium-text { animation: floatText 2s infinite ease-in-out; }
+        @keyframes floatText { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-        /* JANELAS E ABAS (TAMANHO REDUZIDO) */
-        .win { display: none; position: fixed; top: 5%; left: 5%; width: 90%; height: 88%; background: var(--preto); border-radius: 12px; border: 1px solid #333; flex-direction: column; z-index: 2000; overflow: hidden; }
-        .tab-small { height: 75%; top: 12%; }
+        /* CHAT DESIGN */
+        .chat-container { flex: 1; background: linear-gradient(to bottom, #000, var(--azul-chat)); overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .bubble { max-width: 75%; padding: 10px; border-radius: 12px; font-size: 13px; position: relative; }
+        .b-out { align-self: flex-end; background: var(--azul-msg); }
+        .b-in { align-self: flex-start; background: #161b22; }
 
-        /* CHAT PRETO E AZUL */
-        .chat-content { flex: 1; overflow-y: auto; background: linear-gradient(to bottom, #000, var(--azul-profundo)); padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .bubble { max-width: 80%; padding: 10px; border-radius: 12px; font-size: 13px; position: relative; }
-        .b-out { align-self: flex-end; background: var(--msg-out); }
-        .b-in { align-self: flex-start; background: var(--msg-in); }
-        .timestamp { font-size: 9px; opacity: 0.5; float: right; margin-top: 5px; margin-left: 8px; }
+        /* CALCULADORA FLUTUANTE */
+        #calc-floating { display: none; position: fixed; width: 240px; background: #000; border: 1px solid #444; border-radius: 10px; z-index: 9000; cursor: move; padding: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        .calc-disp { width: 100%; background: #000; color: #0f0; border: none; text-align: right; font-size: 22px; padding: 5px; margin-bottom: 5px; }
 
-        /* CALCULADORA CIENTÍFICA ARRASTÁVEL */
-        #calc-sci { display: none; position: fixed; width: 260px; background: #000; border: 1px solid #444; border-radius: 8px; z-index: 8000; cursor: move; padding: 10px; }
-        .calc-display { width: 100%; height: 45px; background: #111; color: #0f0; text-align: right; border: none; font-size: 20px; padding: 5px; margin-bottom: 8px; }
-        .calc-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-        .calc-btns button { padding: 12px; background: #222; color: white; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; }
+        /* PESQUISA TRANSPARENTE */
+        .search-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); z-index: 9500; align-items: center; justify-content: center; }
+        .search-bar { width: 85%; background: transparent; border: none; border-bottom: 3px solid white; color: white; font-size: 28px; text-align: center; outline: none; }
 
-        /* BARRA DE PESQUISA TRANSPARENTE */
-        .search-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); z-index: 9000; flex-direction: column; align-items: center; justify-content: center; }
-        .search-input { width: 85%; background: transparent; border: none; border-bottom: 2px solid white; color: white; font-size: 26px; text-align: center; outline: none; }
+        /* MIDIAS TIPO TELEGRAM */
+        .media-bar { display: none; flex-direction: row; background: #111; font-size: 10px; border-bottom: 1px solid #333; }
+        .media-bar span { flex: 1; padding: 10px; text-align: center; cursor: pointer; }
 
-        /* PERFIL / COROA */
-        .pfp-box { position: relative; width: 90px; margin: 0 auto; cursor: pointer; }
-        .pfp-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--azul-brilhante); object-fit: cover; }
-        .crown-big { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 35px; display: none; }
-
-        /* MATÉRIAS NA HOME */
-        .materia-btn { background: var(--azul-profundo); padding: 15px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1a2a3a; }
-
-        /* MÍDIA ESTILO TELEGRAM */
-        .media-tabs { display: flex; background: #111; border-bottom: 1px solid #333; font-size: 11px; }
-        .media-tabs span { flex: 1; padding: 10px; text-align: center; cursor: pointer; border-bottom: 2px solid transparent; }
-        .media-tabs span.active { border-bottom-color: var(--azul-brilhante); color: var(--azul-brilhante); }
+        /* FLOATING CALL BLOB */
+        #video-blob { display: none; width: 45px; height: 45px; background: #222; border-radius: 50%; border: 2px solid #0f0; align-items: center; justify-content: center; position: absolute; left: 10px; top: -55px; }
     </style>
 </head>
-<body onload="initApp()">
+<body onload="startup()">
 
-    <div id="home" style="padding: 15px; height: 100vh; overflow-y: auto;">
-        <header style="display: flex; justify-content: space-between; align-items: center;">
-            <div onclick="openWin('win-materias')">
-                <strong style="color:var(--azul-brilhante)">Estudo Social</strong><br>
-                <small>ID: 22</small>
-            </div>
-            <div onclick="openWin('win-profile')" style="cursor:pointer; font-size: 20px;">⋮</div>
-        </header>
+    <div id="home-screen" style="padding: 15px; height: 100vh; overflow-y: auto;">
+        <h2 style="color: #1DA1F2;">Estudo Social</h2>
+        <p>ID: 22 <span id="home-status" style="color:var(--verde)">● Online</span></p>
+        
+        <button onclick="openSearch()" style="width:100%; padding:15px; border-radius:25px; background:rgba(255,255,255,0.05); color:white; border:1px solid #333;">🔍 Pesquisar na Internet...</button>
 
-        <div style="margin: 15px 0;">
-            <button onclick="openSearch()" style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid #333; border-radius:20px; color:white;">🔍 Pesquisar na Internet...</button>
+        <div id="materias-container" style="margin-top:20px;">
+            <h3>Matérias</h3>
+            <div id="mat-list"></div>
         </div>
 
-        <h4 style="color:#888; font-size: 12px; margin-bottom: 10px;">MEUS GRUPOS CRIADOS</h4>
-        <div id="saved-groups-container"></div>
-
-        <h4 style="color:#888; font-size: 12px; margin: 20px 0 10px 0;">MATÉRIAS</h4>
-        <div id="materias-list">
-            <div class="materia-btn"><span>📘 Matemática</span> <button onclick="showPlaylist('Matemática')" style="background:none; border:none; color:white;">⋮</button></div>
-            <div class="materia-btn"><span>📗 Inglês</span> <button onclick="showPlaylist('Inglês')" style="background:none; border:none; color:white;">⋮</button></div>
-            <div class="materia-btn"><span>📙 História</span> <button onclick="showPlaylist('História')" style="background:none; border:none; color:white;">⋮</button></div>
-            <div class="materia-btn"><span>📕 Redação</span> <button onclick="showPlaylist('Redação')" style="background:none; border:none; color:white;">⋮</button></div>
+        <div id="group-tabs" style="margin-top:20px;">
+            <h3>Grupos Criados</h3>
+            <div id="saved-groups"></div>
         </div>
+
+        <button id="btn-create" onclick="openWin('win-create-group')" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; border-radius:50%; background:rgba(29,161,242,0.2); border:1px solid #1DA1F2; color:white; font-size:30px; backdrop-filter:blur(5px);">+</button>
+        <button onclick="openWin('win-profile')" style="position:fixed; bottom:90px; right:20px; width:60px; height:60px; border-radius:50%; background:var(--azul-msg); border:none; color:white;">PERFIL</button>
     </div>
 
-    <div id="win-profile" class="win tab-small">
-        <button class="btn-back-x" onclick="closeWin('win-profile')">X</button>
-        <div style="padding: 20px; text-align: center;">
-            <div class="pfp-box" onclick="triggerFile('in-pfp')">
-                <span id="u-crown" class="crown-big">👑</span>
-                <img id="u-pfp" src="https://via.placeholder.com/90" class="pfp-img">
+    <div id="win-profile" class="win win-small">
+        <button class="btn-x-global" onclick="closeWin('win-profile')">X</button>
+        <div id="p-banner" onclick="triggerFile('in-banner')" style="height:100px; background:#111; background-size:cover;"></div>
+        <center>
+            <div style="position:relative; width:80px; margin-top:-40px;">
+                <span id="p-crown" style="position:absolute; top:-25px; left:25%; font-size:35px; display:none;">👑</span>
+                <img id="p-pfp" src="https://via.placeholder.com/80" style="width:80px; height:80px; border-radius:50%; border:3px solid #1DA1F2;" onclick="triggerFile('in-pfp')">
             </div>
-            <div style="margin-top:10px;">
-                <span id="u-online" style="color:lime">● Online</span><br>
-                <small style="color:#888">visto por último hoje às <span id="visto-clock">--:--</span></small>
-            </div>
-            <div style="text-align: left; margin-top: 15px;">
-                <label style="font-size:11px; color:#888">NOME (@)</label>
-                <input type="text" id="u-name" value="@Dono_22" style="width:100%; background:#111; border:1px solid #333; color:white; padding:8px; border-radius:5px;">
-                <p>ID: 22</p>
-                <button onclick="window.location.href='https://accounts.google.com/'" style="width:100%; padding:10px; margin-bottom:5px;">Entrar com Google G</button>
-                <button onclick="buyPremium()" style="width:100%; padding:12px; background:var(--ouro); color:black; font-weight:bold; border:none; border-radius:8px;">COMPRAR PREMIUM 👑</button>
-                <button onclick="toggleCalc()" style="width:100%; margin-top:5px;">Calculadora Científica</button>
-                <button onclick="clearCache()" style="width:100%; margin-top:5px; color:red; background:none; border:none;">Limpar Cache/Memória</button>
-            </div>
-        </div>
+            <h3 id="p-display">@Dono_22</h3>
+            <div id="p-status" style="color:var(--verde)">● Online</div>
+            <small>visto por último hoje às <span id="v-time"></span></small>
+            <p>ID: 22</p>
+            <input type="text" id="p-id-search" placeholder="Buscar ID ou Usuário..." style="width:80%; margin:5px;">
+            <button onclick="buyPremium()" style="width:80%; background:var(--ouro); color:black; font-weight:bold; border:none; padding:10px; border-radius:8px;">COMPRAR PREMIUM 👑</button>
+            <button onclick="toggleCalc()" style="width:80%; margin-top:5px;">Calculadora Científica</button>
+            <button onclick="clearSystem()" style="width:80%; margin-top:5px; color:red;">Limpar Cache/Memória</button>
+        </center>
     </div>
 
     <div id="win-chat" class="win">
-        <button class="btn-back-x" onclick="closeWin('win-chat')">X</button>
-        <div id="chat-head" style="text-align:center; padding:10px; border-bottom:1px solid #333;">
-            <div class="pfp-box" style="width:50px;" onclick="triggerFile('in-g-pfp')">
-                <img id="g-pfp" src="https://via.placeholder.com/50" style="width:50px; height:50px; border-radius:50%;">
-            </div>
-            <h4 id="g-display-name" style="margin:5px 0;">Grupo</h4>
-            <div id="typing-box" style="font-size:10px; color:var(--azul-brilhante); height:12px;"></div>
-            <div style="display:flex; justify-content:center; gap:15px; margin-top:5px;">
-                <button onclick="alert('Iniciando Chamada de Vídeo...')" style="background:none; border:none; color:white; font-size:18px;">📹</button>
-                <button onclick="openWin('win-g-settings')" style="background:none; border:none; color:white; font-size:18px;">⚙️</button>
-            </div>
+        <button class="btn-x-global" onclick="closeWin('win-chat')">X</button>
+        <div id="chat-header" style="text-align:center; padding:10px; border-bottom:1px solid #333;">
+            <img id="g-pfp" src="https://via.placeholder.com/60" style="width:60px; height:60px; border-radius:50%; cursor:pointer;" onclick="triggerFile('in-g-pfp')">
+            <h4 id="g-name-chat">Grupo</h4>
+            <div id="typing-box" style="font-size:10px; color:cyan; height:12px;"></div>
+            <button onclick="openWin('win-g-settings')" style="position:absolute; left:15px; top:15px; background:none; border:none; color:white; font-size:20px;">⚙️</button>
         </div>
 
-        <div class="media-tabs">
-            <span class="active">Chat</span><span>Mídias</span><span>Arquivos</span><span>Links</span>
+        <div id="media-tabs-ui" class="media-bar">
+            <span onclick="alert('Mídias: Fotos/Vídeos')">Mídias</span>
+            <span onclick="alert('Arquivos: PDF/Docs')">Arquivos</span>
+            <span onclick="alert('Links')">Links</span>
         </div>
 
-        <div class="chat-content" id="chat-flow"></div>
+        <div class="chat-container" id="chat-box"></div>
 
-        <div style="background:#000; padding:10px; display:flex; align-items:center; gap:8px;">
-            <button onclick="sendDiscordSticker()" style="background:none; border:none; font-size:20px;">🎭</button>
-            <button onclick="triggerFile('in-chat-img')" style="background:none; border:none; font-size:20px;">🖼️</button>
-            <button id="btn-mic" onmousedown="startVoice()" onmouseup="stopVoice()" style="background:none; border:none; color:white; font-size:20px;">🎤</button>
-            <input type="text" id="chat-input" placeholder="Mensagem..." oninput="typingNotify()" style="flex:1; background:#1a1a1a; border:1px solid #333; color:white; padding:8px; border-radius:20px;">
-            <button onclick="pushMsg()" style="background:none; border:none; color:var(--azul-brilhante); font-size:24px;">➡️</button>
+        <div style="background:#000; padding:10px; display:flex; align-items:center; gap:8px; position:relative;">
+            <div id="video-blob">📹</div>
+            <button onclick="alert('Dino & Figurinhas Premium!')" style="background:none; border:none; font-size:20px;">🎭</button>
+            <button id="mic-btn" onmousedown="recStart()" onmouseup="recStop()" style="background:none; border:none; color:white; font-size:20px;">🎤</button>
+            <input type="text" id="chat-in" placeholder="Mensagem..." oninput="isTyping('write')" style="flex:1; background:#111; border:1px solid #333; color:white; padding:8px; border-radius:20px;">
+            <button onclick="sendMsg()" style="background:none; border:none; color:#1DA1F2; font-size:25px;">➡️</button>
         </div>
     </div>
 
-    <div id="win-g-settings" class="win tab-small" style="background:white; color:black;">
-        <button class="btn-back-x" onclick="closeWin('win-g-settings')">X</button>
+    <div id="win-g-settings" class="win win-small" style="background:white; color:black;">
+        <button class="btn-x-global" onclick="closeWin('win-g-settings')">X</button>
         <div style="padding:20px;">
             <h3>Configurações do Grupo</h3>
-            <label>Descrição:</label>
-            <textarea id="g-desc-in" style="width:100%; height:60px; margin-bottom:10px;"></textarea>
-            <label>Adicionar Membro (ID):</label>
-            <div style="display:flex; gap:5px;">
-                <input type="text" id="add-id-in" style="flex:1;">
-                <button onclick="alert('Membro Adicionado!')">Adicionar</button>
-            </div>
-            <hr>
-            <button onclick="groupAction('lock')" style="width:100%; margin-bottom:5px;">Trancar Grupo</button>
-            <button onclick="groupAction('adm')" style="width:100%; margin-bottom:5px;">Somente ADM pode mandar mensagem</button>
-            <button onclick="groupAction('emoji')" style="width:100%; margin-bottom:5px;">Modo Somente Emojis</button>
-            <button onclick="deleteCurrentGroup()" style="width:100%; background:red; color:white; border:none; padding:10px; margin-top:20px;">APAGAR GRUPO</button>
+            <textarea id="g-desc" placeholder="Descrição do grupo..." style="width:100%; height:50px;"></textarea>
+            <button onclick="openMedia()">Ver Mídias/Arquivos/Links</button>
+            <button onclick="toggleVideoCall()">Ativar Chamada de Vídeo?</button>
+            <button onclick="setMode('lock')" style="width:100%; margin-top:5px;">Trancar Grupo</button>
+            <button onclick="setMode('adm')" style="width:100%; margin-top:5px;">Somente ADM</button>
+            <button onclick="deleteGroup()" style="width:100%; background:red; color:white; margin-top:20px;">Apagar Grupo</button>
         </div>
     </div>
 
-    <div id="win-create" class="win tab-small" style="background:#fff; color:#000;">
-        <button class="btn-back-x" onclick="closeWin('win-create')">X</button>
+    <div id="win-create-group" class="win win-small" style="background:white; color:black;">
+        <button class="btn-x-global" onclick="closeWin('win-create-group')">X</button>
         <div style="padding:20px;">
-            <h3>Novo Grupo</h3>
-            <input type="text" id="cg-name" placeholder="Nome do Grupo" style="width:100%; padding:10px; margin-bottom:10px;">
-            <textarea id="cg-desc" placeholder="Descrição" style="width:100%; padding:10px; margin-bottom:10px;"></textarea>
-            <button onclick="saveNewGroup()" style="width:100%; padding:15px; background:var(--azul-brilhante); color:white; border:none; border-radius:10px; font-weight:bold;">CRIAR GRUPO</button>
+            <h3>Criar Novo Grupo</h3>
+            <input type="text" id="cg-name" placeholder="Nome do Grupo" style="width:100%; margin-bottom:10px;">
+            <textarea id="cg-desc" placeholder="Descrição" style="width:100%; margin-bottom:10px;"></textarea>
+            <button onclick="createNewGroup()" style="width:100%; padding:15px; background:var(--azul-msg); color:white; border:none; border-radius:8px;">CRIAR</button>
         </div>
     </div>
 
-    <div id="calc-sci">
-        <div style="text-align:center; font-size:9px; color:#555; background:#111; margin-bottom:5px;">CALCULADORA CIENTÍFICA (ARRASTE)</div>
-        <input type="text" id="c-disp" class="calc-display" readonly>
-        <div class="calc-grid calc-btns">
+    <div id="calc-floating">
+        <div style="background:#222; font-size:9px; text-align:center; cursor:move;">CALCULADORA SCI</div>
+        <input type="text" id="c-screen" class="calc-disp" readonly>
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:4px;">
             <button onclick="cVal('7')">7</button><button onclick="cVal('8')">8</button><button onclick="cVal('9')">9</button><button onclick="cVal('/')">/</button>
             <button onclick="cVal('4')">4</button><button onclick="cVal('5')">5</button><button onclick="cVal('6')">6</button><button onclick="cVal('*')">*</button>
             <button onclick="cVal('1')">1</button><button onclick="cVal('2')">2</button><button onclick="cVal('3')">3</button><button onclick="cVal('-')">-</button>
-            <button onclick="cVal('0')">0</button><button onclick="cVal('Math.sqrt(')">√</button><button onclick="cExec()">=</button><button onclick="cVal('+')">+</button>
-            <button onclick="cVal('Math.PI')">π</button><button onclick="cVal('**')">^</button><button onclick="cVal('C')" style="color:red">C</button><button onclick="toggleCalc()">OFF</button>
+            <button onclick="cVal('0')">0</button><button onclick="cVal('Math.sqrt(')">√</button><button onclick="cRes()">=</button><button onclick="cVal('+')">+</button>
+            <button onclick="cVal('Math.PI')">π</button><button onclick="cVal('**')">^</button><button onclick="cVal('C')" style="color:red">C</button><button onclick="toggleCalc()">X</button>
         </div>
     </div>
 
     <div id="search-win" class="search-overlay">
-        <button class="btn-back-x" onclick="document.getElementById('search-win').style.display='none'">X</button>
-        <input type="text" id="sq" class="search-input" placeholder="O que deseja estudar?" onkeypress="doSearch(event)">
+        <button class="btn-x-global" onclick="closeWin('search-win')">X</button>
+        <input type="text" class="search-bar" placeholder="O que deseja aprender?" onkeypress="doSearch(event)">
     </div>
 
-    <div id="btn-float" onclick="openWin('win-create')" style="position:fixed; bottom:20px; right:20px; width:55px; height:55px; background:rgba(29,161,242,0.2); border:1px solid rgba(255,255,255,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px; backdrop-filter:blur(5px); z-index:1000;">+</div>
-
-    <input type="file" id="in-pfp" hidden onchange="readMedia(this, 'u-pfp')">
-    <input type="file" id="in-g-pfp" hidden onchange="readMedia(this, 'g-pfp')">
-    <input type="file" id="in-chat-img" hidden onchange="sendImg(this)">
+    <input type="file" id="in-pfp" hidden onchange="readImg(this, 'p-pfp')">
+    <input type="file" id="in-banner" hidden onchange="readImg(this, 'p-banner', true)">
+    <input type="file" id="in-g-pfp" hidden onchange="readImg(this, 'g-pfp')">
 
     <script>
         let isPremium = false;
         let mediaRec, chunks = [];
         let typeTimer;
 
-        function initApp() {
-            document.getElementById('visto-clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-            renderGroups();
-            renderChatHistory();
+        function startup() {
+            document.getElementById('v-time').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+            loadSavedMsgs();
+            loadSavedGroups();
+            renderMaterias();
         }
 
         function openWin(id) { document.getElementById(id).style.display = 'flex'; }
@@ -201,135 +173,158 @@
         function openSearch() { document.getElementById('search-win').style.display = 'flex'; }
         function triggerFile(id) { document.getElementById(id).click(); }
 
-        // MENSAGENS E PERSISTÊNCIA
-        function pushMsg() {
-            let input = document.getElementById('chat-input');
+        // MENSAGENS PERSISTENTES
+        function sendMsg() {
+            let input = document.getElementById('chat-in');
             if(!input.value) return;
-            let m = { type: 'text', text: input.value, owner: true, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) };
+            let m = { type: 'text', content: input.value, owner: true, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) };
             renderMsg(m);
-            saveMsg(m);
+            saveToStorage(m);
             input.value = "";
         }
 
-        function saveMsg(m) {
-            let db = JSON.parse(localStorage.getItem('msgs_v9') || '[]');
+        function saveToStorage(m) {
+            let db = JSON.parse(localStorage.getItem('db_ultra_v11') || '[]');
             db.push(m);
-            localStorage.setItem('msgs_v9', JSON.stringify(db));
+            localStorage.setItem('db_ultra_v11', JSON.stringify(db));
         }
 
-        function renderChatHistory() {
-            let db = JSON.parse(localStorage.getItem('msgs_v9') || '[]');
+        function loadSavedMsgs() {
+            let db = JSON.parse(localStorage.getItem('db_ultra_v11') || '[]');
             db.forEach(m => renderMsg(m));
         }
 
         function renderMsg(m) {
-            let flow = document.getElementById('chat-flow');
+            let box = document.getElementById('chat-box');
             let div = document.createElement('div');
             div.className = m.owner ? "bubble b-out" : "bubble b-in";
             
-            let nameTag = isPremium ? '<small class="fire-text">Fundador #27</small><br>' : '<small style="color:orange">Fundador #27</small><br>';
+            let fundadorTag = isPremium ? '<small class="fire-text">Fundador #27</small><br>' : '<small style="color:orange">Fundador #27</small><br>';
             
             if(m.type === 'audio') {
-                div.innerHTML = `${nameTag}<audio src="${m.text}" controls style="width:200px;"></audio>`;
+                div.innerHTML = `${fundadorTag}<audio src="${m.content}" controls style="width:200px;"></audio>`;
             } else if(m.type === 'img') {
-                div.innerHTML = `${nameTag}<img src="${m.text}" style="max-width:100%; border-radius:8px;">`;
+                div.innerHTML = `${fundadorTag}<img src="${m.content}" style="max-width:100%; border-radius:8px;">`;
             } else {
-                div.innerHTML = `${nameTag}${m.text}<span class="timestamp">${m.time}</span>`;
+                div.innerHTML = `${fundadorTag}${m.content}<span style="font-size:9px; opacity:0.5; float:right; margin: 5px 0 0 8px;">${m.time}</span>`;
             }
 
-            // SEGURAR MENSAGEM
-            let timer;
-            div.onmousedown = () => timer = setTimeout(() => {
-                let op = prompt("1: Reagir | 2: Apagar | 3: Fixar | 4: Editar");
-                if(op === '2') div.remove();
-                if(op === '4') div.innerHTML = nameTag + prompt("Editar:") + `<span class="timestamp">${m.time}</span>`;
+            // SEGURAR MENSAGEM (FIXAR, APAGAR, REAGIR)
+            let hold;
+            div.onmousedown = () => hold = setTimeout(() => {
+                let act = prompt("1: Reagir ❤️ | 2: Apagar | 3: Fixar | 4: Editar");
+                if(act == '2') div.remove();
+                if(act == '4') div.innerHTML = fundadorTag + prompt("Editar:") + `<span style="font-size:9px; opacity:0.5; float:right;">${m.time}</span>`;
             }, 800);
-            div.onmouseup = () => clearTimeout(timer);
+            div.onmouseup = () => clearTimeout(hold);
 
-            flow.appendChild(div);
-            flow.scrollTop = flow.scrollHeight;
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
         }
 
         // ÁUDIO REAL
-        async function startVoice() {
+        async function recStart() {
+            isTyping('rec');
             let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRec = new MediaRecorder(stream);
             mediaRec.ondataavailable = e => chunks.push(e.data);
             mediaRec.onstop = () => {
                 let blob = new Blob(chunks, { type: 'audio/ogg' });
-                let url = URL.createObjectURL(blob);
-                renderMsg({ type: 'audio', text: url, owner: true });
-                saveMsg({ type: 'audio', text: url, owner: true });
+                let reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = () => {
+                    let m = { type: 'audio', content: reader.result, owner: true, time: "Agora" };
+                    renderMsg(m);
+                    saveToStorage(m);
+                };
                 chunks = [];
             };
             mediaRec.start();
-            document.getElementById('btn-mic').style.color = "red";
-            document.getElementById('typing-box').innerText = "Gravando áudio...";
+            document.getElementById('mic-btn').style.color = "red";
         }
-        function stopVoice() {
+        function recStop() {
             mediaRec.stop();
-            document.getElementById('btn-mic').style.color = "white";
+            document.getElementById('mic-btn').style.color = "white";
             document.getElementById('typing-box').innerText = "";
         }
 
-        // CALCULADORA
-        function toggleCalc() { let c = document.getElementById('calc-sci'); c.style.display = c.style.display === 'block' ? 'none' : 'block'; }
-        function cVal(v) { let d = document.getElementById('c-disp'); if(v==='C') d.value=''; else d.value+=v; }
-        function cExec() { try { let d = document.getElementById('c-disp'); d.value = eval(d.value); } catch { d.value='Erro'; } }
+        // STATUS DIGITANDO/GRAVANDO
+        function isTyping(mode) {
+            let txt = mode === 'write' ? "Lucas está escrevendo..." : "Lucas está gravando áudio...";
+            document.getElementById('typing-box').innerText = txt;
+            clearTimeout(typeTimer);
+            typeTimer = setTimeout(() => document.getElementById('typing-box').innerText = "", 1500);
+        }
 
-        // DRAG CALC
-        const cWin = document.getElementById('calc-sci');
+        // CALCULADORA ARRASTÁVEL
+        function toggleCalc() { let c = document.getElementById('calc-floating'); c.style.display = c.style.display === 'block' ? 'none' : 'block'; }
+        function cVal(v) { document.getElementById('c-screen').value += v; }
+        function cRes() { try { let s = document.getElementById('c-screen'); s.value = eval(s.value); } catch { s.value = "Erro"; } }
+
+        const calc = document.getElementById('calc-floating');
         let drag = false;
-        cWin.onmousedown = (e) => drag = true;
-        document.onmousemove = (e) => { if(drag) { cWin.style.left = e.pageX - 130 + 'px'; cWin.style.top = e.pageY - 20 + 'px'; } };
+        calc.onmousedown = () => drag = true;
+        document.onmousemove = (e) => { if(drag) { calc.style.left = e.pageX - 120 + 'px'; calc.style.top = e.pageY - 50 + 'px'; } };
         document.onmouseup = () => drag = false;
 
-        // GRUPOS
-        function saveNewGroup() {
+        // SISTEMA DE GRUPOS
+        function createNewGroup() {
             let n = document.getElementById('cg-name').value;
-            let db = JSON.parse(localStorage.getItem('groups_v9') || '[]');
-            db.push({ name: n, id: Math.floor(Math.random() * 1000) });
-            localStorage.setItem('groups_v9', JSON.stringify(db));
-            renderGroups();
-            closeWin('win-create');
+            let db = JSON.parse(localStorage.getItem('groups_v11') || '[]');
+            db.push({ name: n, id: Math.floor(Math.random()*1000) });
+            localStorage.setItem('groups_v11', JSON.stringify(db));
+            loadSavedGroups();
+            closeWin('win-create-group');
         }
-
-        function renderGroups() {
-            let container = document.getElementById('saved-groups-container');
-            container.innerHTML = "";
-            let db = JSON.parse(localStorage.getItem('groups_v9') || '[]');
+        function loadSavedGroups() {
+            let db = JSON.parse(localStorage.getItem('groups_v11') || '[]');
+            let cont = document.getElementById('saved-groups');
+            cont.innerHTML = "";
             db.forEach(g => {
-                container.innerHTML += `<div class="materia-btn" onclick="enterGroup('${g.name}')"><span>👥 ${g.name}</span> <small>#ID${g.id}</small></div>`;
+                cont.innerHTML += `<div onclick="enterGroup('${g.name}')" style="background:#0a192f; padding:15px; border-radius:10px; margin-bottom:5px;">👥 ${g.name}</div>`;
             });
         }
+        function enterGroup(n) { document.getElementById('g-name-chat').innerText = n; openWin('win-chat'); }
 
-        function enterGroup(name) {
-            document.getElementById('g-display-name').innerText = name;
-            openWin('win-chat');
+        // MATÉRIAS
+        function renderMaterias() {
+            let mats = ['Matemática', 'Inglês', 'História', 'Geografia', 'Redação'];
+            let html = "";
+            mats.forEach(m => {
+                html += `<div style="background:#111; padding:12px; margin-bottom:5px; display:flex; justify-content:space-between; border-radius:8px;">
+                    <span>${m}</span> <button onclick="alert('Playlist YouTube Grátis Ativada!')">⋮</button>
+                </div>`;
+            });
+            document.getElementById('mat-list').innerHTML = html;
         }
 
-        function groupAction(type) {
-            let flow = document.getElementById('chat-flow');
-            let m = "";
-            if(type === 'lock') m = "O grupo está trancado, somente os adm podem remover essa função.";
-            if(type === 'adm') m = "Fundador #27 alterou as configurações para somente adms podem mandar mensagem.";
-            flow.innerHTML += `<div style="text-align:center; font-size:11px; color:orange; margin:10px;">${m}</div>`;
-        }
-
+        // PREMIUM
         function buyPremium() {
             isPremium = true;
-            document.getElementById('u-crown').style.display = 'block';
+            document.getElementById('p-crown').style.display = 'block';
             document.getElementById('win-profile').classList.add('aura-fire');
             document.getElementById('win-chat').classList.add('aura-fire');
-            alert("👑 Premium Ativado! Aura de fogo e nomes flamejantes liberados.");
+            alert("👑 Premium Ativado! Aura e nomes flamejantes liberados!");
         }
 
-        function doSearch(e) { if(e.key === 'Enter') window.open('https://www.google.com/search?q=' + document.getElementById('sq').value); }
-        function showPlaylist(m) { alert(`Playlist YouTube gratuita de ${m} carregada!`); }
-        function typingNotify() { document.getElementById('typing-box').innerText = "Dono está escrevendo..."; clearTimeout(typeTimer); typeTimer = setTimeout(()=> document.getElementById('typing-box').innerText="", 1000); }
-        function readMedia(i, id) { if(i.files && i.files[0]) { let r = new FileReader(); r.onload = e => document.getElementById(id).src = e.target.result; r.readAsDataURL(i.files[0]); } }
-        function sendImg(i) { if(i.files && i.files[0]) { let r = new FileReader(); r.onload = e => { renderMsg({type:'img', text:e.target.result, owner:true}); saveMsg({type:'img', text:e.target.result, owner:true}); }; r.readAsDataURL(i.files[0]); } }
-        function sendDiscordSticker() { renderMsg({type:'text', text:'🎭 (Figurinha Discord Premium)', owner:true, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}); }
+        function toggleVideoCall() {
+            let v = document.getElementById('video-blob');
+            v.style.display = v.style.display === 'flex' ? 'none' : 'flex';
+            alert("Opção Chamada de Vídeo alterada!");
+        }
+
+        function openMedia() { document.getElementById('media-tabs-ui').style.display = 'flex'; }
+        function doSearch(e) { if(e.key === 'Enter') window.open("https://www.google.com/search?q=" + e.target.value); }
+        function readImg(i, id, bg=false) {
+            if(i.files[0]) {
+                let r = new FileReader();
+                r.onload = e => { 
+                    if(bg) document.getElementById(id).style.backgroundImage = `url(${e.target.result})`;
+                    else document.getElementById(id).src = e.target.result;
+                };
+                r.readAsDataURL(i.files[0]);
+            }
+        }
     </script>
 </body>
 </html>
