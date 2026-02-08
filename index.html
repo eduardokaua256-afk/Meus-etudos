@@ -244,39 +244,20 @@
             {n: 'Geografia', l: 'https://youtube.com/playlist?list=PLNM2T4DNzmq7p-TtQPn3vjNU9t8M0Arxc'},
             {n: 'Redação', l: 'https://youtube.com/playlist?list=PLPwuAOl5BHi8UTmce6l7kWwDVj2oMYPv2'}
         ];
-
-        function initApp() {
-    // 1. Carrega as matérias e grupos
     renderSubjects();
     renderGroups();
 
-    // 2. BUSCA O NOME SALVO (Pra não voltar para @User)
+    let premium = localStorage.getItem('is_premium');
+    if(premium === 'true') {
+        ativarVisualPremium();
+    }
+    
     let n = localStorage.getItem('saved_username');
     if(n) {
         if(document.getElementById('p-name-disp')) document.getElementById('p-name-disp').innerText = "@" + n;
         if(document.getElementById('header-user-name')) document.getElementById('header-user-name').innerText = "@" + n;
     }
 
-    // 3. BUSCA A BIO SALVA
-    let b = localStorage.getItem('saved_bio');
-    if(b && document.getElementById('p-bio-disp')) {
-        document.getElementById('p-bio-disp').innerText = b;
-    }
-
-    // 4. BUSCA A FOTO SALVA (Topo e Perfil)
-    let foto = localStorage.getItem('user_pfp');
-    if(foto) {
-        if(document.getElementById('p-img')) document.getElementById('p-img').src = foto;
-        if(document.getElementById('header-pfp')) document.getElementById('header-pfp').src = foto;
-    }
-
-    // 5. BUSCA O PREMIUM (O que você me perguntou!)
-    // Se o navegador disser que é true, ele ativa a coroa e as chamas sozinho
-    let premium = localStorage.getItem('is_premium');
-    if(premium === 'true') {
-        ativarVisualPremium();
-    }
-}
     // Atualiza o horário do visto por último
     document.getElementById('seen-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 }
@@ -435,24 +416,43 @@
     
     alert("👑 Premium Ativado com Sucesso! Suas configurações foram salvas.");
 }
+// --- APAGUE O ANTIGO E COLE ESTE NO LUGAR ---
 
 function ativarVisualPremium() {
-    // Mostra a coroa no perfil e no topo
     if(document.getElementById('p-crown')) document.getElementById('p-crown').style.display = 'block';
     if(document.getElementById('header-premium-crown')) document.getElementById('header-premium-crown').style.display = 'block';
     
-    // Borda dourada (Aura Premium)
     if(document.getElementById('p-img')) document.getElementById('p-img').style.border = "3px solid #ffd700";
     if(document.getElementById('header-pfp')) document.getElementById('header-pfp').style.border = "2px solid #ffd700";
     
-    // Deixa o ID 22 pegando fogo azul (chamando a classe que criamos)
     let idElement = document.querySelector('.id-owner');
-    if(idElement) idElement.classList.add('premium-active');
+    if(idElement) {
+        idElement.style.color = "#1DA1F2";
+        idElement.style.textShadow = "0 0 15px #00ffff";
+    }
 }
-        function updateLastSeen() {
-            document.getElementById('last-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        }
 
+function buyPremium() {
+    localStorage.setItem('is_premium', 'true');
+    ativarVisualPremium();
+    alert("👑 Premium Ativado com Sucesso!");
+}
+
+function updateLastSeen() {
+    const agora = new Date();
+    const horas = agora.getHours().toString().padStart(2, '0');
+    const minutos = agora.getMinutes().toString().padStart(2, '0');
+    const display = document.getElementById('seen-time');
+    if(display) display.innerText = horas + ":" + minutos;
+}
+initApp(); 
+updateLastSeen();
+        function updateLastSeen() {
+    const display = document.getElementById('seen-time');
+    if(display) {
+        display.innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }
+}
         function handleTyping() {
             document.getElementById('typing-status').innerText = "@Dono está escrevendo...";
             clearTimeout(window.typeTimer);
@@ -497,11 +497,9 @@ function updateProfileFromHeader(input) {
                 document.getElementById('p-name-disp').innerText = "@" + novoNome;
                 localStorage.setItem('saved_username', novoNome);
             }
-            
             // 4. Salva a foto no banco de dados local (LocalStorage)
             localStorage.setItem('pfp', e.target.result);
         };
-        
         reader.readAsDataURL(input.files[0]);
     }
 }
