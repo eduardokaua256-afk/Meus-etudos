@@ -277,31 +277,6 @@
         ativarVisualPremium();
     }
 }
-
-    // CARREGAR NOME
-    let n = localStorage.getItem('saved_username');
-    if(n) {
-        document.getElementById('p-name-disp').innerText = "@" + n;
-        document.getElementById('header-user-name').innerText = "@" + n;
-    }
-
-    // CARREGAR BIO
-    let b = localStorage.getItem('saved_bio');
-    if(b) document.getElementById('p-bio-disp').innerText = b;
-
-    // CARREGAR FOTO DE PERFIL
-    let foto = localStorage.getItem('user_pfp');
-    if(foto) {
-        document.getElementById('p-img').src = foto;
-        document.getElementById('header-pfp').src = foto;
-    }
-
-    // CARREGAR STATUS PREMIUM
-    let premium = localStorage.getItem('is_premium');
-    if(premium === 'true') {
-        ativarVisualPremium();
-    }
-    
     // Atualiza o horário do visto por último
     document.getElementById('seen-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 }
