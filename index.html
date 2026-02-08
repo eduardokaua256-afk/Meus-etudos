@@ -31,9 +31,11 @@
     <div id="screen-home" style="padding: 20px; height: 100vh; overflow-y: auto;">
         <div style="display:flex; justify-content: space-between; align-items: center;">
             <h1 style="margin:0; font-size:22px; color:var(--azul-brilhante)">Estudo Social</h1>
-            <div onclick="openWin('win-profile')" style="cursor:pointer;">
-                <img id="top-pfp" src="https://via.placeholder.com/40" style="width:40px; height:40px; border-radius:50%; border:1px solid #333; object-fit: cover;">
-            </div>
+            <div onclick="openWin('win-profile')" style="cursor:pointer; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 20px; border: 1px solid #222;">
+    <span id="top-username" style="font-size: 14px; font-weight: bold; color: white;">@Usuario</span>
+    <img id="top-pfp" src="https://via.placeholder.com/40" style="width:35px; height:35px; border-radius:50%; border:1px solid var(--azul-brilhante); object-fit: cover;">
+</div>
+
         </div>
 
         <h3 style="color:var(--azul-brilhante); margin-top:20px;">Matérias</h3>
@@ -87,28 +89,53 @@
 
         // CARREGA NOME E FOTOS SALVAS
         function loadProfile() {
-            const savedName = localStorage.getItem('user_name') || '@Usuario';
-            const savedPfp = localStorage.getItem('user_pfp') || 'https://via.placeholder.com/90';
-            const savedBanner = localStorage.getItem('user_banner') || '';
-            const isPremium = localStorage.getItem('is_premium') === 'true';
+    const savedName = localStorage.getItem('user_name') || '@Usuario';
+    const savedPfp = localStorage.getItem('user_pfp') || 'https://via.placeholder.com/90';
+    const savedBanner = localStorage.getItem('user_banner') || '';
+    const isPremium = localStorage.getItem('is_premium') === 'true';
 
-            document.getElementById('p-name').innerText = savedName;
-            document.getElementById('p-img').src = savedPfp;
-            document.getElementById('top-pfp').src = savedPfp;
-            if(savedBanner) document.getElementById('p-banner').style.backgroundImage = `url(${savedBanner})`;
-            if(isPremium) {
-                document.getElementById('p-crown').style.display = 'block';
-                document.getElementById('p-img').style.border = "3px solid var(--ouro)";
-            }
-        }
+    // Atualiza o nome nos dois lugares (Perfil e Topo)
+    if(document.getElementById('p-name')) document.getElementById('p-name').innerText = savedName;
+    if(document.getElementById('top-username')) document.getElementById('top-username').innerText = savedName;
+
+    // Atualiza a foto nos dois lugares
+    if(document.getElementById('p-img')) document.getElementById('p-img').src = savedPfp;
+    if(document.getElementById('top-pfp')) document.getElementById('top-pfp').src = savedPfp;
+
+    // Atualiza o Banner
+    if(savedBanner && document.getElementById('p-banner')) {
+        document.getElementById('p-banner').style.backgroundImage = `url(${savedBanner})`;
+    }
+    
+    // Se for Premium, aplica os estilos
+    if(isPremium) {
+        if(document.getElementById('p-crown')) document.getElementById('p-crown').style.display = 'block';
+        if(document.getElementById('p-img')) document.getElementById('p-img').style.border = "3px solid var(--ouro)";
+        if(document.getElementById('top-username')) document.getElementById('top-username').style.color = "var(--ouro)";
+    }
+}
+
 
         function editName() {
-            let n = prompt("Novo nome:", document.getElementById('p-name').innerText);
-            if(n) {
-                document.getElementById('p-name').innerText = n;
-                localStorage.setItem('user_name', n);
-            }
+    // Puxa o nome atual para mostrar na caixa de digitação
+    let nomeAtual = document.getElementById('p-name').innerText;
+    let novoNome = prompt("Digite seu novo nome de usuário:", nomeAtual);
+    
+    // Se o usuário digitou algo e não cancelou
+    if(novoNome && novoNome.trim() !== "") {
+        // 1. Atualiza no perfil (dentro da configuração)
+        document.getElementById('p-name').innerText = novoNome;
+        
+        // 2. Atualiza no topo (canto superior direito)
+        if(document.getElementById('top-username')) {
+            document.getElementById('top-username').innerText = novoNome;
         }
+        
+        // 3. Salva no navegador para não sumir ao atualizar
+        localStorage.setItem('user_name', novoNome);
+    }
+}
+
 
         // SISTEMA DE STATUS (VERDE/VERMELHO)
         function setStatus(estado) {
