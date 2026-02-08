@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Estudo Social Master v16</title>
-    <style>
+    <style>.premium-tag {
+    animation: fogoAzul 1s infinite alternate;
+}
+
         :root {
             --preto: #000000; --azul-profundo: #001a33; --azul-brilhante: #1DA1F2;
             --msg-out: #004d99; --msg-in: #1a1a1a; --ouro: #ffd700; --vermelho: #ff3b3b;
@@ -49,7 +52,15 @@
         <button class="btn-v" onclick="closeWin('win-profile')">X</button>
         <div id="p-banner" onclick="triggerFile('in-banner')" style="width:100%; height:130px; background:#111; background-size:cover; cursor:pointer; background-position: center;"></div>
         <center>
-            <div style="position:relative; width:90px; margin-top:-45px;">
+                 <center>
+    <div style="display: flex; align-items: center; width: 90%; margin: 10px 0;">
+        <div style="flex: 1; height: 1px; background: linear-gradient(to left, var(--ouro), transparent);"></div>
+         <span class="premium-tag" style="padding: 0 10px; color: var(--ouro); font-size: 10px; font-weight: bold; letter-spacing: 1px; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);">OPÇÃO PREMIUM</span>
+        <div style="flex: 1; height: 1px; background: linear-gradient(to right, var(--ouro), transparent);"></div>
+    </div>
+
+    <div style="position:relative; width:90px; margin-top: 10px;">
+
                 <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none;">👑</span>
                 <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer; object-fit: cover;" onclick="triggerFile('in-pfp')">
             </div>
