@@ -157,10 +157,14 @@
         const myId = 22;
 
         function initApp() {
-            loadProfile();
-            renderMats();
-            renderGroups();
-            setupDraggable();
+        renderMats();
+        renderGroups();
+        loadProfile();
+        loadStatus();
+        setupDraggable();
+}
+
+            
         }
 
         // CARREGAR E SALVAR PERFIL
@@ -331,6 +335,36 @@
         }
 
         function triggerFile(id) { document.getElementById(id).click(); }
+        function setStatus(estado) {
+    const dot = document.getElementById('status-dot');
+    const text = document.getElementById('status-text');
+    const agora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+    if (estado === 'online') {
+        dot.style.background = '#00ff00'; // Bolinha Verde
+        text.innerText = 'Online';
+        text.style.color = '#00ff00';     // Texto Verde
+        localStorage.setItem('user_status', 'online');
+    } else {
+        dot.style.background = '#ff3b3b'; // Bolinha Vermelha
+        text.innerText = 'Offline';
+        text.style.color = '#ff3b3b';     // Texto Vermelho
+        localStorage.setItem('user_status', 'offline');
+    }
+
+    // O horário do visto por último sempre fica em branco
+    document.getElementById('last-time').innerText = agora;
+    localStorage.setItem('last_seen_time', agora);
+}
+
+// Essa função faz o site lembrar do seu status quando você atualizar a página
+function loadStatus() {
+    const statusSalvo = localStorage.getItem('user_status') || 'online';
+    const horaSalva = localStorage.getItem('last_seen_time') || '--:--';
+    setStatus(statusSalvo);
+    document.getElementById('last-time').innerText = horaSalva;
+}
+
     </script>
 </body>
 </html>
