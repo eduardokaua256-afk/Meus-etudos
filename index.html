@@ -9,6 +9,17 @@
     color: var(--ouro) !important;
     text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
 }
+        .linha-movimentada {
+    background: linear-gradient(90deg, transparent, var(--ouro), transparent);
+    background-size: 200% 100%;
+    animation: movimentoLinha 2s linear infinite;
+}
+
+@keyframes movimentoLinha {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
         :root {
             --preto: #000000; --azul-profundo: #001a33; --azul-brilhante: #1DA1F2;
             --msg-out: #004d99; --msg-in: #1a1a1a; --ouro: #ffd700; --vermelho: #ff3b3b;
@@ -54,10 +65,14 @@
         <div id="p-banner" onclick="triggerFile('in-banner')" style="width:100%; height:130px; background:#111; background-size:cover; cursor:pointer; background-position: center;"></div>
         <center>
                  <center>
-    <div style="display: flex; align-items: center; width: 90%; margin: 10px 0;">
-        <div style="flex: 1; height: 1px; background: linear-gradient(to left, var(--ouro), transparent);"></div>
-         <span class="premium-tag" style="padding: 0 10px; color: var(--ouro); font-size: 10px; font-weight: bold; letter-spacing: 1px; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);">OPÇÃO PREMIUM</span>
-        <div style="flex: 1; height: 1px; background: linear-gradient(to right, var(--ouro), transparent);"></div>
+    <div style="display: flex; align-items: center; width: 90%; margin: 15px 0;">
+    <div class="linha-movimentada" style="flex: 1; height: 2px;"></div>
+    
+    <span class="premium-tag" style="padding: 0 15px; font-size: 10px; font-weight: bold; letter-spacing: 2px;">OPÇÃO PREMIUM</span>
+    
+    <div class="linha-movimentada" style="flex: 1; height: 2px;"></div>
+</div>
+
     </div>
 
     <div style="position:relative; width:90px; margin-top: 10px;">
