@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head> <div class="user-header-profile" onclick="triggerProfileUpdate()">
-    <span id="header-user-name">@User</span> <div class="profile-circle">
+<head> <div class="user-header-profile" onclick="openWin('win-profile')">
+    <span id="header-user-name">@User</span>
+    <div class="profile-circle">
         <img id="header-pfp" src="https://via.placeholder.com/40" alt="Profile">
+    </div>
+</div>
+
     </div>
 </div>
 
@@ -63,8 +67,9 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    z-index: 1001;
+    z-index: 2500; /* Aumentado para ficar acima de tudo */
 }
+
 
 #header-user-name {
     font-size: 10px;
@@ -313,8 +318,12 @@
                 let reader = new FileReader();
                 reader.onload = (e) => {
                     if(targetId == 'p-banner') document.getElementById(targetId).style.backgroundImage = `url(${e.target.result})`;
-                    else document.getElementById(targetId).src = e.target.result;
-                    localStorage.setItem(storageKey, e.target.result);
+                    else { 
+    document.getElementById(id).src = e.target.result; 
+    document.getElementById('header-pfp').src = e.target.result; // Esta linha faz a mágica
+    if(t == 'pfp') localStorage.setItem('pfp', e.target.result); 
+}
+
                 };
                 reader.readAsDataURL(input.files[0]);
             }
