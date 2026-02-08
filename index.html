@@ -45,61 +45,6 @@
     background-size: 200% 100%;
     animation: movimentoLinha 2s linear infinite;
 }
-
-@keyframes movimentoLinha {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-        /* Botão Flutuante (+) */
-.btn-plus {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    background: var(--azul-brilhante);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    border: none;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    z-index: 1000;
-    cursor: pointer;
-    transition: transform 0.3s;
-}
-
-/* Menu de Opções que aparece ao clicar */
-.plus-menu {
-    position: fixed;
-    bottom: 100px;
-    right: 30px;
-    display: none; /* Começa escondido */
-    flex-direction: column;
-    gap: 10px;
-    z-index: 1000;
-}
-
-.plus-option {
-    background: #1a1a1a;
-    color: white;
-    border: 1px solid var(--azul-brilhante);
-    padding: 12px 20px;
-    border-radius: 25px;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    white-space: nowrap;
-    text-align: right;
-}
-
-.plus-option:hover {
-    background: var(--azul-brilhante);
-}
-
-
         :root {
             --preto: #000000; --azul-profundo: #001a33; --azul-brilhante: #1DA1F2;
             --msg-out: #004d99; --msg-in: #1a1a1a; --ouro: #ffd700; --vermelho: #ff3b3b;
@@ -400,6 +345,48 @@ function togglePlus() {
 </script>
 
     </script>
+    <style>
+    .btn-plus-final {
+        position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+        background: #007bff; color: white; border-radius: 50%; border: none;
+        font-size: 30px; cursor: pointer; z-index: 9999; transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+    }
+    .plus-menu-final {
+        position: fixed; bottom: 100px; right: 30px; display: none;
+        flex-direction: column; gap: 10px; z-index: 9999;
+    }
+    .plus-option-final {
+        background: #1a1a1a; color: white; border: 1px solid #007bff;
+        padding: 12px 20px; border-radius: 25px; font-size: 14px;
+        cursor: pointer; text-align: right; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+</style>
+
+<div id="plus-menu" class="plus-menu-final">
+    <div class="plus-option-final" onclick="alert('Criar Grupo em breve!'); togglePlus()">👥 Criar Grupo</div>
+    <div class="plus-option-final" onclick="openWin('win-profile'); togglePlus()">⚙️ Configurações</div>
+</div>
+
+<button id="main-plus" class="btn-plus-final" onclick="togglePlus()">+</button>
+
+<script>
+function togglePlus() {
+    const menu = document.getElementById('plus-menu');
+    const btn = document.getElementById('main-plus');
+    
+    if (menu.style.display === 'flex') {
+        menu.style.display = 'none';
+        btn.style.transform = 'rotate(0deg)';
+        btn.style.background = '#007bff';
+    } else {
+        menu.style.display = 'flex';
+        btn.style.transform = 'rotate(45deg)';
+        btn.style.background = '#ff4444';
+    }
+}
+</script>
+
 </body>
 </html>
 
