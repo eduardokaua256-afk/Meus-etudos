@@ -79,13 +79,34 @@
     </div>
 </div>
 
-<div id="win-profile" class="win">
-    <button onclick="closeWin('win-profile')" style="float:right; background:none; color:white; border:none; font-size:20px; cursor:pointer;">X</button>
+<div id="aba-principal">
+    <div id="subject-list"></div> 
+</div>
+
+<div id="aba-perfil" style="display:none; padding: 20px;">
+    <button onclick="voltarParaPrincipal()" style="background: #222; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer;">← Voltar</button>
+    
     <center>
-        <div style="position:relative; width:90px;">
-            <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none;">👑</span>
-            <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--bright-blue); cursor:pointer;" onclick="document.getElementById('in-pfp').click()">
+        <div style="margin-top: 20px; position: relative; width: 100px; display: inline-block;">
+            <span id="p-crown" style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 25px; display: none;">👑</span>
+            <img id="p-img-perfil" src="https://via.placeholder.com/100" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #00d9ff; object-fit: cover;">
         </div>
+
+        <h2 id="p-name-perfil" style="color: white; margin: 10px 0;">@Usuario</h2>
+
+        <div style="margin: 15px 0;">
+            <div style="color: #2ecc71; font-weight: bold;">● Online</div>
+            <div style="color: #ff4b4b; font-weight: bold;">● Offline</div>
+            <div style="color: white; font-size: 13px;">Visto por último: <span id="real-time-perfil" style="color: white;">--:--</span></div>
+        </div>
+
+        <div style="background: #1a1a1a; border: 1px solid #ffd700; padding: 20px; border-radius: 15px; margin-top: 20px; max-width: 300px;">
+            <h3 style="color: #ffd700; margin: 0 0 10px 0;">👑 Modo Premium</h3>
+            <button onclick="ativarPremiumOficial()" style="background: #ffd700; color: black; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%;">ATIVAR AGORA</button>
+        </div>
+    </center>
+</div>
+
         <h2 id="p-name-disp" style="color: white; margin: 10px 0;">@Usuario</h2>
 <p id="p-bio-disp" style="color:#888; cursor:pointer; margin-bottom: 15px;" onclick="changeBio()">Clique para mudar a bio...</p>
 
