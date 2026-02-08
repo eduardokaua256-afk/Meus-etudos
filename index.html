@@ -50,6 +50,55 @@
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
+        /* Botão Flutuante (+) */
+.btn-plus {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: var(--azul-brilhante);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    z-index: 1000;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+/* Menu de Opções que aparece ao clicar */
+.plus-menu {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    display: none; /* Começa escondido */
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.plus-option {
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid var(--azul-brilhante);
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    white-space: nowrap;
+    text-align: right;
+}
+
+.plus-option:hover {
+    background: var(--azul-brilhante);
+}
+
 
         :root {
             --preto: #000000; --azul-profundo: #001a33; --azul-brilhante: #1DA1F2;
@@ -171,6 +220,7 @@
     <input type="file" id="in-banner" hidden onchange="readImg(this, 'p-banner', 'user_banner')">
 
     <script>
+        
         function initApp() {
             renderMats();
             renderGroups();
@@ -299,6 +349,59 @@
         function triggerFile(id) { document.getElementById(id).click(); }
         function clearCache() { if(confirm("Limpar tudo?")) { localStorage.clear(); location.reload(); } }
     </script>
+    <div id="plus-menu" class="plus-menu">
+    <div class="plus-option" onclick="alert('Função Criar Grupo em breve!'); togglePlus()">👥 Criar Grupo</div>
+    <div class="plus-option" onclick="openWin('win-profile'); togglePlus()">⚙️ Configurações</div>
+</div>
+
+<button class="btn-plus" onclick="togglePlus()" id="main-plus">+</button>
+
+<script>
+        <div id="plus-menu" class="plus-menu">
+        <div class="plus-option" onclick="alert('Função Criar Grupo em breve!'); togglePlus()">👥 Criar Grupo</div>
+        <div class="plus-option" onclick="openWin('win-profile'); togglePlus()">⚙️ Configurações</div>
+    </div>
+    <button class="btn-plus" onclick="togglePlus()" id="main-plus">+</button>
+
+    <script>
+        // O CÓDIGO 3 (a função togglePlus) deve estar aqui dentro!
+        function togglePlus() {
+            const menu = document.getElementById('plus-menu');
+            const btn = document.getElementById('main-plus');
+            if (menu.style.display === 'flex') {
+                menu.style.display = 'none';
+                btn.style.transform = 'rotate(0deg)';
+                btn.style.background = 'var(--azul-brilhante)';
+            } else {
+                menu.style.display = 'flex';
+                btn.style.transform = 'rotate(45deg)';
+                btn.style.background = 'var(--vermelho)';
+            }
+        }
+        
+        // ... outras funções como initApp, loadProfile ...
+    <script>
+// Esta função faz o menu aparecer/desaparecer e o botão girar
+function togglePlus() {
+    const menu = document.getElementById('plus-menu');
+    const btn = document.getElementById('main-plus');
+    
+    // Verifica se o menu está visível
+    if (menu.style.display === 'flex') {
+        menu.style.display = 'none';
+        btn.style.transform = 'rotate(0deg)';
+        btn.style.background = 'var(--azul-brilhante)'; // Volta a ser azul
+    } else {
+        menu.style.display = 'flex';
+        btn.style.transform = 'rotate(45deg)'; // Vira um X
+        btn.style.background = '#ff4444'; // Fica vermelho
+    }
+}
+</script>
+
+    </script>
 </body>
 </html>
 
+</body>
+</html>
