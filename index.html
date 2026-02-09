@@ -185,7 +185,39 @@
         
     </style>
 </head>
-<body onload="initApp()">
+<body onload="initApp()"> <div id="screen-home" style="padding: 20px; height: 100vh; overflow-y: auto;">
+    <div style="display:flex; justify-content: space-between; align-items: center;">
+        <h1 style="margin:0; font-size:22px; color:var(--azul-brilhante)">Estudo Social</h1>
+        <div onclick="openWin('win-profile')" style="cursor:pointer; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 20px; border: 1px solid #222;">
+            <span id="top-username" style="font-size: 14px; font-weight: bold;">@Usuario</span>
+            <img id="top-pfp" src="https://via.placeholder.com/40" style="width:35px; height:35px; border-radius:50%; object-fit: cover;">
+        </div>
+    </div>
+    ```
+
+### 2. Para o Efeito do ID voltar (CSS)
+Vá na sua tag `<style>` (lá no topo) e veja se essa animação ainda existe. Se não existir, cole ela lá no final do CSS:
+
+```css
+/* Efeito de flutuação e brilho do ID */
+.id-container {
+    display: inline-block;
+    animation: flutuarID 1.5s infinite alternate ease-in-out;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+@keyframes flutuarID {
+    from { 
+        transform: translateY(0); 
+        text-shadow: 0 0 2px var(--azul-brilhante);
+    }
+    to { 
+        transform: translateY(-5px); 
+        text-shadow: 0 0 12px var(--azul-brilhante);
+    }
+}
+
 
     <div id="screen-home" style="padding: 20px; height: 100vh; overflow-y: auto;">
         <div id="win-profile" class="win win-small">
