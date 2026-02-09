@@ -4,7 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Estudo Social Master v16</title>
-    <style>/* Efeito de brilho pulsante para o ID */
+    <style>/* Animação de digitação */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* Brilho que passa pelo retângulo (efeito scanner) */
+@keyframes bio-scan {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.bio-box {
+    position: relative;
+    overflow: hidden; /* Garante que o brilho não saia do box */
+}
+
+/* A linha de luz que passa pela bio */
+.bio-box::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(29, 161, 242, 0.1), transparent);
+    animation: bio-scan 3s infinite;
+}
+
+.bio-texto {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid var(--azul-brilhante); /* Cursor piscando */
+    animation: 
+        typing 3.5s steps(30, end),
+        blink-caret .75s step-end infinite;
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--azul-brilhante); }
+}
+/* Efeito de brilho pulsante para o ID */
 .id-glow {
     color: var(--azul-brilhante);
     text-shadow: 0 0 10px var(--azul-brilhante);
@@ -49,6 +91,62 @@
         
         /* Prevenção do X de imagem quebrada */
         img:not([src]) { display: none !important; }
+
+        /* Estilo do ID Animado */
+.id-container {
+    display: inline-block;
+    animation: flutuar 1.5s infinite alternate ease-in-out;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+@keyframes flutuar {
+    from { transform: translateY(0); }
+    to { transform: translateY(-4px); }
+}
+
+/* Estilo da Bio (Retângulo Preto, Bordas Brancas Finas e Quina Azul) */
+.bio-box {
+    background: #000000;
+    border: 0.3px solid rgba(255,255,255,0.4); /* Borda branca bem fininha */
+    padding: 12px;
+    border-radius: 6px;
+    width: 80%;
+    margin: 15px auto;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+/* A "pontinha" azul vindo da esquerda/cima */
+.bio-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 15px;
+    border-top: 1.5px solid var(--azul-brilhante);
+    border-left: 1.5px solid var(--azul-brilhante);
+}
+
+/* Efeito de digitação na bio */
+.bio-texto {
+    color: #ffffff;
+    font-size: 11px;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    animation: typing 3s steps(30, end) forwards;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+        
     </style>
 </head>
 <body onload="initApp()">
@@ -89,7 +187,16 @@
     <span class="id-glow">22</span>
 </div>
 
+<div class="id-container">
+    <span style="color: white;">ID - </span>
+    <span style="color: var(--azul-brilhante); font-weight: bold; text-shadow: 0 0 5px var(--azul-brilhante);">22</span>
+</div>
+
 <h2 id="p-name" onclick="editName()" style="margin: 5px 0; cursor:pointer;">@Usuario</h2>
+
+<div class="bio-box">
+    <p class="bio-texto">Bio: Fundador Do Site Estudos Sociais</p>
+</div>
 
 <p class="bio-texto">Fundador do site Estudos Sociais</p>
 
