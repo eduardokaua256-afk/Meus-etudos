@@ -23,28 +23,6 @@
     to { text-shadow: 0 0 10px #a020f0, 0 0 20px #ffffff; } 
 }
 
-@keyframes ondaPremium { 
-    0% { background-position: 0% 50%; } 
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.premium-tag { 
-    animation: fogoAzul 1.5s infinite alternate; 
-    color: #ffffff; 
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-
-.linha-movimentada { 
-    height: 2px;
-    flex: 1;
-    background: linear-gradient(90deg, transparent, #ffd700, #1DA1F2, #ffffff, #a020f0, transparent); 
-    background-size: 400% 100%; 
-    animation: ondaPremium 4s linear infinite; 
-}
-
         /* --- EFEITO DO ID (MOVIMENTAÇÃO) --- */
         .id-container {
             display: inline-block;
@@ -57,20 +35,18 @@
             0% { transform: translateY(0px); filter: drop-shadow(0 0 2px var(--azul-brilhante)); }
             100% { transform: translateY(-6px); filter: drop-shadow(0 0 10px var(--azul-brilhante)); }
         }
-
-        .bio-box {
+.bio-box {
     background: #000000;
     border: 0.5px solid rgba(255, 255, 255, 0.3);
     padding: 18px 12px 12px 12px;
     border-radius: 6px;
     width: 85%;
-    margin: 25px auto;
+    margin: 20px auto;
     text-align: left;
     position: relative;
     overflow: visible;
 }
 
-/* O Nome BIO na borda */
 .bio-box::before {
     content: "BIO";
     position: absolute;
@@ -82,31 +58,20 @@
     color: #ffffff;
     font-size: 10px;
     font-weight: bold;
-    letter-spacing: 2px;
-    z-index: 10; /* Garante que o nome fique na frente */
+    z-index: 10;
 }
 
-/* Camada da Luz (Scanner) */
 .bio-box-inner {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden; /* Corta a luz nas bordas */
-    border-radius: 6px;
-    z-index: 1;
-    pointer-events: none;
+    top: 0; left: 0; width: 100%; height: 100%;
+    overflow: hidden; border-radius: 6px; z-index: 1; pointer-events: none;
 }
 
 .bio-box-inner::after {
     content: "";
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(29, 161, 242, 0.4), transparent);
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(29, 161, 242, 0.3), transparent);
     animation: bio-scan 3s infinite linear;
 }
 
@@ -114,6 +79,30 @@
     0% { left: -100%; }
     100% { left: 100%; }
 }
+
+.linha-movimentada {
+    height: 2px;
+    flex: 1;
+    background: linear-gradient(90deg, transparent, #ffd700, #1DA1F2, #ffffff, #a020f0, transparent);
+    background-size: 400% 100%;
+    animation: ondaPremium 4s linear infinite;
+}
+
+@keyframes ondaPremium {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.premium-tag {
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 0 10px;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+        
 
 /* Texto da Bio */
 .bio-texto {
@@ -125,17 +114,6 @@
 }
 
 /* Quina Azul */
-.bio-box-quina {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 20px;
-    height: 10px;
-    border-top: 2px solid var(--azul-brilhante);
-    border-left: 2px solid var(--azul-brilhante);
-    z-index: 11;
-    border-top-left-radius: 6px;
-}
 
 
 @keyframes movimentoID {
