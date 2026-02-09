@@ -4,7 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Estudo Social Master v16</title>
-    <style>/* Animação de digitação */
+    <style>//* Animação do ID: Flutuar + Brilho Pulsante */
+.id-container {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    animation: movimentoID 2s infinite alternate ease-in-out;
+}
+
+@keyframes movimentoID {
+    0% {
+        transform: translateY(0px);
+        filter: drop-shadow(0 0 2px var(--azul-brilhante));
+    }
+    100% {
+        transform: translateY(-6px);
+        filter: drop-shadow(0 0 10px var(--azul-brilhante));
+    }
+}
+
+.id-numero {
+    color: var(--azul-brilhante);
+    text-shadow: 0 0 5px rgba(29, 161, 242, 0.5);
+}
+* Animação de digitação */
 @keyframes typing {
   from { width: 0 }
   to { width: 100% }
