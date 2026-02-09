@@ -36,7 +36,8 @@
             0% { transform: translateY(0px); filter: drop-shadow(0 0 2px var(--azul-brilhante)); }
             100% { transform: translateY(-6px); filter: drop-shadow(0 0 10px var(--azul-brilhante)); }
         }
-.bio-box {
+
+        .bio-box {
     background: #000000;
     border: 0.5px solid rgba(255, 255, 255, 0.3);
     padding: 18px 12px 12px 12px;
@@ -45,34 +46,10 @@
     margin: 25px auto;
     text-align: left;
     position: relative;
-    overflow: visible; /* Mantém o nome BIO visível */
+    overflow: visible;
 }
 
-/* Camada interna para prender o efeito de luz */
-.bio-box-inner {
-    position: absolute;
-    inset: 0;
-    overflow: hidden; /* Prende a luz aqui dentro */
-    border-radius: 6px;
-    z-index: 1;
-}
-
-.bio-box-inner::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(29, 161, 242, 0.2), transparent);
-    animation: bio-scan 3s infinite;
-}
-
-@keyframes bio-scan {
-    0% { left: -100%; }
-    100% { left: 100%; }
-}
-
+/* O Nome BIO na borda */
 .bio-box::before {
     content: "BIO";
     position: absolute;
@@ -85,9 +62,48 @@
     font-size: 10px;
     font-weight: bold;
     letter-spacing: 2px;
-    z-index: 5;
+    z-index: 10; /* Garante que o nome fique na frente */
 }
 
+/* Camada da Luz (Scanner) */
+.bio-box-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Corta a luz nas bordas */
+    border-radius: 6px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bio-box-inner::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(29, 161, 242, 0.4), transparent);
+    animation: bio-scan 3s infinite linear;
+}
+
+@keyframes bio-scan {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Texto da Bio */
+.bio-texto {
+    position: relative;
+    z-index: 5; /* Fica na frente da luz */
+    color: #ffffff;
+    font-size: 11px;
+    margin: 0;
+}
+
+/* Quina Azul */
 .bio-box-quina {
     position: absolute;
     top: 0;
@@ -96,7 +112,7 @@
     height: 10px;
     border-top: 2px solid var(--azul-brilhante);
     border-left: 2px solid var(--azul-brilhante);
-    z-index: 6;
+    z-index: 11;
     border-top-left-radius: 6px;
 }
 
@@ -148,6 +164,12 @@
     </div>
 
     <div id="win-profile" class="win win-small">
+        <div class="bio-box">
+    <div class="bio-box-inner"></div>
+    <div class="bio-box-quina"></div>
+    <p class="bio-texto">Fundador Do Site Estudos Sociais</p>
+</div>
+
         <button class="btn-v" onclick="closeWin('win-profile')">X</button>
         <div id="p-banner" onclick="triggerFile('in-banner')" style="width:100%; height:130px; background:#111; background-size:cover; cursor:pointer; background-position: center;"></div>
         
