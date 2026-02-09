@@ -18,11 +18,32 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: white; margin: 0; overflow: hidden; }
 
         /* --- ANIMAÇÕES GERAIS --- */
-        @keyframes fogoAzul { from { text-shadow: 0 0 5px #00f, 0 0 10px #0ff; } to { text-shadow: 0 0 10px #0ff, 0 0 20px #00f; } }
-        @keyframes movimentoLinha { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
-        
-        .premium-tag { animation: fogoAzul 1s infinite alternate; color: var(--ouro); text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
-        .linha-movimentada { background: linear-gradient(90deg, transparent, var(--ouro), transparent); background-size: 200% 100%; animation: movimentoLinha 2s linear infinite; }
+        @keyframes fogoAzul { 
+    from { text-shadow: 0 0 5px #ffd700, 0 0 10px #1DA1F2; } 
+    to { text-shadow: 0 0 10px #a020f0, 0 0 20px #ffffff; } 
+}
+
+@keyframes ondaPremium { 
+    0% { background-position: 0% 50%; } 
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.premium-tag { 
+    animation: fogoAzul 1.5s infinite alternate; 
+    color: #ffffff; 
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.linha-movimentada { 
+    height: 2px;
+    flex: 1;
+    background: linear-gradient(90deg, transparent, #ffd700, #1DA1F2, #ffffff, #a020f0, transparent); 
+    background-size: 400% 100%; 
+    animation: ondaPremium 4s linear infinite; 
+}
 
         /* --- EFEITO DO ID (MOVIMENTAÇÃO) --- */
         .id-container {
@@ -164,6 +185,12 @@
     </div>
 
     <div id="win-profile" class="win win-small">
+        <div style="display: flex; align-items: center; width: 90%; margin: 15px 0;">
+    <div class="linha-movimentada"></div>
+    <span class="premium-tag">OPÇÃO PREMIUM</span>
+    <div class="linha-movimentada"></div>
+</div>
+
         
 
         <button class="btn-v" onclick="closeWin('win-profile')">X</button>
