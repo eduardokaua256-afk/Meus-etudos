@@ -4,247 +4,264 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Estudo Social Master v16</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
             --preto: #000000; --azul-profundo: #001a33; --azul-brilhante: #1DA1F2;
-            --msg-out: #005c4b; --msg-in: #202c33; --ouro: #ffd700; --vermelho: #ff3b3b;
-            --fundador: #eb4034; --adm: #25d366;
+            --msg-out: #004d99; --msg-in: #1a1a1a; --ouro: #ffd700; --vermelho: #ff3b3b;
         }
 
         body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: white; margin: 0; overflow: hidden; }
 
-        /* ANIMAÇÕES E EFEITOS */
+        /* ANIMAÇÕES */
         @keyframes fogoAzul { from { text-shadow: 0 0 5px #00f, 0 0 10px #0ff; } to { text-shadow: 0 0 10px #0ff, 0 0 20px #00f; } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        @keyframes movimentoLinha { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
         
-        .premium-tag { animation: fogoAzul 1s infinite alternate; color: var(--ouro); }
+        .premium-tag { animation: fogoAzul 1s infinite alternate; color: var(--ouro); text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
         .linha-movimentada { background: linear-gradient(90deg, transparent, var(--ouro), transparent); background-size: 200% 100%; animation: movimentoLinha 2s linear infinite; }
-        .msg-efeito { animation: bounce 0.5s ease; }
 
-        /* COMPONENTES */
+        /* COMPONENTES PRINCIPAIS */
         .win { display: none; position: fixed; inset: 0; background: var(--preto); flex-direction: column; z-index: 2000; }
-        .win-small { height: 85%; top: 7.5%; border-radius: 20px; border: 1px solid #333; overflow-y: auto; }
+        .win-small { height: 80%; top: 10%; border-radius: 20px; border: 1px solid #333; overflow-y: auto; }
+        .btn-v { position: absolute; top: 15px; right: 15px; background: var(--vermelho); color: white; border: none; border-radius: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 3000; }
         
-        .botao-flutuante { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--azul-brilhante); color: white; border-radius: 50%; border: none; font-size: 30px; cursor: pointer; z-index: 9999; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        
+        .mat-item { background: #111; padding: 15px; margin: 8px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; }
+
+        /* BOTÃO FLUTUANTE E MENU */
+        .botao-flutuante { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--azul-brilhante); color: white; border-radius: 50%; border: none; font-size: 30px; cursor: pointer; z-index: 9999; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.3s; }
         .menu-opcoes { position: fixed; bottom: 100px; right: 30px; display: none; flex-direction: column; gap: 10px; z-index: 9999; }
-        .opcao-item { background: #1a1a1a; color: white; border: 1px solid var(--azul-brilhante); padding: 12px 20px; border-radius: 25px; cursor: pointer; }
+        .opcao-item { background: #1a1a1a; color: white; border: 1px solid var(--azul-brilhante); padding: 12px 20px; border-radius: 25px; font-size: 14px; cursor: pointer; text-align: right; }
 
-        /* CHAT ESTILO WHATSAPP */
-        #chat-messages { flex:1; overflow-y: auto; padding: 20px; background: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-color: #0b141a; display: flex; flex-direction: column; }
-        .bubble { max-width: 80%; padding: 8px 12px; border-radius: 10px; margin-bottom: 5px; position: relative; font-size: 14px; }
-        .out { align-self: flex-end; background: var(--msg-out); }
-        .in { align-self: flex-start; background: var(--msg-in); }
-        .time { font-size: 10px; color: rgba(255,255,255,0.5); float: right; margin-top: 5px; margin-left: 8px; }
-        .badge { font-size: 10px; padding: 2px 5px; border-radius: 4px; margin-right: 5px; font-weight: bold; }
+        /* JANELA CRIAR GRUPO */
+        .janela-grupo { display: none; width: 340px; top: 50%; left: 50%; transform: translate(-50%, -50%); position: fixed; z-index: 10000; background: #121212; border: 2px solid var(--azul-brilhante); border-radius: 20px; padding: 25px; box-shadow: 0 0 30px #000; }
+        .btn-check-azul { position: absolute; bottom: -25px; right: 20px; width: 60px; height: 60px; background: var(--azul-brilhante); color: white; border-radius: 50%; border: 4px solid #121212; font-size: 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(29, 161, 242, 0.5); }
         
-        /* AUDIO */
-        .audio-player { display: flex; align-items: center; gap: 10px; min-width: 150px; }
-
-        .janela-grupo { display: none; width: 320px; top: 50%; left: 50%; transform: translate(-50%, -50%); position: fixed; z-index: 10000; background: #121212; border: 2px solid var(--azul-brilhante); border-radius: 20px; padding: 25px; }
+        /* Prevenção do X de imagem quebrada */
+        img:not([src]) { display: none !important; }
     </style>
 </head>
 <body onload="initApp()">
 
     <div id="screen-home" style="padding: 20px; height: 100vh; overflow-y: auto;">
         <div style="display:flex; justify-content: space-between; align-items: center;">
-            <h1 style="margin:0; font-size:22px; color:var(--azul-brilhante)">Estudo Social Master</h1>
-            <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-callback="handleCredentialResponse"></div>
-            <div class="g_id_signin" data-type="standard"></div>
-        </div>
-
-        <div id="user-info-bar" style="margin-top:15px; display:flex; align-items:center; gap:10px;">
-            <img id="top-pfp" src="https://via.placeholder.com/40" style="width:40px; height:40px; border-radius:50%;" onclick="openWin('win-profile')">
-            <div>
-                <b id="top-username">Usuário #000</b><br>
-                <small id="user-id-display">ID: ---</small>
+            <h1 style="margin:0; font-size:22px; color:var(--azul-brilhante)">Estudo Social</h1>
+            <div onclick="openWin('win-profile')" style="cursor:pointer; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 20px; border: 1px solid #222;">
+                <span id="top-username" style="font-size: 14px; font-weight: bold;">@Usuario</span>
+                <img id="top-pfp" src="https://via.placeholder.com/40" style="width:35px; height:35px; border-radius:50%; object-fit: cover;">
             </div>
         </div>
 
-        <h3 style="color:var(--azul-brilhante)">Grupos Disponíveis</h3>
-        <div id="group-list">
-            </div>
+        <h3 style="color:var(--azul-brilhante); margin-top:20px;">Matérias</h3>
+        <div id="mat-list"></div>
+
+        <h3 style="margin-top:25px; color:var(--azul-brilhante)">Grupos</h3>
+        <div id="group-list"></div>
     </div>
 
     <div id="win-profile" class="win win-small">
         <button class="btn-v" onclick="closeWin('win-profile')">X</button>
-        <div id="p-banner" style="width:100%; height:100px; background:#111;"></div>
+        <div id="p-banner" onclick="triggerFile('in-banner')" style="width:100%; height:130px; background:#111; background-size:cover; cursor:pointer; background-position: center;"></div>
         <center>
-            <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; margin-top:-45px; border:3px solid var(--preto);">
-            <h2 id="p-name">@Usuario</h2>
-            <p id="p-id-detail">ID: 0</p>
-            <button onclick="buyPremium()" style="background:var(--ouro); border:none; padding:10px; border-radius:5px; font-weight:bold;">VIRE PREMIUM 👑</button>
-        </center>
-    </div>
-
-    <div id="janelaCriar" class="janela-grupo">
-        <button onclick="fecharJanelaGrupo()" style="float:right; background:none; border:none; color:white;">X</button>
-        <h3>Novo Grupo</h3>
-        <center>
-            <div onclick="document.getElementById('in-foto-grupo').click()" style="width:80px; height:80px; border-radius:50%; background:#222; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden;">
-                <img id="prev-grupo" style="width:100%; height:100%; display:none;">
-                <span>📷</span>
+            <div style="display: flex; align-items: center; width: 90%; margin: 15px 0;">
+                <div class="linha-movimentada" style="flex: 1; height: 2px;"></div>
+                <span class="premium-tag" style="padding: 0 15px; font-size: 10px; font-weight: bold; letter-spacing: 2px;">OPÇÃO PREMIUM</span>
+                <div class="linha-movimentada" style="flex: 1; height: 2px;"></div>
             </div>
-            <input type="file" id="in-foto-grupo" hidden onchange="previewFotoGrupo(this)">
-            <input type="text" id="nome-grupo-input" placeholder="Nome do Grupo" style="width:80%; margin-top:15px; padding:10px; border-radius:8px; border:1px solid #333; background:#000; color:white;">
-        </center>
-        <button class="btn-check-azul" onclick="finalizarCriacaoGrupo()">✅</button>
-    </div>
 
-    <div id="win-chat" class="win">
-        <div style="background: #1a1a1a; padding: 10px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333;">
-            <button onclick="closeWin('win-chat')" style="background:none; border:none; color:white; font-size:20px;">←</button>
-            <img id="chat-icon" src="" style="width:40px; height:40px; border-radius:50%;" onclick="openGroupSettings()">
-            <div onclick="openGroupSettings()" style="flex:1; cursor:pointer;">
-                <b id="chat-name">Grupo</b><br>
-                <small id="chat-status" style="color:#25d366;">online</small>
+            <div style="position:relative; width:90px;">
+                <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none; z-index:10;">👑</span>
+                <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer; object-fit: cover;" onclick="triggerFile('in-pfp')">
             </div>
-        </div>
 
-        <div id="chat-messages"></div>
+            <h2 id="p-name" onclick="editName()" style="margin: 10px 0; cursor:pointer;">@Usuario</h2>
+            
+            <div id="status-box" style="margin-bottom: 15px;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <span id="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #00ff00;"></span>
+                    <span id="status-text" style="font-weight: bold; color: #00ff00;">Online</span>
+                </div>
+                <small>visto por último hoje às <span id="last-time">--:--</span></small>
+            </div>
 
-        <div style="padding: 10px; background: #1a1a1a; display: flex; align-items: center; gap: 10px;">
-            <button onclick="document.getElementById('in-chat-file').click()" style="background:none; border:none; font-size:20px; color:white;">📎</button>
-            <input type="file" id="in-chat-file" hidden onchange="sendImage(this)">
-            <input type="text" id="msg-input" placeholder="Mensagem" style="flex:1; padding:10px; border-radius:20px; border:none; background:#333; color:white;">
-            <button id="btn-audio" onmousedown="startRecording()" onmouseup="stopRecording()" style="background:none; border:none; font-size:20px; color:white;">🎤</button>
-            <button onclick="sendMessage()" style="background:var(--azul-brilhante); border:none; width:40px; height:40px; border-radius:50%; color:white;">➤</button>
-        </div>
+            <div style="display: flex; gap: 5px; padding: 0 20px;">
+                <button onclick="setStatus('online')" style="flex:1; background:#004400; color:#0f0; border:1px solid #0f0; padding:8px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR ONLINE</button>
+                <button onclick="setStatus('offline')" style="flex:1; background:#440000; color:#f00; border:1px solid #f00; padding:8px; border-radius:5px; font-size:10px; cursor:pointer;">FICAR OFFLINE</button>
+            </div>
+            
+            <button id="btn-premium" onclick="buyPremium()" style="width:85%; background:var(--ouro); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px; cursor:pointer; margin-top:15px;">OBTER PREMIUM 👑</button>
+            <br><br>
+            <button onclick="clearCache()" style="color:var(--vermelho); background:none; border:none; font-size:12px; cursor:pointer;">Limpar Tudo</button>
+        </center>
     </div>
 
     <div id="menuPrincipal" class="menu-opcoes">
         <div class="opcao-item" onclick="abrirJanelaGrupo()">👥 Criar Grupo</div>
         <div class="opcao-item" onclick="openWin('win-profile'); toggleMenuGeral()">⚙️ Configurações</div>
     </div>
+
     <button id="btnPrincipal" class="botao-flutuante" onclick="toggleMenuGeral()">+</button>
 
+    <div id="janelaCriar" class="janela-grupo">
+        <button onclick="fecharJanelaGrupo()" style="position: absolute; right: 15px; top: 10px; background: none; border: none; color: #666; font-size: 22px; cursor: pointer;">&times;</button>
+        <h3 style="color: white; margin-top: 0;">Criar Grupo</h3>
+
+        <div style="display: flex; gap: 15px; align-items: center; margin-top: 20px;">
+            <div style="position: relative; width: 70px; height: 70px; flex-shrink: 0;">
+                <input type="file" id="input-foto-grupo" accept="image/*" style="display: none;" onchange="previewFotoGrupo(this)">
+                <div onclick="document.getElementById('input-foto-grupo').click()" id="moldura-foto" style="width: 70px; height: 70px; border-radius: 50%; background: #1e1e1e; border: 2px dashed var(--azul-brilhante); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;">
+                    <span id="icone-camera-grupo" style="font-size: 24px; color: var(--azul-brilhante);">📷</span>
+                    <img id="preview-img-grupo" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+            <input type="text" placeholder="Nome do grupo..." style="flex: 1; height: 45px; background: #1e1e1e; border: 1px solid #333; color: white; padding: 0 15px; border-radius: 12px; outline: none;">
+        </div>
+
+        <button class="btn-check-azul" onclick="alert('Grupo Criado!'); fecharJanelaGrupo()">✅</button>
+    </div>
+
+    <input type="file" id="in-pfp" hidden onchange="readImg(this, 'p-img', 'user_pfp')">
+    <input type="file" id="in-banner" hidden onchange="readImg(this, 'p-banner', 'user_banner')">
+
     <script>
-        let mediaRecorder;
-        let audioChunks = [];
-        let userId = Math.floor(Math.random() * 1000000) + 1;
-        let isFundador = false;
-
         function initApp() {
-            document.getElementById('user-id-display').innerText = "ID: " + userId;
-            document.getElementById('p-id-detail').innerText = "ID: " + userId;
+            renderMats();
             renderGroups();
+            loadProfile();
+            loadStatus();
         }
 
-        // --- LÓGICA DO CHAT ---
-        function sendMessage() {
-            const input = document.getElementById('msg-input');
-            if (input.value.trim() === "") return;
-            appendMessage(input.value, 'out');
-            input.value = "";
-        }
-
-        function appendMessage(content, type, isAudio = false, isImg = false) {
-            const container = document.getElementById('chat-messages');
-            const now = new Date();
-            const time = now.getHours() + ":" + now.getMinutes().toString().padStart(2, '0');
-            
-            let badge = isFundador ? '<span class="badge" style="background:var(--fundador)">#27</span>' : '';
-            
-            const div = document.createElement('div');
-            div.className = `bubble ${type} msg-efeito`;
-            
-            if(isAudio) {
-                div.innerHTML = `${badge}<div class="audio-player"><button onclick="this.nextSibling.play()">▶️</button><audio src="${content}"></audio></div><span class="time">${time}</span>`;
-            } else if(isImg) {
-                div.innerHTML = `${badge}<img src="${content}" style="max-width:200px; border-radius:10px;"><br><span class="time">${time}</span>`;
+        // MENU FLUTUANTE
+        function toggleMenuGeral() {
+            const menu = document.getElementById('menuPrincipal');
+            const btn = document.getElementById('btnPrincipal');
+            if (menu.style.display === 'flex') {
+                fecharMenuGeral();
             } else {
-                div.innerHTML = `${badge}${content}<span class="time">${time}</span>`;
-            }
-
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // --- GRAVAÇÃO DE ÁUDIO ---
-        function startRecording() {
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.start();
-                audioChunks = [];
-                document.getElementById('btn-audio').style.color = "red";
-                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-            });
-        }
-
-        function stopRecording() {
-            if(!mediaRecorder) return;
-            mediaRecorder.stop();
-            document.getElementById('btn-audio').style.color = "white";
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                const audioUrl = URL.createObjectURL(audioBlob);
-                appendMessage(audioUrl, 'out', true);
-            };
-        }
-
-        // --- FOTOS DA GALERIA ---
-        function sendImage(input) {
-            if(input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => appendMessage(e.target.result, 'out', false, true);
-                reader.readAsDataURL(input.files[0]);
+                menu.style.display = 'flex';
+                btn.style.transform = 'rotate(45deg)';
+                btn.style.background = 'var(--vermelho)';
             }
         }
 
-        // --- LOGIN GOOGLE ---
-        function handleCredentialResponse(response) {
-            const data = JSON.parse(atob(response.credential.split('.')[1]));
-            document.getElementById('top-username').innerText = data.name;
-            document.getElementById('top-pfp').src = data.picture;
-            document.getElementById('p-name').innerText = data.name;
-            document.getElementById('p-img').src = data.picture;
+        function fecharMenuGeral() {
+            document.getElementById('menuPrincipal').style.display = 'none';
+            const btn = document.getElementById('btnPrincipal');
+            btn.style.transform = 'rotate(0deg)';
+            btn.style.background = 'var(--azul-brilhante)';
         }
 
-        // --- CRIAÇÃO DE GRUPO ---
-        function abrirJanelaGrupo() { 
+        function abrirJanelaGrupo() {
             document.getElementById('janelaCriar').style.display = 'block';
-            toggleMenuGeral();
+            document.getElementById('btnPrincipal').style.display = 'none';
+            fecharMenuGeral();
         }
-        function fecharJanelaGrupo() { document.getElementById('janelaCriar').style.display = 'none'; }
 
+        function fecharJanelaGrupo() {
+            document.getElementById('janelaCriar').style.display = 'none';
+            document.getElementById('btnPrincipal').style.display = 'flex';
+        }
+
+        // PREVIEW FOTO GRUPO
         function previewFotoGrupo(input) {
-            if(input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    document.getElementById('prev-grupo').src = e.target.result;
-                    document.getElementById('prev-grupo').style.display = 'block';
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.getElementById('preview-img-grupo');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('icone-camera-grupo').style.display = 'none';
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        function finalizarCriacaoGrupo() {
-            const nome = document.getElementById('nome-grupo-input').value;
-            if(!nome) return alert("Dê um nome!");
-            isFundador = true; // Criador ganha #27
-            document.getElementById('chat-name').innerText = nome;
-            document.getElementById('chat-icon').src = document.getElementById('prev-grupo').src || '';
-            document.getElementById('chat-icon').style.display = 'block';
-            fecharJanelaGrupo();
-            openWin('win-chat');
+        // PROFILE E STATUS
+        function loadProfile() {
+            const savedName = localStorage.getItem('user_name') || '@Usuario';
+            const savedPfp = localStorage.getItem('user_pfp') || 'https://via.placeholder.com/90';
+            const isPremium = localStorage.getItem('is_premium') === 'true';
+
+            document.getElementById('p-name').innerText = savedName;
+            document.getElementById('top-username').innerText = savedName;
+            document.getElementById('p-img').src = savedPfp;
+            document.getElementById('top-pfp').src = savedPfp;
+
+            const savedBanner = localStorage.getItem('user_banner');
+            if(savedBanner) document.getElementById('p-banner').style.backgroundImage = `url(${savedBanner})`;
+
+            if(isPremium) {
+                document.getElementById('p-crown').style.display = 'block';
+                document.getElementById('p-img').style.border = "3px solid var(--ouro)";
+                document.getElementById('top-username').style.color = "var(--ouro)";
+            }
         }
 
-        function openGroupSettings() {
-            alert("Configurações do Grupo:\n- Dar ADM (#99)\n- Mudar Nome\n- Apagar Grupo");
+        function editName() {
+            let novo = prompt("Novo nome:", document.getElementById('p-name').innerText);
+            if(novo) {
+                localStorage.setItem('user_name', novo);
+                loadProfile();
+            }
         }
 
-        // --- AUXILIARES ---
-        function toggleMenuGeral() {
-            const menu = document.getElementById('menuPrincipal');
-            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+        function setStatus(estado) {
+            const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
+            const timeSpan = document.getElementById('last-time');
+            const agora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            if (estado === 'online') {
+                dot.style.background = '#00ff00';
+                text.innerText = 'Online';
+                text.style.color = '#00ff00';
+            } else {
+                dot.style.background = '#ff3b3b';
+                text.innerText = 'Offline';
+                text.style.color = '#ff3b3b';
+            }
+            timeSpan.innerText = agora;
+            localStorage.setItem('user_status', estado);
+            localStorage.setItem('last_seen_time', agora);
         }
+
+        function loadStatus() {
+            setStatus(localStorage.getItem('user_status') || 'online');
+            document.getElementById('last-time').innerText = localStorage.getItem('last_seen_time') || '--:--';
+        }
+
+        function readImg(input, targetId, storageKey) {
+            if(input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    if(targetId === 'p-banner') document.getElementById(targetId).style.backgroundImage = `url(${e.target.result})`;
+                    else {
+                        document.getElementById(targetId).src = e.target.result;
+                        document.getElementById('top-pfp').src = e.target.result;
+                    }
+                    localStorage.setItem(storageKey, e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function renderMats() {
+            const mats = ['Matemática', 'Inglês', 'História', 'Geografia', 'Redação'];
+            document.getElementById('mat-list').innerHTML = mats.map(m => `
+                <div class="mat-item"><span>${m}</span><span style="color:var(--azul-brilhante)">📚</span></div>
+            `).join('');
+        }
+
+        function renderGroups() {
+            document.getElementById('group-list').innerHTML = `
+                <div style="background:#111; padding:15px; border-radius:12px; border:1px solid #222;">
+                    <b>Comunidade Geral</b><br><small>22 membros online</small>
+                </div>`;
+        }
+
+        function buyPremium() { localStorage.setItem('is_premium', 'true'); location.reload(); }
         function openWin(id) { document.getElementById(id).style.display = 'flex'; }
         function closeWin(id) { document.getElementById(id).style.display = 'none'; }
-        function buyPremium() { alert("Você agora é PREMIUM!"); }
-        function renderGroups() {
-            document.getElementById('group-list').innerHTML = `<div class="mat-item" onclick="openWin('win-chat')"><span>🌍 Comunidade Global</span><span>💬</span></div>`;
-        }
+        function triggerFile(id) { document.getElementById(id).click(); }
+        function clearCache() { if(confirm("Limpar tudo?")) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
 </html>
