@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Estudo Social Master v16</title>
     <style>
+        /* Trava o tamanho da foto de perfil */
+#p-foto {
+    width: 100px;  /* Ajuste o tamanho que desejar aqui */
+    height: 100px; /* Deve ser igual à largura */
+    border-radius: 50%;
+    object-fit: cover; /* Faz a foto preencher o círculo sem esticar */
+    cursor: pointer;
+    border: 2px solid var(--azul-brilhante);
+    display: block;
+    margin: 0 auto;
+}
+
+/* Garante que o banner seja clicável */
+#p-banner {
+    width: 100%;
+    height: 150px; /* Altura do seu banner */
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    position: relative;
+    display: block;
+}
+
         :root {
             --preto: #000000; 
             --azul-profundo: #001a33; 
@@ -163,6 +186,12 @@
     </div>
 
     <div id="win-profile" class="win win-small">
+        <div id="p-banner" onclick="openGallery('banner')"></div>
+
+<img id="p-foto" src="sua-foto-padrao.jpg" onclick="openGallery('foto')">
+
+<input type="file" id="fileInput" style="display:none" accept="image/*" onchange="updateImage(event)">
+
     
     <div style="display: flex; align-items: center; width: 90%; margin: 15px auto;">
     <div class="linha-movimentada"></div>
@@ -172,7 +201,7 @@
         
 
         <button class="btn-v" onclick="closeWin('win-profile')">X</button>
-        <div id="p-banner" onclick="triggerFile('in-banner')" style="width:100%; height:130px; background:#111; background-size:cover; cursor:pointer; background-position: center;"></div>
+        
         
         <center>
             <div style="display: flex; align-items: center; width: 90%; margin: 15px 0;">
