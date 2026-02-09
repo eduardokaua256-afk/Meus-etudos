@@ -101,22 +101,64 @@
     <button id="btnPrincipal" class="botao-flutuante" onclick="toggleMenuGeral()">+</button>
 
     <div id="janelaCriar" class="janela-grupo">
-        <button onclick="fecharJanelaGrupo()" style="position: absolute; right: 15px; top: 10px; background: none; border: none; color: #666; font-size: 22px; cursor: pointer;">&times;</button>
-        <h3 style="color: white; margin-top: 0;">Criar Grupo</h3>
 
-        <div style="display: flex; gap: 15px; align-items: center; margin-top: 20px;">
-            <div style="position: relative; width: 70px; height: 70px; flex-shrink: 0;">
-                <input type="file" id="input-foto-grupo" accept="image/*" style="display: none;" onchange="previewFotoGrupo(this)">
-                <div onclick="document.getElementById('input-foto-grupo').click()" id="moldura-foto" style="width: 70px; height: 70px; border-radius: 50%; background: #1e1e1e; border: 2px dashed var(--azul-brilhante); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;">
-                    <span id="icone-camera-grupo" style="font-size: 24px; color: var(--azul-brilhante);">📷</span>
-                    <img id="preview-img-grupo" style="display: none; width: 100%; height: 100%; object-fit: cover;">
-                </div>
-            </div>
-            <input type="text" placeholder="Nome do grupo..." style="flex: 1; height: 45px; background: #1e1e1e; border: 1px solid #333; color: white; padding: 0 15px; border-radius: 12px; outline: none;">
-        </div>
-
-        <button class="btn-check-azul" onclick="alert('Grupo Criado!'); fecharJanelaGrupo()">✅</button>
+        <div id="win-chat" class="win" style="display:none; flex-direction: column; z-index: 15000;">
+    <div style="background: #1a1a1a; padding: 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333;">
+        <button onclick="closeWin('win-chat')" style="background:none; border:none; color:white; font-size: 20px; cursor:pointer;">←</button>
+        <img id="chat-icon" src="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; display:none;">
+        <div id="chat-pfp-placeholder" style="width: 40px; height: 40px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center;">👥</div>
+        <h4 id="chat-name" style="margin:0;">Nome do Grupo</h4>
     </div>
+    
+    <div id="chat-messages" style="flex:1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; background-color: #0b141a;">
+        <center><small style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 10px; color: #aaa;">Você criou este grupo</small></center>
+    </div>
+
+    <div style="padding: 15px; background: #1a1a1a; display: flex; gap: 10px;">
+        <input type="text" id="msg-input" placeholder="Mensagem" style="flex:1; background:#333; border:none; border-radius: 20px; padding: 10px 15px; color:white; outline:none;">
+        <button onclick="sendMessage()" style="background: var(--azul-brilhante); border:none; border-radius: 50%; width: 45px; height: 45px; color:white; cursor:pointer;">➤</button>
+    </div>
+            
+<div id="janelaCriar" class="janela-grupo">
+    <button onclick="fecharJanelaGrupo()" ...> &times; </button>
+    <h3>Criar Grupo</h3>
+    <div ...>
+       </div>
+    <button class="btn-check-azul" ...>✅</button>
+</div> ```
+<div id="janelaCriar" class="janela-grupo" style="display:none;">
+    <button onclick="fecharJanelaGrupo()" style="position: absolute; right: 15px; top: 10px; background: none; border: none; color: #666; font-size: 22px; cursor: pointer;">&times;</button>
+    <h3 style="color: white; margin-top: 0;">Criar Grupo</h3>
+
+    <div style="display: flex; gap: 15px; align-items: center; margin-top: 20px;">
+        <div style="position: relative; width: 70px; height: 70px; flex-shrink: 0;">
+            <input type="file" id="input-foto-grupo" accept="image/*" style="display: none;" onchange="previewFotoGrupo(this)">
+            <div onclick="document.getElementById('input-foto-grupo').click()" style="width: 70px; height: 70px; border-radius: 50%; background: #1e1e1e; border: 2px dashed var(--azul-brilhante); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;">
+                <span id="icone-camera-grupo" style="font-size: 24px; color: var(--azul-brilhante);">📷</span>
+                <img id="preview-img-grupo" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+            </div>
+        </div>
+        <input type="text" id="nome-grupo-input" placeholder="Nome do grupo..." style="flex: 1; height: 45px; background: #1e1e1e; border: 1px solid #333; color: white; padding: 0 15px; border-radius: 12px; outline: none; color: white;">
+    </div>
+    <button class="btn-check-azul" onclick="finalizarCriacaoGrupo()">✅</button>
+</div>
+
+<div id="win-chat" class="win" style="display:none; flex-direction: column; z-index: 15000;">
+    <div style="background: #1a1a1a; padding: 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333;">
+        <button onclick="closeWin('win-chat')" style="background:none; border:none; color:white; font-size: 20px; cursor:pointer;">←</button>
+        <img id="chat-icon" src="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; display:none;">
+        <div id="chat-pfp-placeholder" style="width: 40px; height: 40px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center;">👥</div>
+        <h4 id="chat-name" style="margin:0;">Nome do Grupo</h4>
+    </div>
+    <div id="chat-messages" style="flex:1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; background-color: #0b141a;">
+        <center><small style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 10px; color: #aaa;">Você criou este grupo</small></center>
+    </div>
+    <div style="padding: 15px; background: #1a1a1a; display: flex; gap: 10px;">
+        <input type="text" id="msg-input" placeholder="Mensagem" style="flex:1; background:#333; border:none; border-radius: 20px; padding: 10px 15px; color:white; outline:none;">
+        <button onclick="sendMessage()" style="background: var(--azul-brilhante); border:none; border-radius: 50%; width: 45px; height: 45px; color:white; cursor:pointer;">➤</button>
+    </div>
+</div>
+
 
     <input type="file" id="in-pfp" hidden onchange="readImg(this, 'p-img', 'user_pfp')">
     <input type="file" id="in-banner" hidden onchange="readImg(this, 'p-banner', 'user_banner')">
@@ -148,17 +190,54 @@
             btn.style.transform = 'rotate(0deg)';
             btn.style.background = 'var(--azul-brilhante)';
         }
+// 1. Essa função agora faz TUDO: Salva o nome e abre a tela de chat
+function finalizarCriacaoGrupo() {
+    const input = document.getElementById('nome-grupo-input');
+    const nome = input.value;
+    const foto = document.getElementById('preview-img-grupo').src;
 
-        function abrirJanelaGrupo() {
-            document.getElementById('janelaCriar').style.display = 'block';
-            document.getElementById('btnPrincipal').style.display = 'none';
-            fecharMenuGeral();
+    if (nome.trim() !== "") {
+        // Coloca o nome do grupo na aba de conversa
+        document.getElementById('chat-name').innerText = nome;
+        
+        const chatIcon = document.getElementById('chat-icon');
+        const placeholder = document.getElementById('chat-pfp-placeholder');
+
+        // Se você escolheu uma foto, ela aparece no topo do chat
+        if (foto && foto.includes('data:image')) {
+            chatIcon.src = foto;
+            chatIcon.style.display = 'block';
+            placeholder.style.display = 'none';
         }
 
-        function fecharJanelaGrupo() {
-            document.getElementById('janelaCriar').style.display = 'none';
-            document.getElementById('btnPrincipal').style.display = 'flex';
-        }
+        // Fecha a janela de criar e abre a aba de conversa (win-chat)
+        document.getElementById('janelaCriar').style.display = 'none';
+        document.getElementById('btnPrincipal').style.display = 'flex';
+        document.getElementById('win-chat').style.display = 'flex';
+        
+        input.value = ""; // Limpa o campo de texto
+    } else {
+        alert("Por favor, digite um nome para o grupo.");
+    }
+}
+
+// 2. Essa função faz as mensagens aparecerem na tela
+function sendMessage() {
+    const input = document.getElementById('msg-input');
+    if(input.value.trim() !== "") {
+        const msgDiv = document.createElement('div');
+        // Estilo balão de WhatsApp (Verde)
+        msgDiv.style = "align-self: flex-end; background: #005c4b; color: white; padding: 8px 15px; border-radius: 15px 15px 0 15px; max-width: 80%; font-size: 14px; margin-bottom: 5px;";
+        msgDiv.innerText = input.value;
+        document.getElementById('chat-messages').appendChild(msgDiv);
+        
+        input.value = ""; // Limpa a barra de digitação
+        
+        // Faz o chat rolar sozinho para baixo
+        const chatBox = document.getElementById('chat-messages');
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+}
 
         // PREVIEW FOTO GRUPO
         function previewFotoGrupo(input) {
