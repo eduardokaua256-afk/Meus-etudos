@@ -4,7 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Estudo Social Master v16</title>
-    <style>
+    <style>/* Efeito de brilho pulsante para o ID */
+.id-glow {
+    color: var(--azul-brilhante);
+    text-shadow: 0 0 10px var(--azul-brilhante);
+    font-weight: bold;
+}
+.bio-texto {
+    color: #bbb;
+    font-size: 13px;
+    margin-top: 5px;
+    font-style: italic;
+}
+
         :root {
             --preto: #000000; --azul-profundo: #001a33; --azul-brilhante: #1DA1F2;
             --msg-out: #004d99; --msg-in: #1a1a1a; --ouro: #ffd700; --vermelho: #ff3b3b;
@@ -72,7 +84,15 @@
                 <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer; object-fit: cover;" onclick="triggerFile('in-pfp')">
             </div>
 
-            <h2 id="p-name" onclick="editName()" style="margin: 10px 0; cursor:pointer;">@Usuario</h2>
+            <div style="margin-top: 10px; font-size: 14px; font-weight: bold;">
+    <span style="color: white;">ID - </span>
+    <span class="id-glow">22</span>
+</div>
+
+<h2 id="p-name" onclick="editName()" style="margin: 5px 0; cursor:pointer;">@Usuario</h2>
+
+<p class="bio-texto">Fundador do site Estudos Sociais</p>
+
             
             <div id="status-box" style="margin-bottom: 15px;">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
