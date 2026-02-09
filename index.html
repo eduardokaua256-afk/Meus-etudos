@@ -183,7 +183,12 @@
 
             <div style="position:relative; width:90px;">
                 <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none; z-index:10;">👑</span>
-                <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--azul-brilhante); cursor:pointer; object-fit: cover;" onclick="triggerFile('in-pfp')">
+                <input type="file" id="fileInput" style="display:none" accept="image/*" onchange="updateImage(event)">
+
+<div id="p-banner" class="banner" onclick="openGallery('banner')" style="cursor:pointer;"></div>
+
+<img id="p-foto" class="profile-pic" onclick="openGallery('foto')" src="sua-foto-padrao.jpg" style="cursor:pointer;">
+
             </div>
 
             <div class="id-container">
@@ -294,5 +299,33 @@
         function clearCache() { if(confirm("Limpar tudo?")) { localStorage.clear(); location.reload(); } }
         function loadStatus() { document.getElementById('last-time').innerText = localStorage.getItem('last_seen_time') || '--:--'; }
     </script>
+        <script>
+    let currentTarget = "";
+
+    function openGallery(target) {
+        currentTarget = target;
+        document.getElementById('fileInput').click();
+    }
+
+    function updateImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (currentTarget === 'foto') {
+                    document.getElementById('p-foto').src = e.target.result;
+                    localStorage.setItem('perfil_foto', e.target.result); // Salva a foto
+                } else {
+                    document.getElementById('p-banner').style.backgroundImage = `url('${e.target.result}')`;
+                    localStorage.setItem('perfil_banner', e.target.result); // Salva o banner
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    </script>
+</body>
+
+
 </body>
 </html>
