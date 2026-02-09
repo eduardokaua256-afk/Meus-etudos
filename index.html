@@ -5,29 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Estudo Social Master v16</title>
     <style>
-        /* Trava o tamanho da foto de perfil */
-#p-foto {
-    width: 100px;  /* Ajuste o tamanho que desejar aqui */
-    height: 100px; /* Deve ser igual à largura */
-    border-radius: 50%;
-    object-fit: cover; /* Faz a foto preencher o círculo sem esticar */
-    cursor: pointer;
-    border: 2px solid var(--azul-brilhante);
-    display: block;
-    margin: 0 auto;
-}
-
-/* Garante que o banner seja clicável */
-#p-banner {
-    width: 100%;
-    height: 150px; /* Altura do seu banner */
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
-    position: relative;
-    display: block;
-}
-
         :root {
             --preto: #000000; 
             --azul-profundo: #001a33; 
@@ -38,15 +15,33 @@
             --vermelho: #ff3b3b;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: white; margin: 0; overflow: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: white; margin: 0; overflow-x: hidden; }
 
-        /* --- ANIMAÇÕES GERAIS --- */
-        @keyframes fogoAzul { 
-    from { text-shadow: 0 0 5px #ffd700, 0 0 10px #1DA1F2; } 
-    to { text-shadow: 0 0 10px #a020f0, 0 0 20px #ffffff; } 
-}
+        /* --- PERFIL --- */
+        #p-banner {
+            width: 100%;
+            height: 160px;
+            background-color: #1a1a1a;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            border-bottom: 2px solid #333;
+        }
 
-        /* --- EFEITO DO ID (MOVIMENTAÇÃO) --- */
+        #p-foto {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 3px solid var(--azul-brilhante);
+            margin-top: -50px; /* Faz a foto subir para cima do banner */
+            background: #000;
+            z-index: 10;
+            position: relative;
+        }
+
+        /* --- ANIMAÇÕES E BIO --- */
         .id-container {
             display: inline-block;
             margin-top: 10px;
@@ -54,122 +49,90 @@
             font-weight: bold;
             animation: movimentoID 2s infinite alternate ease-in-out;
         }
+
         @keyframes movimentoID {
             0% { transform: translateY(0px); filter: drop-shadow(0 0 2px var(--azul-brilhante)); }
             100% { transform: translateY(-6px); filter: drop-shadow(0 0 10px var(--azul-brilhante)); }
         }
-.bio-box {
-    background: #000000;
-    border: 0.5px solid rgba(255, 255, 255, 0.3);
-    padding: 18px 12px 12px 12px;
-    border-radius: 6px;
-    width: 85%;
-    margin: 20px auto;
-    text-align: left;
-    position: relative;
-    overflow: visible;
-}
 
-.bio-box::before {
-    content: "BIO";
-    position: absolute;
-    top: -9px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #000000;
-    padding: 0 10px;
-    color: #ffffff;
-    font-size: 10px;
-    font-weight: bold;
-    z-index: 10;
-}
+        .bio-box {
+            background: #000000;
+            border: 0.5px solid rgba(255, 255, 255, 0.3);
+            padding: 18px 12px 12px 12px;
+            border-radius: 6px;
+            width: 85%;
+            margin: 20px auto;
+            text-align: left;
+            position: relative;
+        }
 
-.bio-box-inner {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    overflow: hidden; border-radius: 6px; z-index: 1; pointer-events: none;
-}
+        .bio-box::before {
+            content: "BIO";
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            padding: 0 10px;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: bold;
+            z-index: 10;
+        }
 
-.bio-box-inner::after {
-    content: "";
-    position: absolute;
-    top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(29, 161, 242, 0.3), transparent);
-    animation: bio-scan 3s infinite linear;
-}
+        .bio-box-inner {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; border-radius: 6px; z-index: 1; pointer-events: none;
+        }
 
-@keyframes bio-scan {
-    0% { left: -100%; }
-    100% { left: 100%; }
-}
-
-.linha-movimentada {
-    height: 2px;
-    flex: 1;
-    background: linear-gradient(90deg, transparent, #ffd700, #1DA1F2, #ffffff, #a020f0, transparent);
-    background-size: 400% 100%;
-    animation: ondaPremium 4s linear infinite;
-}
-
-@keyframes ondaPremium {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.premium-tag {
-    color: #ffffff;
-    font-size: 10px;
-    font-weight: bold;
-    padding: 0 10px;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-}
-
-        
-
-/* Texto da Bio */
-.bio-texto {
-    position: relative;
-    z-index: 5; /* Fica na frente da luz */
-    color: #ffffff;
-    font-size: 11px;
-    margin: 0;
-}
-
-/* Quina Azul */
-
-
-@keyframes movimentoID {
-    0% { transform: translateY(0px); filter: drop-shadow(0 0 2px var(--azul-brilhante)); }
-    100% { transform: translateY(-6px); filter: drop-shadow(0 0 10px var(--azul-brilhante)); }
-}
-
+        .bio-box-inner::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(29, 161, 242, 0.3), transparent);
+            animation: bio-scan 3s infinite linear;
+        }
 
         @keyframes bio-scan { 0% { left: -100%; } 100% { left: 100%; } }
 
-        .bio-texto {
-            color: #ffffff; font-size: 11px; margin: 0; position: relative; z-index: 3;
-            white-space: nowrap; overflow: hidden; width: 0;
-            animation: typing 3.5s steps(35, end) forwards;
+        .linha-movimentada {
+            height: 2px;
+            flex: 1;
+            background: linear-gradient(90deg, transparent, #ffd700, #1DA1F2, #ffffff, #a020f0, transparent);
+            background-size: 400% 100%;
+            animation: ondaPremium 4s linear infinite;
         }
-        @keyframes typing { from { width: 0; } to { width: 100%; } }
 
-        /* --- COMPONENTES DA INTERFACE --- */
+        @keyframes ondaPremium {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .premium-tag {
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 0 10px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        .bio-texto { color: #ffffff; font-size: 11px; margin: 0; position: relative; z-index: 3; }
+
+        /* --- INTERFACE --- */
         .win { display: none; position: fixed; inset: 0; background: var(--preto); flex-direction: column; z-index: 2000; }
-        .win-small { height: 80%; top: 10%; border-radius: 20px; border: 1px solid #333; overflow-y: auto; }
+        .win-small { height: 90%; top: 5%; border-radius: 20px; border: 1px solid #333; overflow-y: auto; }
         .btn-v { position: absolute; top: 15px; right: 15px; background: var(--vermelho); color: white; border: none; border-radius: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 3000; }
-        .mat-item { background: #111; padding: 15px; margin: 8px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; }
-        .botao-flutuante { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--azul-brilhante); color: white; border-radius: 50%; border: none; font-size: 30px; cursor: pointer; z-index: 9999; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.3s; }
+        .mat-item { background: #111; padding: 15px; margin: 8px 0; border-radius: 10px; display: flex; justify-content: space-between; border: 1px solid #222; }
+        .botao-flutuante { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--azul-brilhante); color: white; border-radius: 50%; border: none; font-size: 30px; z-index: 9999; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .menu-opcoes { position: fixed; bottom: 100px; right: 30px; display: none; flex-direction: column; gap: 10px; z-index: 9999; }
-        .opcao-item { background: #1a1a1a; color: white; border: 1px solid var(--azul-brilhante); padding: 12px 20px; border-radius: 25px; font-size: 14px; cursor: pointer; text-align: right; }
-        .janela-grupo { display: none; width: 340px; top: 50%; left: 50%; transform: translate(-50%, -50%); position: fixed; z-index: 10000; background: #121212; border: 2px solid var(--azul-brilhante); border-radius: 20px; padding: 25px; box-shadow: 0 0 30px #000; }
-        .btn-check-azul { position: absolute; bottom: -25px; right: 20px; width: 60px; height: 60px; background: var(--azul-brilhante); color: white; border-radius: 50%; border: 4px solid #121212; font-size: 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        img:not([src]) { display: none !important; }
+        .opcao-item { background: #1a1a1a; color: white; border: 1px solid var(--azul-brilhante); padding: 12px 20px; border-radius: 25px; font-size: 14px; cursor: pointer; }
     </style>
 </head>
 <body onload="initApp()">
 
-    <div id="screen-home" style="padding: 20px; height: 100vh; overflow-y: auto;">
+    <div id="screen-home" style="padding: 20px;">
         <div style="display:flex; justify-content: space-between; align-items: center;">
             <h1 style="margin:0; font-size:22px; color:var(--azul-brilhante)">Estudo Social</h1>
             <div onclick="openWin('win-profile')" style="cursor:pointer; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 20px; border: 1px solid #222;">
@@ -177,139 +140,107 @@
                 <img id="top-pfp" src="https://via.placeholder.com/40" style="width:35px; height:35px; border-radius:50%; object-fit: cover;">
             </div>
         </div>
-
-        <h3 style="color:var(--azul-brilhante); margin-top:20px;">Matérias</h3>
         <div id="mat-list"></div>
-
-        <h3 style="margin-top:25px; color:var(--azul-brilhante)">Grupos</h3>
-        <div id="group-list"></div>
     </div>
 
     <div id="win-profile" class="win win-small">
-        <div id="p-banner" onclick="openGallery('banner')"></div>
-
-<img id="p-foto" src="sua-foto-padrao.jpg" onclick="openGallery('foto')">
-
-<input type="file" id="fileInput" style="display:none" accept="image/*" onchange="updateImage(event)">
-
-    
-    <div style="display: flex; align-items: center; width: 90%; margin: 15px auto;">
-    <div class="linha-movimentada"></div>
-    <span class="premium-tag">OPÇÃO PREMIUM</span>
-    <div class="linha-movimentada"></div>
-    </div>
-        
-
         <button class="btn-v" onclick="closeWin('win-profile')">X</button>
         
-        
+        <div id="p-banner" onclick="openGallery('banner')"></div>
+
         <center>
-            <div style="display: flex; align-items: center; width: 90%; margin: 15px 0;">
-                <div class="linha-movimentada" style="flex: 1; height: 2px;"></div>
-                <span class="premium-tag" style="padding: 0 15px; font-size: 10px; font-weight: bold; letter-spacing: 2px;">OPÇÃO PREMIUM</span>
-                <div class="linha-movimentada" style="flex: 1; height: 2px;"></div>
-            </div>
-
-            <div style="position:relative; width:90px;">
-                <span id="p-crown" style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:25px; display:none; z-index:10;">👑</span>
-                <input type="file" id="fileInput" style="display:none" accept="image/*" onchange="updateImage(event)">
-
-<div id="p-banner" class="banner" onclick="openGallery('banner')" style="cursor:pointer;"></div>
-
-<img id="p-foto" class="profile-pic" onclick="openGallery('foto')" src="sua-foto-padrao.jpg" style="cursor:pointer;">
-
-            </div>
+            <img id="p-foto" src="https://via.placeholder.com/100" onclick="openGallery('foto')">
+            <span id="p-crown" style="font-size:25px; display:none; margin-top: 10px;">👑</span>
 
             <div class="id-container">
                 <span style="color: white;">ID - </span>
                 <span style="color: var(--azul-brilhante);">22</span>
             </div>
-            <h2 id="p-name" onclick="editName()" style="margin: 5px 0; cursor:pointer;">@Usuario</h2>
-            <div class="bio-box">
-    <div class="bio-box-inner"></div>
-    <div class="bio-box-quina"></div>
-    <p class="bio-texto">Fundador Do Site Estudos Sociais</p>
-</div>
 
-                </div>
-                <small>visto por último <span id="last-time">--:--</span></small>
+            <h2 id="p-name" onclick="editName()" style="margin: 10px 0; cursor:pointer;">@Usuario</h2>
+            
+            <div style="display: flex; align-items: center; width: 90%; margin: 15px auto;">
+                <div class="linha-movimentada"></div>
+                <span class="premium-tag">OPÇÃO PREMIUM</span>
+                <div class="linha-movimentada"></div>
             </div>
 
-            <button id="btn-premium" onclick="buyPremium()" style="width:85%; background:var(--ouro); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px; cursor:pointer;">OBTER PREMIUM 👑</button>
+            <div class="bio-box">
+                <div class="bio-box-inner"></div>
+                <p class="bio-texto">Fundador Do Site Estudos Sociais</p>
+            </div>
+
+            <small>visto por último <span id="last-time">--:--</span></small>
+            <br><br>
+            <button onclick="buyPremium()" style="width:85%; background:var(--ouro); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px; cursor:pointer;">OBTER PREMIUM 👑</button>
             <br><br>
             <button onclick="clearCache()" style="color:var(--vermelho); background:none; border:none; font-size:12px; cursor:pointer;">Limpar Tudo</button>
         </center>
     </div>
 
+    <input type="file" id="fileInput" style="display:none" accept="image/*" onchange="updateImage(event)">
+
     <div id="menuPrincipal" class="menu-opcoes">
-        <div class="opcao-item" onclick="abrirJanelaGrupo()">👥 Criar Grupo</div>
         <div class="opcao-item" onclick="openWin('win-profile'); toggleMenuGeral()">⚙️ Configurações</div>
     </div>
     <button id="btnPrincipal" class="botao-flutuante" onclick="toggleMenuGeral()">+</button>
 
-    <div id="janelaCriar" class="janela-grupo">
-        <button onclick="fecharJanelaGrupo()" style="position: absolute; right: 15px; top: 10px; background: none; border: none; color: #666; font-size: 22px; cursor: pointer;">&times;</button>
-        <h3 style="color: white; margin: 0;">Criar Grupo</h3>
-        <div style="display: flex; gap: 15px; align-items: center; margin-top: 20px;">
-            <input type="text" placeholder="Nome do grupo..." style="flex: 1; height: 45px; background: #1e1e1e; border: 1px solid #333; color: white; padding: 0 15px; border-radius: 12px;">
-        </div>
-        <button class="btn-check-azul" onclick="alert('Grupo Criado!'); fecharJanelaGrupo()">✅</button>
-    </div>
-
-    <input type="file" id="in-pfp" hidden onchange="readImg(this, 'p-img', 'user_pfp')">
-    <input type="file" id="in-banner" hidden onchange="readImg(this, 'p-banner', 'user_banner')">
-
     <script>
-        function initApp() { renderMats(); renderGroups(); loadProfile(); loadStatus(); }
+        let currentTarget = "";
+
+        function initApp() { renderMats(); loadProfile(); loadStatus(); }
 
         function toggleMenuGeral() {
             const menu = document.getElementById('menuPrincipal');
-            const btn = document.getElementById('btnPrincipal');
-            if (menu.style.display === 'flex') {
-                menu.style.display = 'none'; btn.style.transform = 'rotate(0deg)'; btn.style.background = 'var(--azul-brilhante)';
-            } else {
-                menu.style.display = 'flex'; btn.style.transform = 'rotate(45deg)'; btn.style.background = 'var(--vermelho)';
-            }
+            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        function abrirJanelaGrupo() { document.getElementById('janelaCriar').style.display = 'block'; toggleMenuGeral(); }
-        function fecharJanelaGrupo() { document.getElementById('janelaCriar').style.display = 'none'; }
+        // --- FUNÇÕES DA GALERIA ---
+        function openGallery(target) {
+            currentTarget = target;
+            document.getElementById('fileInput').click();
+        }
+
+        function updateImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const result = e.target.result;
+                    if (currentTarget === 'foto') {
+                        document.getElementById('p-foto').src = result;
+                        document.getElementById('top-pfp').src = result;
+                        localStorage.setItem('user_pfp', result);
+                    } else {
+                        document.getElementById('p-banner').style.backgroundImage = `url('${result}')`;
+                        localStorage.setItem('user_banner', result);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
 
         function loadProfile() {
             const savedName = localStorage.getItem('user_name') || '@Usuario';
-            const savedPfp = localStorage.getItem('user_pfp') || 'https://via.placeholder.com/90';
+            const savedPfp = localStorage.getItem('user_pfp') || 'https://via.placeholder.com/100';
+            const savedBanner = localStorage.getItem('user_banner');
             const isPremium = localStorage.getItem('is_premium') === 'true';
+
             document.getElementById('p-name').innerText = savedName;
             document.getElementById('top-username').innerText = savedName;
-            document.getElementById('p-img').src = savedPfp;
+            document.getElementById('p-foto').src = savedPfp;
             document.getElementById('top-pfp').src = savedPfp;
-            if(isPremium) {
-                document.getElementById('p-crown').style.display = 'block';
-                document.getElementById('p-img').style.border = "3px solid var(--ouro)";
-            }
+            
+            if(savedBanner) document.getElementById('p-banner').style.backgroundImage = `url('${savedBanner}')`;
+            if(isPremium) document.getElementById('p-crown').style.display = 'block';
         }
 
         function editName() {
-            let novo = prompt("Novo nome:", document.getElementById('p-name').innerText);
-            if(novo) { localStorage.setItem('user_name', novo); loadProfile(); }
-        }
-
-        function setStatus(estado) {
-            const dot = document.getElementById('status-dot');
-            const agora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('last-time').innerText = agora;
-            localStorage.setItem('last_seen_time', agora);
-        }
-
-        function readImg(input, targetId, storageKey) {
-            if(input.files[0]) {
-                let reader = new FileReader();
-                reader.onload = (e) => {
-                    if(targetId === 'p-banner') document.getElementById(targetId).style.backgroundImage = `url(${e.target.result})`;
-                    else document.getElementById(targetId).src = e.target.result;
-                    localStorage.setItem(storageKey, e.target.result);
-                };
-                reader.readAsDataURL(input.files[0]);
+            let novo = prompt("Novo nome:", localStorage.getItem('user_name') || "@Usuario");
+            if(novo) { 
+                localStorage.setItem('user_name', novo); 
+                document.getElementById('p-name').innerText = novo;
+                document.getElementById('top-username').innerText = novo;
             }
         }
 
@@ -318,43 +249,14 @@
             document.getElementById('mat-list').innerHTML = mats.map(m => `<div class="mat-item"><span>${m}</span><span>📚</span></div>`).join('');
         }
 
-        function renderGroups() {
-            document.getElementById('group-list').innerHTML = `<div style="background:#111; padding:15px; border-radius:12px; border:1px solid #222;"><b>Comunidade Geral</b></div>`;
-        }
-
-        function buyPremium() { localStorage.setItem('is_premium', 'true'); location.reload(); }
+        function buyPremium() { localStorage.setItem('is_premium', 'true'); loadProfile(); alert('Premium Ativado!'); }
         function openWin(id) { document.getElementById(id).style.display = 'flex'; }
         function closeWin(id) { document.getElementById(id).style.display = 'none'; }
         function clearCache() { if(confirm("Limpar tudo?")) { localStorage.clear(); location.reload(); } }
-        function loadStatus() { document.getElementById('last-time').innerText = localStorage.getItem('last_seen_time') || '--:--'; }
-    </script>
-        <script>
-    let currentTarget = "";
-
-    function openGallery(target) {
-        currentTarget = target;
-        document.getElementById('fileInput').click();
-    }
-
-    function updateImage(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                if (currentTarget === 'foto') {
-                    document.getElementById('p-foto').src = e.target.result;
-                    localStorage.setItem('perfil_foto', e.target.result); // Salva a foto
-                } else {
-                    document.getElementById('p-banner').style.backgroundImage = `url('${e.target.result}')`;
-                    localStorage.setItem('perfil_banner', e.target.result); // Salva o banner
-                }
-            };
-            reader.readAsDataURL(file);
+        function loadStatus() { 
+            const agora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('last-time').innerText = localStorage.getItem('last_seen_time') || agora; 
         }
-    }
     </script>
-</body>
-
-
 </body>
 </html>
