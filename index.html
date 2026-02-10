@@ -2,194 +2,243 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GlobalMart | Secure Shopping</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Social Study Master v17</title>
     <style>
         :root {
-            --primary: #1a73e8;
-            --secondary: #34a853;
-            --danger: #d93025;
-            --dark: #202124;
-            --gray: #f8f9fa;
+            --black: #000000; --deep-blue: #001a33; --bright-blue: #1DA1F2;
+            --msg-out: #004d99; --msg-in: #1a1a1a; --gold: #ffd700; --red: #ff3b3b;
         }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--black); color: white; margin: 0; overflow: hidden; }
 
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            background-color: var(--gray);
-            color: var(--dark);
-        }
+        /* PREMIUM ANIMATIONS */
+        @keyframes fireBlue { from { text-shadow: 0 0 5px #00f, 0 0 10px #0ff; } to { text-shadow: 0 0 10px #0ff, 0 0 20px #00f; } }
+        @keyframes fireYellow { from { box-shadow: 0 0 10px #ff0; border: 1px solid #ff0; } to { box-shadow: 0 0 25px #f60; border: 1px solid #f60; } }
+        .id-owner { animation: fireBlue 0.5s infinite alternate; color: var(--bright-blue); font-weight: bold; }
+        .premium-aura { animation: fireYellow 0.6s infinite alternate !important; border-radius: 20px; }
+        .crown-small { width: 25px; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); }
 
-        /* Header & Navigation */
-        header {
-            background: white;
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
-
-        /* Admin Dashboard Section */
-        .admin-panel {
-            background: #fff3cd;
-            padding: 15px 5%;
-            border-bottom: 2px solid #ffeeba;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        /* Product Grid */
-        .container { padding: 2rem 5%; }
+        /* UI COMPONENTS */
+        .win { display: none; position: fixed; inset: 0; background: var(--black); flex-direction: column; z-index: 2000; }
+        .win-small { height: 80%; top: 10%; border-radius: 20px; border: 1px solid #333; overflow-y: auto; }
+        .btn-back { position: absolute; top: 15px; right: 15px; background: var(--red); color: white; border: none; border-radius: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 3000; font-weight: bold; }
         
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
+        /* CHAT */
+        .chat-header { display: flex; flex-direction: column; align-items: center; padding: 10px; border-bottom: 1px solid #222; }
+        .chat-flow { flex: 1; overflow-y: auto; padding: 15px; background: linear-gradient(180deg, #000, #001122); display: flex; flex-direction: column; gap: 8px; }
+        .bubble { max-width: 80%; padding: 10px; border-radius: 12px; font-size: 14px; position: relative; }
+        .b-out { align-self: flex-end; background: var(--msg-out); }
+        .b-in { align-self: flex-start; background: var(--msg-in); }
 
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
+        /* DRAGGABLE CALCULATOR */
+        #calc-box { display: none; position: fixed; width: 200px; background: #000; border: 1px solid #444; border-radius: 10px; z-index: 9999; cursor: move; padding: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+        .calc-screen { width: 100%; height: 35px; background: #111; color: #0f0; border: none; text-align: right; font-size: 18px; margin-bottom: 5px; }
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+        .calc-grid button { padding: 8px; background: #222; color: white; border: none; border-radius: 5px; }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
+        /* SUBJECTS */
+        .subject-card { background: #111; padding: 15px; margin: 5px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
 
-        .badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: var(--danger);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
+        /* SEARCH BAR */
+        #search-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); z-index: 9000; align-items: center; justify-content: center; }
+        .search-bar { width: 85%; background: transparent; border: none; border-bottom: 2px solid white; color: white; font-size: 26px; text-align: center; outline: none; }
 
-        .price-tag {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin: 15px 0;
-        }
-
-        button {
-            cursor: pointer;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .btn-main {
-            background: var(--primary);
-            color: white;
-            width: 100%;
-            padding: 12px;
-        }
-
-        .btn-admin {
-            padding: 8px 16px;
-            background: var(--dark);
-            color: white;
-        }
-
-        .btn-admin.down { background: var(--secondary); }
-        .btn-admin.up { background: var(--danger); }
-
+        .float-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: rgba(29,161,242,0.2); border: 1px solid var(--bright-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 1000; }
     </style>
 </head>
-<body>
+<body onload="initApp()">
 
-<header>
-    <div class="logo">GlobalMart.</div>
-    <div class="nav-icons">
-        <span>🔍 Search</span> | 
-        <span>👤 Profile</span> | 
-        <strong>🛒 Cart (<span id="cart-val">0</span>)</strong>
-    </div>
-</header>
-
-<div class="admin-panel">
-    <strong>🛡️ Admin Controls:</strong>
-    <button class="btn-admin down" onclick="adjustAllPrices(0.9)">Flash Sale (-10%)</button>
-    <button class="btn-admin up" onclick="adjustAllPrices(1.1)">Inflation Adj (+10%)</button>
-    <button class="btn-admin" onclick="resetPrices()">Reset Original</button>
-</div>
-
-<div class="container">
-    <h2>Featured Deals</h2>
-    <div class="grid" id="market-grid">
+    <div id="screen-home" style="padding: 20px; height: 100vh; overflow-y: auto;">
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+            <h1 style="margin:0; font-size:22px; color:var(--bright-blue)">Social Study</h1>
+            <div onclick="openWin('win-profile')" style="cursor:pointer;">👤</div>
         </div>
-</div>
+        
+        <button onclick="toggleSearch()" style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid #333; border-radius:25px; color:#888; text-align:left; margin: 20px 0;">🔍 Search the Internet...</button>
 
-<script>
-    // Initial Data (In a real app, this comes from a secure API/Database)
-    const initialInventory = [
-        { id: 1, name: "Ultra-HD Smart TV 55\"", basePrice: 499.99, promo: true },
-        { id: 2, name: "Noise-Cancelling Headphones", basePrice: 199.50, promo: false },
-        { id: 3, name: "Ergonomic Office Chair", basePrice: 245.00, promo: true },
-        { id: 4, name: "Smart Watch Series X", basePrice: 320.00, promo: false },
-        { id: 5, name: "Mechanical Keyboard RGB", basePrice: 89.99, promo: true },
-        { id: 6, name: "Wireless Gaming Mouse", basePrice: 55.00, promo: false }
-    ];
+        <div id="subject-section">
+            <h3 style="color:var(--bright-blue)">Subjects</h3>
+            <div id="subject-list"></div>
+        </div>
 
-    let currentInventory = JSON.parse(JSON.stringify(initialInventory));
+        <h3 style="margin-top:25px; color:var(--bright-blue)">Groups / Community</h3>
+        <div id="group-list"></div>
 
-    function renderMarketplace() {
-        const grid = document.getElementById('market-grid');
-        grid.innerHTML = '';
+        <div class="float-btn" onclick="openWin('win-create-group')">+</div>
+        <div onclick="openWin('win-find-user')" style="position:fixed; bottom:20px; left:20px; background:#111; border-radius:50%; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border:1px solid #333;">👤</div>
+    </div>
 
-        currentInventory.forEach(item => {
-            grid.innerHTML += `
-                <div class="product-card">
-                    ${item.promo ? '<div class="badge">HOT DEAL</div>' : ''}
-                    <h3>${item.name}</h3>
-                    <div class="price-tag">$${item.basePrice.toFixed(2)}</div>
-                    <button class="btn-main" onclick="addToCart()">Add to Cart</button>
-                </div>
-            `;
-        });
-    }
+    <div id="win-profile" class="win win-small">
+        <button class="btn-back" onclick="closeWin('win-profile')">X</button>
+        <div id="p-banner" onclick="triggerFile('in-banner')" style="width:100%; height:130px; background:#111; background-size:cover; cursor:pointer;"></div>
+        <center>
+            <div style="position:relative; width:90px; margin-top:-45px;">
+                <img id="p-crown-img" class="crown-small" src="https://cdn-icons-png.flaticon.com/512/1152/1152912.png" style="display:none;">
+                <img id="p-img" src="https://via.placeholder.com/90" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--bright-blue);" onclick="triggerFile('in-pfp')">
+            </div>
+            <h2 id="p-name-disp">@User</h2>
+            <div id="p-status"><span style="color:#00ff00">●</span> Online</div>
+            <small class="last-seen">Last seen: <span id="seen-time"></span></small>
+            <p>ID: <span class="id-owner" id="p-id-num">22</span></p>
 
-    // Feature: Raise or Lower Prices
-    function adjustAllPrices(factor) {
-        currentInventory = currentInventory.map(item => ({
-            ...item,
-            basePrice: parseFloat((item.basePrice * factor).toFixed(2))
-        }));
-        renderMarketplace();
-    }
+            <button onclick="buyPremium()" style="width:90%; background:var(--gold); color:black; font-weight:bold; border:none; padding:12px; border-radius:8px;">GET PREMIUM 👑</button>
+            <button onclick="toggleCalc()" style="width:90%; margin-top:10px;">Calculator</button>
+            <button onclick="openWin('win-login')" style="width:90%; margin-top:10px; background:white; color:black;">Login with Google</button>
+        </center>
+    </div>
 
-    function resetPrices() {
-        currentInventory = JSON.parse(JSON.stringify(initialInventory));
-        renderMarketplace();
-    }
+    <div id="win-chat" class="win">
+        <button class="btn-back" onclick="closeWin('win-chat'); stopMedia();">X</button>
+        <div class="chat-header" id="chat-aura">
+            <img id="g-pfp" src="https://via.placeholder.com/50" style="width:50px; height:50px; border-radius:50%; cursor:pointer;" onclick="triggerFile('in-g-pfp')">
+            <h4 id="g-name" style="margin:5px 0;">Group Name</h4>
+            <div id="typing-box" style="font-size:10px; color:cyan; height:12px;"></div>
+            <button onclick="openWin('win-g-settings')" style="position:absolute; left:15px; top:15px; background:none; border:none; color:white;">⚙️</button>
+        </div>
+        <div class="chat-flow" id="chat-box"></div>
+        <div style="background:#000; padding:10px; display:flex; gap:8px; align-items:center;">
+            <button onclick="openWin('win-stickers')">🎭</button>
+            <button id="mic-btn" onmousedown="startVoice()" onmouseup="stopVoice()" style="font-size:20px; background:none; border:none; color:white;">🎤</button>
+            <input type="text" id="msg-input" placeholder="Message..." oninput="isTyping()" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:20px;">
+            <button onclick="sendMsg()" style="color:var(--bright-blue); font-size:24px; background:none; border:none;">➡️</button>
+        </div>
+    </div>
 
-    let cartCount = 0;
-    function addToCart() {
-        cartCount++;
-        document.getElementById('cart-val').innerText = cartCount;
-    }
+    <div id="calc-box">
+        <input type="text" id="c-screen" class="calc-screen" readonly value="0">
+        <div class="calc-grid">
+            <button onclick="cVal('7')">7</button><button onclick="cVal('8')">8</button><button onclick="cVal('9')">9</button><button onclick="cVal('/')">÷</button>
+            <button onclick="cVal('4')">4</button><button onclick="cVal('5')">5</button><button onclick="cVal('6')">6</button><button onclick="cVal('*')">×</button>
+            <button onclick="cVal('1')">1</button><button onclick="cVal('2')">2</button><button onclick="cVal('3')">3</button><button onclick="cVal('-')">-</button>
+            <button onclick="cVal('0')">0</button><button onclick="cVal('Math.sqrt(')">√</button><button onclick="cRes()">=</button><button onclick="cVal('+')">+</button>
+            <button onclick="cVal('Math.PI')">π</button><button onclick="cVal('C')" style="color:red">C</button>
+        </div>
+    </div>
 
-    // Init
-    renderMarketplace();
-</script>
+    <div id="search-overlay" onclick="if(event.target==this) toggleSearch()">
+        <input type="text" id="sq" class="search-bar" placeholder="Search..." onkeypress="if(event.key=='Enter') window.open('https://google.com/search?q='+this.value)">
+    </div>
 
+    <input type="file" id="in-pfp" hidden onchange="readImg(this, 'p-img', 'pfp')">
+    <input type="file" id="in-banner" hidden onchange="readImg(this, 'p-banner', 'banner')">
+    <input type="file" id="in-g-pfp" hidden onchange="readImg(this, 'g-pfp', 'gpfp')">
+
+    <script>
+        let isPremium = false;
+        let activeG = null;
+        let mediaRec, chunks = [];
+
+        const subjects = [
+            {n: 'Mathematics', l: 'https://youtube.com/playlist?list=PL83s8LGM84J4mRCdgGKJaZh8KWFU7GgcO'},
+            {n: 'English', l: 'https://youtube.com/playlist?list=PLZ65xj2SRHQB0T2GGk-R7bYxorKUkcyoj'},
+            {n: 'History', l: 'https://youtube.com/playlist?list=PLGCGbN9NWTZBAYWoI5-afZG8bZgIzBoNs'},
+            {n: 'Geography', l: 'https://youtube.com/playlist?list=PLNM2T4DNzmq7p-TtQPn3vjNU9t8M0Arxc'},
+            {n: 'Writing', l: 'https://youtube.com/playlist?list=PLPwuAOl5BHi8UTmce6l7kWwDVj2oMYPv2'}
+        ];
+
+        function initApp() {
+            renderSubjects();
+            renderGroups();
+            loadProfileData();
+            document.getElementById('seen-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function openWin(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeWin(id) { document.getElementById(id).style.display = 'none'; }
+        function toggleSearch() { let s = document.getElementById('search-overlay'); s.style.display = (s.style.display == 'flex') ? 'none' : 'flex'; }
+
+        function renderSubjects() {
+            let list = document.getElementById('subject-list');
+            list.innerHTML = "";
+            subjects.forEach(s => {
+                list.innerHTML += `<div class="subject-card"><span>${s.n}</span><button onclick="window.open('${s.l}')" style="background:none; border:none; color:white;">⋮</button></div>`;
+            });
+        }
+
+        function renderGroups() {
+            let list = document.getElementById('group-list');
+            list.innerHTML = "";
+            let db = JSON.parse(localStorage.getItem('groups_v17') || '[]');
+            db.forEach(g => {
+                list.innerHTML += `<div onclick="openChat(${g.id})" style="background:#111; padding:15px; border-radius:12px; margin-bottom:10px; border:1px solid #333;">👥 ${g.name} <small>#27</small></div>`;
+            });
+        }
+
+        function openChat(id) {
+            activeG = id;
+            let db = JSON.parse(localStorage.getItem('groups_v17'));
+            let g = db.find(x => x.id === id);
+            document.getElementById('g-name').innerText = g.name;
+            if(isPremium) document.getElementById('chat-aura').classList.add('premium-aura');
+            renderMsgs();
+            openWin('win-chat');
+        }
+
+        function sendMsg() {
+            let input = document.getElementById('msg-input');
+            if(!input.value) return;
+            saveMsg({ u: "@Owner", id: 22, t: input.value, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
+            input.value = "";
+        }
+
+        function saveMsg(m) {
+            let db = JSON.parse(localStorage.getItem('groups_v17'));
+            let idx = db.findIndex(x => x.id === activeG);
+            db[idx].msgs.push(m);
+            localStorage.setItem('groups_v17', JSON.stringify(db));
+            renderMsgs();
+        }
+
+        function renderMsgs() {
+            let box = document.getElementById('chat-box');
+            box.innerHTML = "";
+            let g = JSON.parse(localStorage.getItem('groups_v17')).find(x => x.id === activeG);
+            g.msgs.forEach(m => {
+                let div = document.createElement('div');
+                div.className = (m.id == 22) ? "bubble b-out" : "bubble b-in";
+                let tag = (m.id == 22) ? `<small class="id-owner">${m.u} #22</small>` : `<small style="color:orange">${m.u} #27</small>`;
+                div.innerHTML = `${tag}<br>${m.t}<br><small style="font-size:9px; opacity:0.5; float:right;">${m.time}</small>`;
+                box.appendChild(div);
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // DRAGGABLE CALC
+        const calc = document.getElementById('calc-box');
+        let isDrag = false;
+        calc.onmousedown = () => isDrag = true;
+        document.onmousemove = (e) => { if(isDrag) { calc.style.left = e.pageX - 100 + 'px'; calc.style.top = e.pageY - 50 + 'px'; } };
+        document.onmouseup = () => isDrag = false;
+
+        function toggleCalc() { calc.style.display = (calc.style.display == 'block') ? 'none' : 'block'; }
+        function cVal(v) { let s = document.getElementById('c-screen'); if(v=='C') s.value='0'; else s.value+=v; }
+        function cRes() { try { let s = document.getElementById('c-screen'); s.value = eval(s.value); } catch { s.value = 'Error'; } }
+
+        function buyPremium() {
+            isPremium = true;
+            document.getElementById('p-crown-img').style.display = 'block';
+            alert("👑 Premium Unlocked! Fiery Aura Enabled.");
+        }
+
+        function readImg(i, id, key) {
+            if(i.files[0]) {
+                let r = new FileReader();
+                r.onload = e => {
+                    if(id == 'p-banner') document.getElementById(id).style.backgroundImage = `url(${e.target.result})`;
+                    else document.getElementById(id).src = e.target.result;
+                    localStorage.setItem(key, e.target.result);
+                };
+                r.readAsDataURL(i.files[0]);
+            }
+        }
+
+        function loadProfileData() {
+            if(localStorage.getItem('pfp')) document.getElementById('p-img').src = localStorage.getItem('pfp');
+            if(localStorage.getItem('banner')) document.getElementById('p-banner').style.backgroundImage = `url(${localStorage.getItem('banner')})`;
+        }
+
+        function triggerFile(id) { document.getElementById(id).click(); }
+    </script>
 </body>
 </html>
+
