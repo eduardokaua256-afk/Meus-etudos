@@ -1,259 +1,195 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URBAN ELITE | Premium Streetwear</title>
-    
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-
+    <title>GlobalMart | Secure Shopping</title>
     <style>
         :root {
-            --bg: #050505;
-            --surface: #121212;
-            --primary: #00ff88; /* Neon Green Security/Modern vibe */
-            --accent: #ff0055;
-            --text: #ffffff;
-            --glass: rgba(255, 255, 255, 0.05);
+            --primary: #1a73e8;
+            --secondary: #34a853;
+            --danger: #d93025;
+            --dark: #202124;
+            --gray: #f8f9fa;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background-color: var(--gray);
+            color: var(--dark);
+        }
 
-        /* --- ANIMATIONS --- */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes glow { 0% { box-shadow: 0 0 5px var(--primary); } 50% { box-shadow: 0 0 20px var(--primary); } 100% { box-shadow: 0 0 5px var(--primary); } }
-
-        /* --- HEADER --- */
+        /* Header & Navigation */
         header {
-            background: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(15px);
-            padding: 15px 5%;
+            background: white;
+            padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #ddd;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid var(--glass);
         }
 
-        .logo { font-family: 'Syncopate', sans-serif; font-size: 1.2rem; color: var(--primary); letter-spacing: -1px; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
 
-        .search-container {
-            background: var(--glass);
-            padding: 8px 15px;
-            border-radius: 20px;
+        /* Admin Dashboard Section */
+        .admin-panel {
+            background: #fff3cd;
+            padding: 15px 5%;
+            border-bottom: 2px solid #ffeeba;
             display: flex;
+            gap: 15px;
             align-items: center;
-            flex: 0.6;
-            margin: 0 20px;
-        }
-        .search-container input {
-            background: transparent;
-            border: none;
-            color: white;
-            width: 100%;
-            margin-left: 10px;
-            outline: none;
         }
 
-        .nav-actions { display: flex; gap: 15px; align-items: center; }
-        .icon-btn { 
-            background: none; border: none; color: white; cursor: pointer; 
-            position: relative; transition: 0.3s; 
-        }
-        .icon-btn:hover { color: var(--primary); transform: scale(1.1); }
-
-        /* --- PRODUCT GRID --- */
-        .hero {
-            padding: 100px 5% 50px;
-            text-align: center;
-            background: radial-gradient(circle at top, #1a1a1a 0%, #050505 100%);
-        }
-
+        /* Product Grid */
+        .container { padding: 2rem 5%; }
+        
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
-            padding: 20px 5%;
         }
 
-        .card {
-            background: var(--surface);
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--danger);
+            color: white;
+            padding: 4px 12px;
             border-radius: 20px;
-            padding: 15px;
-            border: 1px solid var(--glass);
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: fadeIn 0.6s ease forwards;
+            font-size: 0.75rem;
+            font-weight: bold;
         }
-        .card:hover { border-color: var(--primary); transform: translateY(-10px); }
 
-        .card img { width: 100%; border-radius: 15px; margin-bottom: 15px; }
+        .price-tag {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 15px 0;
+        }
 
-        .buy-btn {
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-main {
+            background: var(--primary);
+            color: white;
             width: 100%;
             padding: 12px;
-            background: var(--primary);
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: 0.3s;
-        }
-        .buy-btn:hover { animation: glow 1.5s infinite; }
-
-        /* --- MODALS --- */
-        .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: none; justify-content: center; align-items: center; z-index: 3000;
-        }
-        .modal-content {
-            background: var(--surface);
-            padding: 30px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            border: 1px solid var(--primary);
         }
 
-        /* --- CART SIDEBAR --- */
-        #cart {
-            position: fixed; right: -100%; top: 0; width: 350px; height: 100%;
-            background: var(--surface); z-index: 4000; transition: 0.5s;
-            padding: 30px; border-left: 1px solid var(--primary);
+        .btn-admin {
+            padding: 8px 16px;
+            background: var(--dark);
+            color: white;
         }
-        #cart.active { right: 0; }
+
+        .btn-admin.down { background: var(--secondary); }
+        .btn-admin.up { background: var(--danger); }
 
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">URBAN ELITE</div>
-        
-        <div class="search-container">
-            <i data-lucide="search" size="18"></i>
-            <input type="text" id="searchInput" placeholder="Buscar tendências..." onkeyup="secureSearch()">
-        </div>
-
-        <div class="nav-actions">
-            <button class="icon-btn" onclick="openModal('userModal')"><i data-lucide="user"></i></button>
-            <button class="icon-btn" onclick="toggleCart()">
-                <i data-lucide="shopping-cart"></i>
-                <span id="cartCount" style="position:absolute; top:-5px; right:-5px; background:var(--accent); font-size:10px; padding:2px 5px; border-radius:50%">0</span>
-            </button>
-        </div>
-    </header>
-
-    <section class="hero">
-        <h1 style="font-size: 2.5rem; margin-bottom: 10px;">DROP 001/26</h1>
-        <p style="color: #888;">Design futurista. Segurança absoluta.</p>
-    </section>
-
-    <main class="grid" id="productGrid"></main>
-
-    <div id="userModal" class="modal" onclick="closeModal(event)">
-        <div class="modal-content">
-            <i data-lucide="shield-check" color="#00ff88" size="48"></i>
-            <h2 style="margin: 15px 0;">Área do Cliente</h2>
-            <input type="email" placeholder="Email" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:none; color:white;">
-            <button class="buy-btn">ENTRAR COM SEGURANÇA</button>
-        </div>
+<header>
+    <div class="logo">GlobalMart.</div>
+    <div class="nav-icons">
+        <span>🔍 Search</span> | 
+        <span>👤 Profile</span> | 
+        <strong>🛒 Cart (<span id="cart-val">0</span>)</strong>
     </div>
+</header>
 
-    <div id="cart">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h2>Carrinho</h2>
-            <button onclick="toggleCart()" style="background:none; border:none; color:white;"><i data-lucide="x"></i></button>
+<div class="admin-panel">
+    <strong>🛡️ Admin Controls:</strong>
+    <button class="btn-admin down" onclick="adjustAllPrices(0.9)">Flash Sale (-10%)</button>
+    <button class="btn-admin up" onclick="adjustAllPrices(1.1)">Inflation Adj (+10%)</button>
+    <button class="btn-admin" onclick="resetPrices()">Reset Original</button>
+</div>
+
+<div class="container">
+    <h2>Featured Deals</h2>
+    <div class="grid" id="market-grid">
         </div>
-        <div id="cartItems" style="margin-top: 30px;"></div>
-        <button class="buy-btn" onclick="secureCheckout()">FINALIZAR (ENCRYPTED)</button>
-    </div>
+</div>
 
-    <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+<script>
+    // Initial Data (In a real app, this comes from a secure API/Database)
+    const initialInventory = [
+        { id: 1, name: "Ultra-HD Smart TV 55\"", basePrice: 499.99, promo: true },
+        { id: 2, name: "Noise-Cancelling Headphones", basePrice: 199.50, promo: false },
+        { id: 3, name: "Ergonomic Office Chair", basePrice: 245.00, promo: true },
+        { id: 4, name: "Smart Watch Series X", basePrice: 320.00, promo: false },
+        { id: 5, name: "Mechanical Keyboard RGB", basePrice: 89.99, promo: true },
+        { id: 6, name: "Wireless Gaming Mouse", basePrice: 55.00, promo: false }
+    ];
 
-        const products = [
-            { id: 1, name: "Cyber Hoodie", price: 349.00, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500" },
-            { id: 2, name: "Neon Tech Pants", price: 289.00, img: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500" },
-            { id: 3, name: "Phantom Sneakers", price: 599.00, img: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500" },
-            { id: 4, name: "Glow Vest", price: 215.00, img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500" }
-        ];
+    let currentInventory = JSON.parse(JSON.stringify(initialInventory));
 
-        let cart = [];
+    function renderMarketplace() {
+        const grid = document.getElementById('market-grid');
+        grid.innerHTML = '';
 
-        // 1. Render Products
-        function render() {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = products.map(p => `
-                <div class="card">
-                    <img src="${p.img}" alt="${p.name}">
-                    <h3>${p.name}</h3>
-                    <p style="color:var(--primary); font-weight:bold; font-size:1.2rem; margin: 10px 0;">R$ ${p.price.toFixed(2)}</p>
-                    <button class="buy-btn" onclick="addToCart(${p.id})">ADICIONAR</button>
+        currentInventory.forEach(item => {
+            grid.innerHTML += `
+                <div class="product-card">
+                    ${item.promo ? '<div class="badge">HOT DEAL</div>' : ''}
+                    <h3>${item.name}</h3>
+                    <div class="price-tag">$${item.basePrice.toFixed(2)}</div>
+                    <button class="btn-main" onclick="addToCart()">Add to Cart</button>
                 </div>
-            `).join('');
-        }
+            `;
+        });
+    }
 
-        // 2. Security: Anti-XSS Search
-        function secureSearch() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            const cleanInput = input.replace(/[^a-zA-Z0-9 ]/g, ""); // Sanitize
-            const cards = document.querySelectorAll('.card');
-            
-            cards.forEach(card => {
-                const title = card.querySelector('h3').innerText.toLowerCase();
-                card.style.display = title.includes(cleanInput) ? "block" : "none";
-            });
-        }
+    // Feature: Raise or Lower Prices
+    function adjustAllPrices(factor) {
+        currentInventory = currentInventory.map(item => ({
+            ...item,
+            basePrice: parseFloat((item.basePrice * factor).toFixed(2))
+        }));
+        renderMarketplace();
+    }
 
-        // 3. Cart Logic
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            cart.push(product);
-            document.getElementById('cartCount').innerText = cart.length;
-            updateCartUI();
-        }
+    function resetPrices() {
+        currentInventory = JSON.parse(JSON.stringify(initialInventory));
+        renderMarketplace();
+    }
 
-        function updateCartUI() {
-            const container = document.getElementById('cartItems');
-            container.innerHTML = cart.map(item => `
-                <div style="padding:10px; border-bottom:1px solid #333; display:flex; justify-content:space-between">
-                    <span>${item.name}</span>
-                    <span>R$ ${item.price}</span>
-                </div>
-            `).join('');
-        }
+    let cartCount = 0;
+    function addToCart() {
+        cartCount++;
+        document.getElementById('cart-val').innerText = cartCount;
+    }
 
-        function toggleCart() { document.getElementById('cart').classList.toggle('active'); }
+    // Init
+    renderMarketplace();
+</script>
 
-        // 4. Modal Logic
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(e) { if(e.target.className === 'modal') e.target.style.display = 'none'; }
-
-        // 5. Security: Simulated Encrypted Checkout
-        function secureCheckout() {
-            if(cart.length === 0) return alert("Carrinho vazio!");
-            const btn = document.querySelector('#cart .buy-btn');
-            btn.innerText = "ENCRYPTING...";
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                alert("🔐 Transação Segura Iniciada!\nConectando ao gateway de pagamento...");
-                btn.innerText = "FINALIZAR (ENCRYPTED)";
-                btn.disabled = false;
-            }, 2000);
-        }
-
-        render();
-    </script>
 </body>
 </html>
