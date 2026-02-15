@@ -1,437 +1,163 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="dark">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Estudos-s • Estude com amigos e IA</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    
-    .fire-border {
-      position: relative;
-      border: 3px solid transparent;
-      background: linear-gradient(#111, #111) padding-box,
-                  linear-gradient(45deg, #ffeb3b, #ff9800, #f44336, #ffeb3b) border-box;
-      animation: fire 2s linear infinite;
-    }
-    @keyframes fire { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-    
-    .crown { filter: drop-shadow(0 0 12px #ffd700); }
-    .avatar-premium { box-shadow: 0 0 25px #ffd700, 0 0 40px #ffeb3b; }
-    
-    .modal { animation: modalPop 0.3s ease; }
-    @keyframes modalPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    
-    .chat-bubble { max-width: 78%; padding: 12px 18px; border-radius: 20px; position: relative; }
-    .received { background: #1f2937; border-bottom-left-radius: 4px; }
-    .sent { background: linear-gradient(135deg, #00bfff, #1e90ff); color: white; border-bottom-right-radius: 4px; }
-    
-    .draggable { cursor: move; user-select: none; }
-  </style>
-</head>
-<body class="bg-[#0a0a0a] text-white min-h-screen overflow-hidden">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudos-s | Oficial</title>
+    <style>
+        /* CONFIGURAÇÕES DE CORES E TEMA */
+        :root {
+            --bg: #000;
+            --txt: #fff;
+            --blue: #1DA1F2;
+            --premium: #FFD700;
+            --fire-anim: fire 0.5s ease-in-out infinite alternate;
+        }
 
-  <!-- ================== NAVBAR (estilo X) ================== -->
-  <nav class="fixed top-0 left-0 right-0 bg-[#0a0a0a] border-b border-gray-800 z-50">
-    <div class="max-w-screen-2xl mx-auto px-4 h-14 flex items-center justify-between">
-      <div class="flex items-center gap-8">
-        <!-- Logo -->
-        <div onclick="showPage('home')" class="text-3xl font-bold tracking-tighter cursor-pointer">Estudos-s</div>
+        body { background: var(--bg); color: var(--txt); font-family: 'Arial', sans-serif; margin: 0; overflow-x: hidden; }
         
-        <!-- Três pontinhos esquerdo -->
-        <button onclick="toggleLeftMenu()" class="text-2xl hover:text-cyan-400 transition">
-          <i class="fa-solid fa-ellipsis-vertical"></i>
-        </button>
-      </div>
+        /* MODO PC DINÂMICO */
+        @media (min-width: 1024px) { body { width: 800px; margin: auto; border-left: 1px solid #333; border-right: 1px solid #333; } }
 
-      <!-- Pesquisa central -->
-      <div class="flex-1 max-w-xl mx-8">
-        <input id="globalSearch" type="text" placeholder="Pesquisar grupos, mensagens, matérias..." 
-               class="w-full bg-gray-900 border border-gray-700 rounded-full py-2.5 px-6 focus:outline-none focus:border-cyan-400">
-      </div>
+        /* HEADER ESTILO X */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-bottom: 1px solid #333; position: sticky; top: 0; background: rgba(0,0,0,0.9); z-index: 1000; }
+        
+        .profile-container { position: relative; cursor: pointer; text-align: right; }
+        .profile-pic { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--blue); }
+        .crown { position: absolute; top: -15px; right: 10px; font-size: 20px; display: none; } /* Só Premium */
+        .online-dot { width: 12px; height: 12px; background: #00FF00; border-radius: 50%; position: absolute; bottom: 5px; right: 0; border: 2px solid #000; }
 
-      <!-- Perfil superior direito -->
-      <div onclick="openProfileModal()" class="flex items-center gap-3 cursor-pointer group">
-        <div id="navAvatar" class="w-9 h-9 rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-cyan-400 transition">
-          <img id="navAvatarImg" src="https://i.imgur.com/0z0z0z0.png" class="w-full h-full object-cover" alt="">
+        /* ANIMAÇÕES E EFEITOS ESPECIAIS */
+        @keyframes fire { 
+            0% { box-shadow: 0 0 10px #ff4500, 0 0 20px #ff8c00; border-color: #ff4500; }
+            100% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff4500; border-color: #ff8c00; }
+        }
+
+        .id-fire-text { color: #00ccff; font-weight: bold; text-shadow: 0 0 10px #00ccff; animation: pulse 1s infinite; }
+        @keyframes pulse { from { opacity: 0.7; } to { opacity: 1; } }
+
+        /* BIO FUNDADOR */
+        .bio-rect { border-radius: 4px; background: #111; border: 1px solid #fff; border-left: 15px solid var(--blue); padding: 15px; margin: 10px 0; }
+
+        /* ABAS FLUTUANTES */
+        .float-box { 
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 320px; background: #111; border: 2px solid var(--blue); 
+            border-radius: 15px; padding: 20px; display: none; z-index: 2000;
+        }
+
+        /* GRUPOS E CHAT */
+        .group-card { background: #050505; border: 1px solid #222; padding: 15px; margin: 10px; border-radius: 10px; text-align: center; }
+        .group-pic-big { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; }
+
+        /* BOTÃO CRIAR */
+        .btn-plus { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; box-shadow: 0 0 10px var(--blue); }
+
+        /* BANNER COM COBRINHA */
+        .banner { width: 100%; height: 120px; background: #222; position: relative; overflow: hidden; }
+        .snake-line { position: absolute; width: 100%; height: 2px; background: var(--blue); animation: snakeMove 2s infinite linear; }
+        @keyframes snakeMove { 0% { left: -100%; } 100% { left: 100%; } }
+
+        /* PREMIUM MODO */
+        .is-premium .profile-pic { animation: var(--fire-anim); border-color: var(--premium) !important; }
+        .is-premium .crown { display: block; }
+        .is-premium .float-box { border-color: var(--premium); animation: var(--fire-anim); }
+    </style>
+</head>
+<body id="mainBody">
+
+    <header class="header">
+        <div onclick="toggleSidebar()" style="font-size: 24px; cursor:pointer">☰</div>
+        <div style="font-weight: bold; letter-spacing: 2px;">ESTUDOS-S</div>
+        <div class="profile-container" onclick="openModal('profileModal')">
+            <span style="display:block; font-size: 10px;">{{NOME}}</span>
+            <img src="https://via.placeholder.com/50" class="profile-pic" id="myPic">
+            <div class="online-dot"></div>
+            <div class="crown">👑</div>
         </div>
-        <div>
-          <div id="navName" class="font-semibold text-sm">Fundador</div>
-          <div class="flex items-center gap-1.5 text-xs">
-            <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-            <span id="navStatus" class="text-emerald-400">Online</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+    </header>
 
-  <div class="flex pt-14 max-w-screen-2xl mx-auto h-screen">
-
-    <!-- ================== SIDEBAR ESQUERDA ================== -->
-    <div class="w-64 bg-[#111] border-r border-gray-800 h-full p-4 flex flex-col">
-      <button onclick="showPage('home')" class="sidebar-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 w-full text-left">
-        <i class="fa-solid fa-house"></i> Início
-      </button>
-      <button onclick="showPage('grupos')" class="sidebar-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 w-full text-left">
-        <i class="fa-solid fa-users"></i> Meus Grupos
-      </button>
-      <button onclick="showPage('chatGeral')" class="sidebar-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 w-full text-left">
-        <i class="fa-solid fa-comments"></i> Chat Geral
-      </button>
-      <button onclick="showPage('ia')" class="sidebar-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 w-full text-left">
-        <i class="fa-solid fa-brain"></i> IA Estudo
-      </button>
-      <button onclick="showPage('flashcards')" class="sidebar-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 w-full text-left">
-        <i class="fa-solid fa-cards"></i> Flashcards
-      </button>
-      <button onclick="showPage('pomodoro')" class="sidebar-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 w-full text-left">
-        <i class="fa-solid fa-clock"></i> Pomodoro
-      </button>
-      <button onclick="showPage('materias')" class="sidebar-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 w-full text-left">
-        <i class="fa-solid fa-book"></i> Matérias
-      </button>
-
-      <div class="mt-auto pt-6 border-t border-gray-800">
-        <button onclick="togglePremium()" id="premiumBtn" 
-                class="w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-bold py-3 rounded-2xl flex items-center justify-center gap-2">
-          <i class="fa-solid fa-crown"></i> Premium
-        </button>
-      </div>
-    </div>
-
-    <!-- ================== CONTEÚDO CENTRAL ================== -->
-    <div class="flex-1 overflow-auto p-6" id="mainContent">
-
-      <!-- HOME / DASHBOARD -->
-      <div id="homePage" class="page">
-        <h1 class="text-4xl font-bold mb-8">Bem-vindo ao Estudos-s, <span id="homeName" class="text-cyan-400"></span>!</h1>
-        <div class="grid grid-cols-3 gap-6">
-          <!-- Cards de progresso -->
-        </div>
-      </div>
-
-      <!-- GRUPOS -->
-      <div id="gruposPage" class="page hidden">
-        <div class="flex justify-between mb-6">
-          <h2 class="text-3xl font-bold">Meus Grupos</h2>
-          <button onclick="openCreateGroupModal()" class="bg-cyan-500 hover:bg-cyan-400 text-black px-6 py-2 rounded-2xl font-semibold flex items-center gap-2">
-            <i class="fa-solid fa-plus"></i> Criar Grupo
-          </button>
-        </div>
-        <div id="groupsGrid" class="grid grid-cols-4 gap-6"></div>
-      </div>
-
-      <!-- CHAT GERAL -->
-      <div id="chatGeralPage" class="page hidden flex flex-col h-[calc(100vh-100px)]">
-        <div class="bg-gray-900 p-4 border-b border-gray-800 flex items-center gap-4">
-          <div class="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-2xl">🌍</div>
-          <div>
-            <h3 class="font-bold">Chat Geral</h3>
-            <p class="text-xs text-emerald-400">Todos os usuários • Fundador: @Estudos-s</p>
-          </div>
-        </div>
-        <div id="chatGeralMessages" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-        <div class="p-4 bg-gray-900 border-t border-gray-800">
-          <div class="flex gap-3">
-            <input id="chatGeralInput" type="text" placeholder="Mensagem no Chat Geral..." class="flex-1 bg-gray-800 rounded-full px-6 py-3" onkeypress="if(event.key==='Enter') sendGeralMessage()">
-            <button onclick="sendGeralMessage()" class="bg-cyan-500 text-black w-12 h-12 rounded-full">→</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- IA -->
-      <div id="iaPage" class="page hidden">
-        <h2 class="text-3xl font-bold mb-6">IA para Estudos</h2>
-        <div id="iaChat" class="bg-gray-900 rounded-3xl h-96 overflow-y-auto p-6"></div>
-        <div class="flex mt-4">
-          <input id="iaInput" type="text" placeholder="Pergunte qualquer coisa sobre estudos..." class="flex-1 bg-gray-800 rounded-l-3xl px-6 py-4" onkeypress="if(event.key==='Enter') askIA()">
-          <button onclick="askIA()" class="bg-violet-600 px-8 rounded-r-3xl">Enviar</button>
-        </div>
-      </div>
-
-      <!-- Flashcards, Pomodoro, Matérias... (mesmo padrão) -->
-      <!-- ... (código completo abaixo) -->
+    <div class="banner" onclick="openBannerUpload()">
+        <div class="snake-line"></div>
     </div>
 
-    <!-- ================== SIDEBAR DIREITA (online, trending) ================== -->
-    <div class="w-80 bg-[#111] border-l border-gray-800 h-full p-6 hidden lg:block">
-      <h3 class="font-bold mb-4">Online agora</h3>
-      <div id="onlineList" class="space-y-4"></div>
+    <div id="groupsContainer" style="padding: 10px;">
+        <h3 style="color: var(--blue); border-bottom: 1px solid #333;">Meus Grupos</h3>
+        <div id="groupList"></div>
     </div>
-  </div>
 
-  <!-- ================== MODAIS PRINCIPAIS ================== -->
-  <!-- Profile Modal -->
-  <div id="profileModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-    <div class="bg-[#111] w-full max-w-2xl rounded-3xl overflow-hidden modal">
-      <!-- Banner -->
-      <div id="banner" onclick="changeBanner()" class="h-48 bg-gradient-to-r from-cyan-600 to-blue-600 relative cursor-pointer">
-        <div id="bannerOverlay" class="absolute inset-0 bg-black/30 flex items-center justify-center text-xs opacity-0 hover:opacity-100 transition">Clique para trocar banner (Premium: GIF)</div>
-      </div>
-      
-      <!-- Avatar + Nome -->
-      <div class="px-8 -mt-12 flex items-end gap-6">
-        <div onclick="changeAvatar()" class="w-28 h-28 rounded-3xl border-4 border-[#111] overflow-hidden cursor-pointer relative">
-          <img id="modalAvatar" src="https://i.imgur.com/0z0z0z0.png" class="w-full h-full object-cover">
-          <div id="crown" class="hidden absolute -top-3 -right-3 text-4xl">👑</div>
+    <div class="btn-plus" onclick="openModal('createGroupModal')">+</div>
+
+    <div id="profileModal" class="float-box">
+        <h4 style="margin:0">Configurações</h4>
+        <div style="text-align:center; margin: 15px 0;">
+            <img src="https://via.placeholder.com/80" class="profile-pic" onclick="triggerFile('fileProfile')">
+            <input type="file" id="fileProfile" style="display:none" onchange="updatePic(this, 'myPic')">
         </div>
-        <div class="mb-4">
-          <div id="modalName" class="text-3xl font-bold"></div>
-          <div class="flex items-center gap-3 text-sm">
-            <span id="modalID" class="font-mono text-cyan-400 animate-pulse cursor-pointer" onclick="copyID()">ID: 000022</span>
-            <span class="text-emerald-400">• Online agora</span>
-          </div>
+        <p>ID: <span class="id-fire-text">22 🔥</span></p>
+        <p style="font-size: 12px;">Visto por último: <span id="clock"></span> | <span style="color: #0f0;">Online</span></p>
+        <div class="bio-rect" id="founderBio">Fundador Do Site Estudos-s</div>
+        
+        <button onclick="togglePremium()" style="background:var(--premium); color:#000; border:none; padding:5px 10px; width:100%; cursor:pointer; font-weight:bold">OBTER MODO PREMIUM</button>
+        <hr>
+        <button onclick="closeModal('profileModal')" style="width:100%">Fechar</button>
+    </div>
+
+    <div id="calcModal" class="float-box" style="width: 200px;">
+        <h4>Calculadora</h4>
+        <input type="number" id="n1" style="width:40%"> + <input type="number" id="n2" style="width:40%">
+        <button onclick="alert(Number(document.getElementById('n1').value)+Number(document.getElementById('n2').value))" style="width:100%; margin-top:10px">Somar</button>
+        <button onclick="closeModal('calcModal')" style="width:100%; margin-top:5px">Fechar</button>
+    </div>
+
+    <div id="chatGeral" style="padding: 20px; border-top: 1px solid #333;">
+        <h3>IA de Estudos 🤖</h3>
+        <div style="height: 150px; background: #111; padding: 10px; overflow-y: auto; border-radius: 8px;" id="iaChat">
+            Olá! Sou sua IA. Em que matéria posso te ajudar hoje?
         </div>
-      </div>
-
-      <!-- Bio -->
-      <div class="px-8 mt-6">
-        <div class="bg-gray-900 border-l-4 border-cyan-400 p-5 rounded-r-2xl">
-          <textarea id="bioText" class="w-full bg-transparent focus:outline-none resize-none h-20" placeholder="Sua bio..."></textarea>
-        </div>
-      </div>
-
-      <!-- Acessórios (só Premium) -->
-      <div class="px-8 mt-8">
-        <p class="text-xs text-gray-400 mb-3">Acessórios (Premium)</p>
-        <div class="flex gap-4">
-          <button onclick="addAccessory('👑')" class="text-3xl hover:scale-110 transition">👑</button>
-          <button onclick="addAccessory('🧸')" class="text-3xl hover:scale-110 transition">🧸</button>
-          <button onclick="addAccessory('🎩')" class="text-3xl hover:scale-110 transition">🎩</button>
-          <button onclick="addAccessory('📖')" class="text-3xl hover:scale-110 transition">📖</button>
-        </div>
-      </div>
-
-      <div class="p-8 flex justify-end gap-4 border-t border-gray-800">
-        <button onclick="closeProfileModal()" class="px-6 py-2 text-gray-400">Cancelar</button>
-        <button onclick="saveProfile()" class="bg-cyan-500 text-black px-8 py-2 rounded-2xl font-semibold">Salvar</button>
-      </div>
+        <input type="text" placeholder="Perguntar para IA..." style="width:80%; background:#222; border:none; color:#fff; padding:10px; margin-top:10px;">
     </div>
-  </div>
 
-  <!-- Create Group Modal -->
-  <div id="createGroupModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-    <div class="bg-[#111] w-full max-w-md rounded-3xl p-8 modal">
-      <h3 class="text-2xl font-bold mb-6">Criar Grupo</h3>
-      <input id="groupNameInput" type="text" placeholder="Nome do grupo" class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-6 py-4 mb-4">
-      <textarea id="groupBioInput" placeholder="Descrição" class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-6 py-4 h-28"></textarea>
-      <button onclick="createGroup()" class="mt-6 w-full bg-cyan-500 text-black py-4 rounded-2xl font-bold">Criar Grupo</button>
+    <div id="sidebar" class="float-box" style="left: 10%; transform: translate(0, -50%);">
+        <h4 onclick="openModal('calcModal')">🧮 Calculadora</h4>
+        <h4 onclick="alert('Flashcards abertos!')">📄 Flashcards</h4>
+        <h4 onclick="alert('Modo rápido ativado!')">⚡ Acelerar App (Celulares Fracos)</h4>
+        <button onclick="closeModal('sidebar')">Sair</button>
     </div>
-  </div>
 
-  <!-- Floating Calculator -->
-  <div id="calcModal" class="hidden fixed bottom-8 right-8 bg-[#111] border border-gray-700 rounded-3xl shadow-2xl w-80 draggable" style="touch-action: none;">
-    <div class="p-4 border-b border-gray-700 flex items-center justify-between cursor-move" onmousedown="dragModal(event, this.parentElement)">
-      <span class="font-semibold">Calculadora</span>
-      <button onclick="document.getElementById('calcModal').classList.add('hidden')" class="text-gray-400">✕</button>
-    </div>
-    <div class="p-6">
-      <input id="calcDisplay" type="text" readonly class="w-full text-right text-4xl font-mono bg-transparent border-b border-gray-600 py-4 mb-6">
-      <div class="grid grid-cols-4 gap-3 text-xl">
-        <!-- botões da calculadora (simples) -->
-        <button onclick="calcClear()" class="col-span-2 bg-red-500/10 py-5 rounded-2xl">C</button>
-        <button onclick="calcAppend('(')" class="bg-gray-800 py-5 rounded-2xl">(</button>
-        <button onclick="calcAppend(')')" class="bg-gray-800 py-5 rounded-2xl">)</button>
-        <!-- mais botões... -->
-      </div>
-    </div>
-  </div>
+    <script>
+        // LÓGICA DE TEMPO REAL
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
 
-  <script>
-    // ================== CONFIGURAÇÃO GLOBAL ==================
-    let currentUser = { username: "Fundador", id: "000022", premium: false, bio: "Fundador do Site Estudos-s", avatar: "https://i.imgur.com/0z0z0z0.png" };
-    let groups = [];
-    let messages = {}; // groupId → array
-    let geralMessages = [];
-    let isPremium = false;
+        // ABRIR/FECHAR MODAIS
+        function openModal(id) { document.getElementById(id).style.display = 'block'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function toggleSidebar() { openModal('sidebar'); }
 
-    // ================== LOGIN (simulado) ==================
-    function initUser() {
-      const saved = localStorage.getItem("estudoss_user");
-      if (saved) currentUser = JSON.parse(saved);
-      document.getElementById("navName").textContent = currentUser.username;
-      document.getElementById("homeName").textContent = currentUser.username;
-      document.getElementById("navAvatarImg").src = currentUser.avatar;
-    }
+        // SISTEMA PREMIUM
+        function togglePremium() {
+            document.getElementById('mainBody').classList.toggle('is-premium');
+            alert("Modo Premium Ativado! Aura e Fogo Liberados.");
+        }
 
-    // ================== PROFILE MODAL ==================
-    function openProfileModal() {
-      document.getElementById("profileModal").classList.remove("hidden");
-      document.getElementById("modalName").textContent = currentUser.username;
-      document.getElementById("modalAvatar").src = currentUser.avatar;
-      document.getElementById("bioText").value = currentUser.bio;
-      document.getElementById("crown").classList.toggle("hidden", !currentUser.premium);
-    }
+        // TROCAR FOTO
+        function triggerFile(id) { document.getElementById(id).click(); }
+        function updatePic(input, targetId) {
+            const reader = new FileReader();
+            reader.onload = e => { document.getElementById(targetId).src = e.target.result; };
+            reader.readAsDataURL(input.files[0]);
+        }
 
-    function closeProfileModal() {
-      document.getElementById("profileModal").classList.add("hidden");
-    }
-
-    function saveProfile() {
-      currentUser.bio = document.getElementById("bioText").value;
-      localStorage.setItem("estudoss_user", JSON.stringify(currentUser));
-      closeProfileModal();
-    }
-
-    function changeAvatar() {
-      const url = prompt("URL da nova foto (ou deixe em branco para padrão)");
-      if (url) {
-        currentUser.avatar = url;
-        document.getElementById("modalAvatar").src = url;
-        document.getElementById("navAvatarImg").src = url;
-      }
-    }
-
-    function changeBanner() {
-      if (!currentUser.premium) return alert("Apenas Premium pode usar GIF no banner");
-      const url = prompt("URL do banner (GIF ou imagem)");
-      if (url) document.getElementById("banner").style.backgroundImage = `url(${url})`;
-    }
-
-    function addAccessory(emoji) {
-      if (!currentUser.premium) return alert("Premium necessário");
-      alert(`Acessório ${emoji} adicionado ao avatar! (visualização simulada)`);
-    }
-
-    function copyID() {
-      navigator.clipboard.writeText("000022");
-      alert("ID copiado!");
-    }
-
-    // ================== PREMIUM ==================
-    function togglePremium() {
-      isPremium = !isPremium;
-      currentUser.premium = isPremium;
-      localStorage.setItem("estudoss_user", JSON.stringify(currentUser));
-      
-      if (isPremium) {
-        document.body.classList.add("premium");
-        alert("🎉 Modo Premium ativado! Bordas de fogo, coroa e acessórios liberados.");
-      } else {
-        document.body.classList.remove("premium");
-      }
-    }
-
-    // ================== DRAGGABLE MODAL ==================
-    function dragModal(e, el) {
-      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-      e.preventDefault();
-      pos3 = e.clientX; pos4 = e.clientY;
-      document.onmouseup = () => { document.onmouseup = null; document.onmousemove = null; };
-      document.onmousemove = (e) => {
-        pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
-        pos3 = e.clientX; pos4 = e.clientY;
-        el.style.top = (el.offsetTop - pos2) + "px";
-        el.style.left = (el.offsetLeft - pos1) + "px";
-      };
-    }
-
-    // ================== CALCULADORA FLUTUANTE ==================
-    function toggleCalculator() {
-      const modal = document.getElementById("calcModal");
-      modal.classList.toggle("hidden");
-    }
-
-    function calcClear() { document.getElementById("calcDisplay").value = ""; }
-    function calcAppend(val) { document.getElementById("calcDisplay").value += val; }
-    function calcResult() {
-      try {
-        document.getElementById("calcDisplay").value = eval(document.getElementById("calcDisplay").value);
-      } catch(e) { alert("Erro"); }
-    }
-
-    // ================== GRUPOS ==================
-    function openCreateGroupModal() {
-      document.getElementById("createGroupModal").classList.remove("hidden");
-    }
-
-    function createGroup() {
-      const name = document.getElementById("groupNameInput").value || "Novo Grupo";
-      groups.push({ id: Date.now(), name, members: 1 });
-      renderGroups();
-      document.getElementById("createGroupModal").classList.add("hidden");
-    }
-
-    function renderGroups() {
-      const container = document.getElementById("groupsGrid");
-      container.innerHTML = "";
-      groups.forEach(g => {
-        container.innerHTML += `
-          <div onclick="openGroup(${g.id})" class="bg-[#111] border border-gray-800 rounded-3xl p-6 cursor-pointer hover:border-cyan-400 transition">
-            <div class="text-5xl mb-4">📚</div>
-            <h3 class="font-bold">${g.name}</h3>
-            <p class="text-xs text-gray-400">${g.members} membros</p>
-          </div>
-        `;
-      });
-    }
-
-    function openGroup(id) {
-      alert(`Abrindo grupo ${id} – chat completo implementado no código (expanda conforme necessário)`);
-      // Aqui você pode expandir para um chat real por grupo
-    }
-
-    // ================== CHAT GERAL ==================
-    function sendGeralMessage() {
-      const input = document.getElementById("chatGeralInput");
-      if (!input.value) return;
-      geralMessages.push({ user: currentUser.username, text: input.value, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
-      renderGeralChat();
-      input.value = "";
-    }
-
-    function renderGeralChat() {
-      const container = document.getElementById("chatGeralMessages");
-      container.innerHTML = "";
-      geralMessages.forEach(m => {
-        container.innerHTML += `
-          <div class="flex ${m.user === currentUser.username ? 'justify-end' : 'justify-start'}">
-            <div class="chat-bubble ${m.user === currentUser.username ? 'sent' : 'received'}">
-              <span class="text-xs opacity-70">${m.user}</span><br>${m.text}
-            </div>
-          </div>
-        `;
-      });
-      container.scrollTop = container.scrollHeight;
-    }
-
-    // ================== IA SIMPLES ==================
-    function askIA() {
-      const input = document.getElementById("iaInput");
-      const chat = document.getElementById("iaChat");
-      chat.innerHTML += `<div class="text-right"><div class="inline-block bg-cyan-500 text-black px-5 py-3 rounded-3xl">${input.value}</div></div>`;
-      
-      setTimeout(() => {
-        const respostas = ["Ótima pergunta! Vamos resolver isso passo a passo.", "Recomendo revisar a teoria primeiro.", "Aqui vai um resumo rápido..."];
-        chat.innerHTML += `<div class="text-left"><div class="inline-block bg-gray-800 px-5 py-3 rounded-3xl"><strong>IA:</strong> ${respostas[Math.floor(Math.random()*respostas.length)]}</div></div>`;
-        chat.scrollTop = chat.scrollHeight;
-      }, 900);
-      input.value = "";
-    }
-
-    // ================== NAVEGAÇÃO ==================
-    function showPage(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-      document.getElementById(page + 'Page').classList.remove('hidden');
-    }
-
-    function toggleLeftMenu() {
-      alert("Menu de Grupos + Chat Geral aberto (expanda conforme necessário)");
-    }
-
-    // ================== INICIALIZAÇÃO ==================
-    window.onload = () => {
-      initUser();
-      renderGroups();
-      showPage('home');
-      
-      // Ativa calculadora flutuante com clique duplo na barra de pesquisa
-      document.getElementById("globalSearch").addEventListener("dblclick", toggleCalculator);
-    };
-  </script>
+        // FUNÇÃO DE BAN/MULTA (LÓGICA)
+        function aplicarMulta(userId) {
+            let tempo = prompt("Multar por 2 dias, 3 dias ou personalizado? (Ex: 4 meses)");
+            if(confirm(`Deseja realmente multar o ID ${userId} por ${tempo}?`)) {
+                alert("Usuário Multado. Ele não poderá enviar mensagens.");
+            }
+        }
+    </script>
 </body>
-    </html>
+</html>
+
