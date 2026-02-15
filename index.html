@@ -71,7 +71,7 @@
         <div style="font-weight: bold; letter-spacing: 2px;">ESTUDOS-S</div>
         <div class="profile-container" onclick="openModal('profileModal')">
             <span style="display:block; font-size: 10px;">{{NOME}}</span>
-            <img src="https://via.placeholder.com/50" class="profile-pic" id="myPic">
+            <img src="https://via.placeholder.com/50" class="profile-pic" id="mainPfp">
             <div class="online-dot"></div>
             <div class="crown">👑</div>
         </div>
@@ -91,7 +91,7 @@
     <div id="profileModal" class="float-box">
         <h4 style="margin:0">Configurações</h4>
         <div style="text-align:center; margin: 15px 0;">
-            <img src="https://via.placeholder.com/80" class="profile-pic" onclick="triggerFile('fileProfile')">
+            <img src="https://via.placeholder.com/80" class="profile-img" id="modalPic" onclick="triggerInput('pfpInput')" style="cursor:pointer">
             <input type="file" id="fileProfile" style="display:none" onchange="updatePic(this, 'myPic')">
         </div>
         <p>ID: <span class="id-fire-text">22 🔥</span></p>
@@ -124,40 +124,99 @@
         <h4 onclick="alert('Modo rápido ativado!')">⚡ Acelerar App (Celulares Fracos)</h4>
         <button onclick="closeModal('sidebar')">Sair</button>
     </div>
-
     <script>
-        // LÓGICA DE TEMPO REAL
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }, 1000);
+        // --- FUNÇÕES DE PERSISTÊNCIA (SALVAR DADOS) ---
 
-        // ABRIR/FECHAR MODAIS
-        function openModal(id) { document.getElementById(id).style.display = 'block'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function toggleSidebar() { openModal('sidebar'); }
+        // Executa ao abrir o site
+        window.onload = function() {
+            // Recupera a foto salva
+            const savedPic = localStorage.getItem('userPhoto');
+            if (savedPic) {
+                document.getElementById('myPic').src = savedPic;
+                document.getElementById('modalPic').src = savedPic;
+            }
 
-        // SISTEMA PREMIUM
-        function togglePremium() {
-            document.getElementById('mainBody').classList.toggle('is-premium');
-            alert("Modo Premium Ativado! Aura e Fogo Liberados.");
+            // Recupera o status Premium
+            const isPremium = localStorage.getItem('premiumStatus');
+            if (isPremium === 'true') {
+                document.getElementById('mainBody').classList.add('is-premium');
+            }
+
+            // Inicia o relógio
+            atualizarRelogio();
+        };
+
+        function atualizarRelogio() {
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('clock').innerText = now.toLocaleTimeString();
+            }, 1000);
         }
 
-        // TROCAR FOTO
+        // --- SISTEMA DE FOTO (COM SALVAMENTO) ---
         function triggerFile(id) { document.getElementById(id).click(); }
-        function updatePic(input, targetId) {
-            const reader = new FileReader();
-            reader.onload = e => { document.getElementById(targetId).src = e.target.result; };
-            reader.readAsDataURL(input.files[0]);
-        }
 
-        // FUNÇÃO DE BAN/MULTA (LÓGICA)
-        function aplicarMulta(userId) {
-            let tempo = prompt("Multar por 2 dias, 3 dias ou personalizado? (Ex: 4 meses)");
-            if(confirm(`Deseja realmente multar o ID ${userId} por ${tempo}?`)) {
-                alert("Usuário Multado. Ele não poderá enviar mensagens.");
+                function updatePic(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    
+                    // 1. Atualiza a foto na barra superior
+                    if(document.getElementById('mainPfp')) {
+                        document.getElementById('mainPfp').src = imageData;
+                    }
+                    
+                    // 2. Atualiza a foto dentro do menu de configurações
+                    if(document.getElementById('modalPic')) {
+                        document.getElementById('modalPic').src = imageData;
+                    }
+                    
+                    // 3. SALVA NO NAVEGADOR (Para não sumir no F5)
+                    const data = JSON.parse(localStorage.getItem('estudos_data') || '{}');
+                    data.pfp = imageData;
+                    localStorage.setItem('estudos_data', JSON.stringify(data));
+                };
+                
+                reader.readAsDataURL(input.files[0]);
             }
         }
-    </script>
+
+
+        // --- SISTEMA PREMIUM (COM SALVAMENTO) ---
+        function togglePremium() {
+            const body = document.getElementById('mainBody');
+            body.classList.toggle('is-premium');
+            
+            // Salva a escolha
+            const status = body.classList.contains('is-premium');
+            localStorage.setItem('premiumStatus', status);
+            
+            if(status) {
+                alert("👑 MODO PREMIUM ATIVADO! Seus dados foram salvos.");
+            } else {
+                alert("Modo Premium desativado.");
+            }
+        }
+
+        // --- MODAIS E INTERFACE ---
+        function openModal(id) { document.getElementById(id).style.display = 'block'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function toggleSidebar() { 
+            const side = document.getElementById('sidebar');
+            side.style.display = (side.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Lógica de Ban/Multa
+        function aplicarMulta(userId) {
+            let tempo = prompt("Multar por 2 dias, 3 dias ou personalizado? (Ex: 4 meses)");
+            if(tempo && confirm(`Deseja multar o ID ${userId} por ${tempo}?`)) {
+                alert("Ação registrada com sucesso.");
+            }
+        }
+</script>
+    
 </body>
 </html>
 
