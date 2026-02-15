@@ -1,3 +1,4 @@
+V K, [15/2/2026 11:50]
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -5,15 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudos-s | Oficial</title>
     <style>
-        /* Faz a linha da Bio ficar dourada no modo Premium */
-.is-premium .bio-rect { 
-    border-color: var(--premium) !important; 
-    border-left-color: var(--premium) !important; 
-}
-/* Muda a cor do texto "BIO" para dourado no Premium */
-.is-premium span[style*="color: #888"] {
-    color: var(--premium) !important;
-}
         /* [1] CONFIGURAÇÕES DE CORES E TEMA */
         :root {
             --bg: #000;
@@ -40,10 +32,12 @@
             0% { box-shadow: 0 0 10px #ff4500, 0 0 20px #ff8c00; border-color: #ff4500; }
             100% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff4500; border-color: #ff8c00; }
         }
-       @keyframes snakeColors {
-    0% { background-position: 200% 0%; }
-    100% { background-position: 0% 0%; }
-} 
+
+        @keyframes snakeColors {
+            0% { background-position: 200% 0%; }
+            100% { background-position: 0% 0%; }
+        } 
+
         .id-fire-text { color: #00ccff; font-weight: bold; text-shadow: 0 0 10px #00ccff; animation: pulse 1s infinite; }
         @keyframes pulse { from { opacity: 0.7; } to { opacity: 1; } }
 
@@ -51,35 +45,33 @@
         .bio-rect { border-radius: 4px; background: #111; border: 1px solid #fff; border-left: 15px solid var(--blue); padding: 15px; margin: 10px 0; }
         .float-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: #111; border: 2px solid var(--blue); border-radius: 15px; display: none; z-index: 2000; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
         .banner { width: 100%; height: 120px; background: #222; position: relative; overflow: hidden; background-position: center; background-size: cover; }
-/* NOVA LINHA DIVISÓRIA COLORIDA */
-.snake-line-animated {
-    width: 100%;
-    height: 3px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(90deg, #800080, #ffffff, #1DA1F2, #000000, #FFFF00, #800080);
-    background-size: 200% 100%;
-    animation: snakeColors 3s linear infinite;
-    z-index: 5;
-}
 
-@keyframes snakeColors {
-    0% { background-position: 200% 0%; }
-    100% { background-position: 0% 0%; }
-}
+        /* LINHA DIVISÓRIA COLORIDA (COBRINHA) */
+        .snake-line-animated {
+            width: 100%;
+            height: 3px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, #800080, #ffffff, #1DA1F2, #000000, #FFFF00, #800080);
+            background-size: 200% 100%;
+            animation: snakeColors 3s linear infinite;
+            z-index: 5;
+        }
+
         .btn-plus { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 99; }
 
         /* [5] MODO PREMIUM (ESTILOS APLICADOS) */
         .is-premium .profile-pic-top, .is-premium #modalPic { animation: var(--fire-anim); border-color: var(--premium) !important; }
         .is-premium .crown { display: block; }
         .is-premium .float-box { border-color: var(--premium); }
-        .is-premium .snake-line { background: var(--premium); box-shadow: 0 0 10px var(--premium); }
+        .is-premium .bio-rect { border-color: var(--premium) !important; border-left-color: var(--premium) !important; }
+        .is-premium span.label-bio { color: var(--premium) !important; }
     </style>
 </head>
 <body id="mainBody">
-
-    <header class="header">
+    V K, [15/2/2026 11:50]
+<header class="header">
         <div onclick="toggleSidebar()" style="font-size: 24px; cursor:pointer">☰</div>
         <div style="font-weight: bold; letter-spacing: 2px;">ESTUDOS-S</div>
         <div class="profile-container" onclick="openModal('profileModal')">
@@ -108,7 +100,7 @@
 
     <div id="profileModal" class="float-box" style="padding:0; overflow:hidden;">
         <div class="banner" id="userBanner" onclick="document.getElementById('bannerInput').click()" style="cursor:pointer;">
-            <div class="snake-line"></div>
+            <div class="snake-line-animated"></div>
             <input type="file" id="bannerInput" style="display:none" onchange="updateBanner(this)">
         </div>
 
@@ -121,13 +113,13 @@
             <p style="margin:5px 0;">ID: <span class="id-fire-text">22 🔥</span></p>
             <p style="font-size: 11px; color:#ccc; margin-bottom:10px;">Visto por último: <span id="clock">00:00:00</span> | <span style="color: #0f0;">Online</span></p>
             
-<div style="margin: 20px 0; text-align: left; position: relative; padding: 5px 0;">
-    <span style="position: absolute; top: -5px; left: 8px; font-size: 9px; color: #888; background: #111; padding: 0 4px; font-weight: bold; z-index: 5;">BIO</span>
-    
-    <div class="bio-rect" style="margin: 0; background: transparent; border: 0.5px solid #444; border-left: 4px solid var(--blue); padding: 12px; border-radius: 4px; color: #eee; font-size: 13px; line-height: 1.4;">
-        Fundador Do Site Estudos-s
-    </div>
-</div>            
+            <div style="margin: 20px 0; text-align: left; position: relative; padding: 5px 0;">
+                <span class="label-bio" style="position: absolute; top: -5px; left: 8px; font-size: 9px; color: #888; background: #111; padding: 0 4px; font-weight: bold; z-index: 5;">BIO</span>
+                <div class="bio-rect" style="margin: 0; background: transparent; border: 0.5px solid #444; border-left: 4px solid var(--blue); padding: 12px; border-radius: 4px; color: #eee; font-size: 13px; line-height: 1.4;">
+                    Fundador Do Site Estudos-s
+                </div>
+            </div>            
+            
             <button onclick="togglePremium()" style="background:var(--premium); color:#000; border:none; padding:10px; width:100%; cursor:pointer; font-weight:bold; border-radius:5px;">OBTER MODO PREMIUM</button>
             <button onclick="closeModal('profileModal')" style="width:100%; margin-top:8px; background:transparent; color:#fff; border:1px solid #444; border-radius:5px; padding:5px; cursor:pointer;">Fechar</button>
         </div>
@@ -140,11 +132,11 @@
         <button onclick="alert('Resultado: ' + (Number(document.getElementById('n1').value) + Number(document.getElementById('n2').value)))" style="width:100%; margin-top:10px">Somar</button>
         <button onclick="closeModal('calcModal')" style="width:100%; margin-top:5px">Fechar</button>
     </div>
-
-    <div id="sidebar" class="float-box" style="left: 10%; transform: translate(0, -50%); width: 200px;">
+    V K, [15/2/2026 11:50]
+<div id="sidebar" class="float-box" style="left: 10%; transform: translate(0, -50%); width: 200px;">
         <h4 onclick="openModal('calcModal')" style="cursor:pointer">🧮 Calculadora</h4>
         <h4 onclick="alert('Flashcards em breve!')" style="cursor:pointer">📄 Flashcards</h4>
-        <h4 onclick="alert('Modo Desempenho Ativado!')" style="cursor:pointer">⚡ Acelerar App</h4>
+        <h4 onclick="alert('Modo Desempenho Ativado!')" style="cursor:pointer">⚡️ Acelerar App</h4>
         <button onclick="closeModal('sidebar')" style="width:100%">Sair</button>
     </div>
 
@@ -162,7 +154,7 @@
             const savedBanner = localStorage.getItem('userBanner');
             if(savedBanner) {
                 const bannerDiv = document.getElementById('userBanner');
-                if(bannerDiv) bannerDiv.style.backgroundImage = `url(${savedBanner})`;
+                if(bannerDiv) bannerDiv.style.backgroundImage = url("${savedBanner}");
             }
 
             // Carrega Status Premium
@@ -196,7 +188,7 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const data = e.target.result;
-                    document.getElementById('userBanner').style.backgroundImage = `url(${data})`;
+                    document.getElementById('userBanner').style.backgroundImage = url("${data}");
                     localStorage.setItem('userBanner', data);
                 };
                 reader.readAsDataURL(input.files[0]);
@@ -222,4 +214,3 @@
     </script>
 </body>
 </html>
-
