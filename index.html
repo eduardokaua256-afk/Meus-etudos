@@ -88,12 +88,28 @@
 
     <div class="btn-plus" onclick="openModal('createGroupModal')">+</div>
 
-    <div id="profileModal" class="float-box">
-        <h4 style="margin:0">Configurações</h4>
-        <div style="text-align:center; margin: 15px 0;">
-            <img src="https://via.placeholder.com/80" class="profile-img" id="modalPic" onclick="triggerInput('pfpInput')" style="cursor:pointer">
-            <input type="file" id="fileProfile" style="display:none" onchange="updatePic(this, 'myPic')">
+    <div id="profileModal" class="float-box" style="padding:0; overflow:hidden;">
+        <div class="banner" id="userBanner" onclick="document.getElementById('bannerInput').click()" style="width:100%; height:100px; background:#222; position:relative; cursor:pointer;">
+            <div class="snake-line"></div>
+            <input type="file" id="bannerInput" style="display:none" onchange="updateBanner(this)">
         </div>
+
+        <div style="text-align:center; margin-top:-45px; position:relative; z-index:10;">
+            <img src="https://via.placeholder.com/100" id="modalPic" class="profile-img" onclick="document.getElementById('pfpInput').click()" style="width:85px; height:85px; border-radius:50%; border:4px solid #111; cursor:pointer; object-fit:cover;">
+            <input type="file" id="pfpInput" style="display:none" onchange="updatePic(this)">
+        </div>
+
+        <div style="padding:15px; text-align:center;">
+            <p style="margin:5px 0;">ID: <span class="id-fire-text">22 🔥</span></p>
+            <p style="font-size: 11px; color:#ccc; margin-bottom:10px;">Visto por último: <span id="clock"></span> | <span style="color: #0f0;">Online</span></p>
+            
+            <div class="bio-rect" style="margin:10px 0; text-align:left;">Fundador Do Site Estudos-s</div>
+            
+            <button onclick="togglePremium()" style="background:var(--premium); color:#000; border:none; padding:8px; width:100%; cursor:pointer; font-weight:bold; border-radius:5px;">OBTER MODO PREMIUM</button>
+            <button onclick="closeModal('profileModal')" style="width:100%; margin-top:8px; background:transparent; color:#fff; border:1px solid #444; border-radius:5px; padding:5px; cursor:pointer;">Fechar</button>
+        </div>
+    </div>
+
         <p>ID: <span class="id-fire-text">22 🔥</span></p>
         <p style="font-size: 12px;">Visto por último: <span id="clock"></span> | <span style="color: #0f0;">Online</span></p>
         <div class="bio-rect" id="founderBio">Fundador Do Site Estudos-s</div>
@@ -156,32 +172,74 @@
         // --- SISTEMA DE FOTO (COM SALVAMENTO) ---
         function triggerFile(id) { document.getElementById(id).click(); }
 
-                function updatePic(input) {
+                        // --- FUNÇÃO PARA A FOTO DE PERFIL ---
+        function updatePic(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                
                 reader.onload = function(e) {
-                    const imageData = e.target.result;
-                    
-                    // 1. Atualiza a foto na barra superior
-                    if(document.getElementById('mainPfp')) {
-                        document.getElementById('mainPfp').src = imageData;
-                    }
-                    
-                    // 2. Atualiza a foto dentro do menu de configurações
-                    if(document.getElementById('modalPic')) {
-                        document.getElementById('modalPic').src = imageData;
-                    }
-                    
-                    // 3. SALVA NO NAVEGADOR (Para não sumir no F5)
-                    const data = JSON.parse(localStorage.getItem('estudos_data') || '{}');
-                    data.pfp = imageData;
-                    localStorage.setItem('estudos_data', JSON.stringify(data));
+                    const imgData = e.target.result;
+                    // Atualiza no topo e no menu
+                    if(document.getElementById('mainPfp')) document.getElementById('mainPfp').src = imgData;
+                    if(document.getElementById('modalPic')) document.getElementById('modalPic').src = imgData;
+                    // Salva no navegador
+                    saveToStorage('userPfp', imgData);
                 };
-                
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        // --- FUNÇÃO PARA O BANNER ---
+        function updateBanner(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const bannerData = e.target.result;
+                    const bannerDiv = document.getElementById('userBanner');
+                    if(bannerDiv) {
+                        bannerDiv.style.backgroundImage = `url(${bannerData})`;
+                        bannerDiv.style.backgroundSize = 'cover';
+                        bannerDiv.style.backgroundPosition = 'center';
+                    }
+                    // Salva no navegador
+                    saveToStorage('userBanner', bannerData);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- FUNÇÃO PARA SALVAR DADOS ---
+        function saveToStorage(key, value) {
+            localStorage.setItem(key, value);
+        }
+
+        // --- CARREGAR TUDO AO ABRIR O SITE (F5) ---
+        window.addEventListener('load', () => {
+            // Carrega Foto
+            const savedPfp = localStorage.getItem('userPfp');
+            if(savedPfp) {
+                if(document.getElementById('mainPfp')) document.getElementById('mainPfp').src = savedPfp;
+                if(document.getElementById('modalPic')) document.getElementById('modalPic').src = savedPfp;
+            }
+            // Carrega Banner
+            const savedBanner = localStorage.getItem('userBanner');
+            if(savedBanner) {
+                const bannerDiv = document.getElementById('userBanner');
+                if(bannerDiv) {
+                    bannerDiv.style.backgroundImage = `url(${savedBanner})`;
+                    bannerDiv.style.backgroundSize = 'cover';
+                }
+            }
+            // Inicia o relógio real
+            setInterval(() => {
+                const clock = document.getElementById('clock');
+                if(clock) clock.innerText = new Date().toLocaleTimeString();
+            }, 1000);
+        });
+
+        // Funções de abrir/fechar modal
+        function openModal(id) { document.getElementById(id).style.display = 'block'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
 
 
         // --- SISTEMA PREMIUM (COM SALVAMENTO) ---
