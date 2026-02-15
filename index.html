@@ -3,159 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudos-s | Oficial</title>
+    <title>Estudos-s</title>
     <style>
-        /* CONFIGURAÇÕES DE CORES E TEMA */
         :root {
-            --bg: #000;
-            --txt: #fff;
+            --bg: #000000;
+            --txt: #ffffff;
             --blue: #1DA1F2;
             --premium: #FFD700;
-            --fire-anim: fire 0.5s ease-in-out infinite alternate;
         }
 
-        body { background: var(--bg); color: var(--txt); font-family: 'Arial', sans-serif; margin: 0; overflow-x: hidden; }
-        
-        /* MODO PC DINÂMICO */
-        @media (min-width: 1024px) { body { width: 800px; margin: auto; border-left: 1px solid #333; border-right: 1px solid #333; } }
-
-        /* HEADER ESTILO X */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-bottom: 1px solid #333; position: sticky; top: 0; background: rgba(0,0,0,0.9); z-index: 1000; }
-        
-        .profile-container { position: relative; cursor: pointer; text-align: right; }
-        .profile-pic { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--blue); }
-        .crown { position: absolute; top: -15px; right: 10px; font-size: 20px; display: none; } /* Só Premium */
-        .online-dot { width: 12px; height: 12px; background: #00FF00; border-radius: 50%; position: absolute; bottom: 5px; right: 0; border: 2px solid #000; }
-
-        /* ANIMAÇÕES E EFEITOS ESPECIAIS */
-        @keyframes fire { 
-            0% { box-shadow: 0 0 10px #ff4500, 0 0 20px #ff8c00; border-color: #ff4500; }
-            100% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff4500; border-color: #ff8c00; }
+        body {
+            background-color: var(--bg);
+            color: var(--txt);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
         }
 
-        .id-fire-text { color: #00ccff; font-weight: bold; text-shadow: 0 0 10px #00ccff; animation: pulse 1s infinite; }
-        @keyframes pulse { from { opacity: 0.7; } to { opacity: 1; } }
-
-        /* BIO FUNDADOR */
-        .bio-rect { border-radius: 4px; background: #111; border: 1px solid #fff; border-left: 15px solid var(--blue); padding: 15px; margin: 10px 0; }
-
-        /* ABAS FLUTUANTES */
-        .float-box { 
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 320px; background: #111; border: 2px solid var(--blue); 
-            border-radius: 15px; padding: 20px; display: none; z-index: 2000;
+        @media (min-width: 1024px) {
+            body { width: 600px; margin: auto; border: 1px solid #333; height: 100vh; }
         }
 
-        /* GRUPOS E CHAT */
-        .group-card { background: #050505; border: 1px solid #222; padding: 15px; margin: 10px; border-radius: 10px; text-align: center; }
-        .group-pic-big { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #333;
+            background: rgba(0,0,0,0.9);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
 
-        /* BOTÃO CRIAR */
-        .btn-plus { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; box-shadow: 0 0 10px var(--blue); }
+        .profile-btn {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
 
-        /* BANNER COM COBRINHA */
-        .banner { width: 100%; height: 120px; background: #222; position: relative; overflow: hidden; }
-        .snake-line { position: absolute; width: 100%; height: 2px; background: var(--blue); animation: snakeMove 2s infinite linear; }
-        @keyframes snakeMove { 0% { left: -100%; } 100% { left: 100%; } }
+        .profile-btn span { font-size: 10px; margin-bottom: 2px; }
 
-        /* PREMIUM MODO */
-        .is-premium .profile-pic { animation: var(--fire-anim); border-color: var(--premium) !important; }
-        .is-premium .crown { display: block; }
-        .is-premium .float-box { border-color: var(--premium); animation: var(--fire-anim); }
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--blue);
+            object-fit: cover;
+        }
+
+        .online-status {
+            width: 10px;
+            height: 10px;
+            background: #00FF00;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            right: 0;
+            border: 2px solid #000;
+        }
+
+        .premium-crown {
+            position: absolute;
+            top: -12px;
+            right: 12px;
+            font-size: 18px;
+            display: none;
+        }
+
+        .float-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            max-width: 350px;
+            background: #111;
+            border: 2px solid var(--blue);
+            border-radius: 10px;
+            padding: 20px;
+            display: none;
+            z-index: 10001;
+            box-shadow: 0 0 20px rgba(29,161,242,0.3);
+        }
+
+        .id-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .id-22 {
+            color: #00ccff;
+            text-shadow: 0 0 8px #00ccff, 0 0 15px #ff4500;
+            animation: fireEffect 0.6s infinite alternate;
+        }
+
+        @keyframes fireEffect {
+            from { transform: scale(1); filter: brightness(1); }
+            to { transform: scale(1.1); filter: brightness(1.5); }
+        }
+
+        .bio-box {
+            background: #fff;
+            color: #000;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 10px solid var(--blue);
+            font-size: 14px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .banner {
+            width: 100%;
+            height: 100px;
+            background: #222;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .snake-anim {
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background: var(--blue);
+            animation: snakeRun 3s infinite linear;
+        }
+
+        @keyframes snakeRun {
+            0% { left: -10%; top: 0; }
+            25% { left: 100%; top: 0; }
+            50% { left: 100%; top: 100%; }
+            75% { left: -10%; top: 100%; }
+            100% { left: -10%; top: 0; }
+        }
+
+        .btn-add-group {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            background: var(--blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 99;
+        }
+
+        .is-premium {
+            --blue: var(--premium);
+        }
+
+        .is-premium .profile-img {
+            animation: auraFire 0.5s infinite alternate;
+            border-color: var(--premium);
+        }
+
+        .is-premium .premium-crown { display: block; }
+
+        @keyframes auraFire {
+            from { box-shadow: 0 0 5px var(--premium); }
+            to { box-shadow: 0 0 15px #ff4500; }
+        }
+
+        .draggable { cursor: move; }
+
+        .group-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #222;
+            margin: 10px;
+            border-radius: 10px;
+        }
+
+        .group-img { width: 60px; height: 60px; border-radius: 50%; background: #333; }
+
+        .calc-ui {
+            background: #000;
+            border: 1px solid #444;
+            padding: 10px;
+            display: none;
+            position: absolute;
+            width: 150px;
+        }
     </style>
 </head>
 <body id="mainBody">
 
     <header class="header">
-        <div onclick="toggleSidebar()" style="font-size: 24px; cursor:pointer">☰</div>
-        <div style="font-weight: bold; letter-spacing: 2px;">ESTUDOS-S</div>
-        <div class="profile-container" onclick="openModal('profileModal')">
-            <span style="display:block; font-size: 10px;">{{NOME}}</span>
-            <img src="https://via.placeholder.com/50" class="profile-pic" id="myPic">
-            <div class="online-dot"></div>
-            <div class="crown">👑</div>
+        <div onclick="openModal('sideMenu')" style="cursor:pointer">☰</div>
+        <div class="profile-btn" onclick="openModal('configModal')">
+            <span id="userNameDisp">Fundador</span>
+            <div style="position:relative">
+                <div class="premium-crown">👑</div>
+                <img src="https://via.placeholder.com/100" id="mainPfp" class="profile-img">
+                <div class="online-status"></div>
+            </div>
         </div>
     </header>
 
-    <div class="banner" onclick="openBannerUpload()">
-        <div class="snake-line"></div>
+    <div class="banner" id="userBanner" onclick="triggerInput('bannerInput')">
+        <div class="snake-anim"></div>
+        <input type="file" id="bannerInput" style="display:none" onchange="uploadFile(this, 'userBanner', 'bg')">
     </div>
 
-    <div id="groupsContainer" style="padding: 10px;">
-        <h3 style="color: var(--blue); border-bottom: 1px solid #333;">Meus Grupos</h3>
-        <div id="groupList"></div>
-    </div>
+    <div id="groupsArea"></div>
 
-    <div class="btn-plus" onclick="openModal('createGroupModal')">+</div>
+    <div class="btn-add-group" onclick="openModal('groupCreateModal')">+</div>
 
-    <div id="profileModal" class="float-box">
-        <h4 style="margin:0">Configurações</h4>
-        <div style="text-align:center; margin: 15px 0;">
-            <img src="https://via.placeholder.com/80" class="profile-pic" onclick="triggerFile('fileProfile')">
-            <input type="file" id="fileProfile" style="display:none" onchange="updatePic(this, 'myPic')">
+    <div id="configModal" class="float-panel draggable">
+        <div style="text-align:center">
+            <img src="https://via.placeholder.com/100" id="modalPfp" class="profile-img" onclick="triggerInput('pfpInput')" style="width:80px; height:80px; cursor:pointer">
+            <input type="file" id="pfpInput" style="display:none" onchange="uploadFile(this, 'mainPfp', 'src')">
         </div>
-        <p>ID: <span class="id-fire-text">22 🔥</span></p>
-        <p style="font-size: 12px;">Visto por último: <span id="clock"></span> | <span style="color: #0f0;">Online</span></p>
-        <div class="bio-rect" id="founderBio">Fundador Do Site Estudos-s</div>
-        
-        <button onclick="togglePremium()" style="background:var(--premium); color:#000; border:none; padding:5px 10px; width:100%; cursor:pointer; font-weight:bold">OBTER MODO PREMIUM</button>
-        <hr>
-        <button onclick="closeModal('profileModal')" style="width:100%">Fechar</button>
-    </div>
-
-    <div id="calcModal" class="float-box" style="width: 200px;">
-        <h4>Calculadora</h4>
-        <input type="number" id="n1" style="width:40%"> + <input type="number" id="n2" style="width:40%">
-        <button onclick="alert(Number(document.getElementById('n1').value)+Number(document.getElementById('n2').value))" style="width:100%; margin-top:10px">Somar</button>
-        <button onclick="closeModal('calcModal')" style="width:100%; margin-top:5px">Fechar</button>
-    </div>
-
-    <div id="chatGeral" style="padding: 20px; border-top: 1px solid #333;">
-        <h3>IA de Estudos 🤖</h3>
-        <div style="height: 150px; background: #111; padding: 10px; overflow-y: auto; border-radius: 8px;" id="iaChat">
-            Olá! Sou sua IA. Em que matéria posso te ajudar hoje?
+        <div class="id-container">
+            <span>ID: <span style="animation: pulse 1s infinite">22</span></span>
+            <span class="id-22">22 🔥</span>
         </div>
-        <input type="text" placeholder="Perguntar para IA..." style="width:80%; background:#222; border:none; color:#fff; padding:10px; margin-top:10px;">
+        <div style="font-size:12px; color:#ccc">Visto: <span id="liveClock">00:00:00</span> | <span style="color:#0f0">Online</span></div>
+        <div class="bio-box">Fundador Do Site Estudos-s</div>
+        <button onclick="activatePremium()" style="width:100%; background:var(--premium); border:none; font-weight:bold; padding:10px; cursor:pointer">OBTER PREMIUM</button>
+        <button onclick="closeModal('configModal')" style="width:100%; margin-top:10px">Fechar</button>
     </div>
 
-    <div id="sidebar" class="float-box" style="left: 10%; transform: translate(0, -50%);">
-        <h4 onclick="openModal('calcModal')">🧮 Calculadora</h4>
-        <h4 onclick="alert('Flashcards abertos!')">📄 Flashcards</h4>
-        <h4 onclick="alert('Modo rápido ativado!')">⚡ Acelerar App (Celulares Fracos)</h4>
-        <button onclick="closeModal('sidebar')">Sair</button>
+    <div id="groupCreateModal" class="float-panel">
+        <input type="text" id="groupName" placeholder="Nome do Grupo" style="width:100%; margin-bottom:10px">
+        <textarea id="groupBio" placeholder="Bio do Grupo" style="width:100%; margin-bottom:10px"></textarea>
+        <button onclick="createGroup()" style="width:100%">Criar Grupo</button>
+        <button onclick="closeModal('groupCreateModal')" style="width:100%; margin-top:5px">Cancelar</button>
+    </div>
+
+    <div id="sideMenu" class="float-panel" style="left:20%">
+        <div onclick="toggleCalc()" style="cursor:pointer; padding:10px">🧮 Calculadora</div>
+        <div onclick="alert('IA Ativada')" style="cursor:pointer; padding:10px">🤖 IA Estudos</div>
+        <div onclick="closeModal('sideMenu')" style="cursor:pointer; padding:10px">Fechar</div>
+    </div>
+
+    <div id="calcFloating" class="float-panel draggable" style="width:200px">
+        <input type="text" id="calcVal" style="width:100%; text-align:right">
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:5px; margin-top:10px">
+            <button onclick="document.getElementById('calcVal').value+='1'">1</button>
+            <button onclick="document.getElementById('calcVal').value+='2'">2</button>
+            <button onclick="document.getElementById('calcVal').value=''">C</button>
+            <button onclick="alert('Resultado: '+eval(document.getElementById('calcVal').value))">=</button>
+        </div>
+        <button onclick="closeModal('calcFloating')" style="width:100%; margin-top:10px">Minimizar</button>
     </div>
 
     <script>
-        // LÓGICA DE TEMPO REAL
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }, 1000);
+        window.onload = function() {
+            const data = JSON.parse(localStorage.getItem('estudos_data') || '{}');
+            if(data.pfp) {
+                document.getElementById('mainPfp').src = data.pfp;
+                document.getElementById('modalPfp').src = data.pfp;
+            }
+            if(data.premium) document.getElementById('mainBody').classList.add('is-premium');
+            
+            setInterval(() => {
+                document.getElementById('liveClock').innerText = new Date().toLocaleTimeString();
+            }, 1000);
+            
+            initDrag(document.getElementById('configModal'));
+            initDrag(document.getElementById('calcFloating'));
+        };
 
-        // ABRIR/FECHAR MODAIS
-        function openModal(id) { document.getElementById(id).style.display = 'block'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function toggleSidebar() { openModal('sidebar'); }
+        function triggerInput(id) { document.getElementById(id).click(); }
 
-        // SISTEMA PREMIUM
-        function togglePremium() {
-            document.getElementById('mainBody').classList.toggle('is-premium');
-            alert("Modo Premium Ativado! Aura e Fogo Liberados.");
-        }
-
-        // TROCAR FOTO
-        function triggerFile(id) { document.getElementById(id).click(); }
-        function updatePic(input, targetId) {
+        function uploadFile(input, target, type) {
             const reader = new FileReader();
-            reader.onload = e => { document.getElementById(targetId).src = e.target.result; };
+            reader.onload = function(e) {
+                const val = e.target.result;
+                if(type === 'src') {
+                    document.getElementById(target).src = val;
+                    document.getElementById('modalPfp').src = val;
+                    save('pfp', val);
+                } else {
+                    document.getElementById(target).style.backgroundImage = `url(${val})`;
+                    document.getElementById(target).style.backgroundSize = 'cover';
+                }
+            };
             reader.readAsDataURL(input.files[0]);
         }
 
-        // FUNÇÃO DE BAN/MULTA (LÓGICA)
-        function aplicarMulta(userId) {
-            let tempo = prompt("Multar por 2 dias, 3 dias ou personalizado? (Ex: 4 meses)");
-            if(confirm(`Deseja realmente multar o ID ${userId} por ${tempo}?`)) {
-                alert("Usuário Multado. Ele não poderá enviar mensagens.");
-            }
+        function activatePremium() {
+            document.getElementById('mainBody').classList.toggle('is-premium');
+            save('premium', document.getElementById('mainBody').classList.contains('is-premium'));
+        }
+
+        function openModal(id) { document.getElementById(id).style.display = 'block'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function toggleCalc() { openModal('calcFloating'); }
+
+        function save(key, val) {
+            const data = JSON.parse(localStorage.getItem('estudos_data') || '{}');
+            data[key] = val;
+            localStorage.setItem('estudos_data', JSON.stringify(data));
+        }
+
+        function createGroup() {
+            const name = document.getElementById('groupName').value;
+            const html = `<div class="group-item"><div class="group-img"></div><strong>${name}</strong></div>`;
+            document.getElementById('groupsArea').innerHTML += html;
+            closeModal('groupCreateModal');
+        }
+
+        function initDrag(el) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            el.onmousedown = function(e) {
+                pos3 = e.clientX; pos4 = e.clientY;
+                document.onmouseup = function() { document.onmouseup = null; document.onmousemove = null; };
+                document.onmousemove = function(e) {
+                    pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX; pos4 = e.clientY;
+                    el.style.top = (el.offsetTop - pos2) + "px";
+                    el.style.left = (el.offsetLeft - pos1) + "px";
+                };
+            };
         }
     </script>
 </body>
