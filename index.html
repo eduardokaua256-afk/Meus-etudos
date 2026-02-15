@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudos-s | Oficial</title>
     <style>
-        /* CONFIGURAÇÕES DE CORES E TEMA */
+        /* [1] CONFIGURAÇÕES DE CORES E TEMA */
         :root {
             --bg: #000;
             --txt: #fff;
@@ -16,52 +16,38 @@
 
         body { background: var(--bg); color: var(--txt); font-family: 'Arial', sans-serif; margin: 0; overflow-x: hidden; }
         
-        /* MODO PC DINÂMICO */
+        /* MODO PC */
         @media (min-width: 1024px) { body { width: 800px; margin: auto; border-left: 1px solid #333; border-right: 1px solid #333; } }
 
-        /* HEADER ESTILO X */
+        /* [2] HEADER (TOPO) */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-bottom: 1px solid #333; position: sticky; top: 0; background: rgba(0,0,0,0.9); z-index: 1000; }
-        
         .profile-container { position: relative; cursor: pointer; text-align: right; }
-        .profile-pic { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--blue); }
-        .crown { position: absolute; top: -15px; right: 10px; font-size: 20px; display: none; } /* Só Premium */
+        .profile-pic-top { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--blue); object-fit: cover; }
+        .crown { position: absolute; top: -15px; right: 10px; font-size: 20px; display: none; }
         .online-dot { width: 12px; height: 12px; background: #00FF00; border-radius: 50%; position: absolute; bottom: 5px; right: 0; border: 2px solid #000; }
 
-        /* ANIMAÇÕES E EFEITOS ESPECIAIS */
+        /* [3] ANIMAÇÕES (FOGO E COBRINHA) */
         @keyframes fire { 
             0% { box-shadow: 0 0 10px #ff4500, 0 0 20px #ff8c00; border-color: #ff4500; }
             100% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff4500; border-color: #ff8c00; }
         }
-
+        @keyframes snakeMove { 0% { left: -100%; } 100% { left: 100%; } }
+        
         .id-fire-text { color: #00ccff; font-weight: bold; text-shadow: 0 0 10px #00ccff; animation: pulse 1s infinite; }
         @keyframes pulse { from { opacity: 0.7; } to { opacity: 1; } }
 
-        /* BIO FUNDADOR */
+        /* [4] ELEMENTOS DE INTERFACE */
         .bio-rect { border-radius: 4px; background: #111; border: 1px solid #fff; border-left: 15px solid var(--blue); padding: 15px; margin: 10px 0; }
-
-        /* ABAS FLUTUANTES */
-        .float-box { 
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 320px; background: #111; border: 2px solid var(--blue); 
-            border-radius: 15px; padding: 20px; display: none; z-index: 2000;
-        }
-
-        /* GRUPOS E CHAT */
-        .group-card { background: #050505; border: 1px solid #222; padding: 15px; margin: 10px; border-radius: 10px; text-align: center; }
-        .group-pic-big { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; }
-
-        /* BOTÃO CRIAR */
-        .btn-plus { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; box-shadow: 0 0 10px var(--blue); }
-
-        /* BANNER COM COBRINHA */
-        .banner { width: 100%; height: 120px; background: #222; position: relative; overflow: hidden; }
+        .float-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: #111; border: 2px solid var(--blue); border-radius: 15px; display: none; z-index: 2000; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .banner { width: 100%; height: 120px; background: #222; position: relative; overflow: hidden; background-position: center; background-size: cover; }
         .snake-line { position: absolute; width: 100%; height: 2px; background: var(--blue); animation: snakeMove 2s infinite linear; }
-        @keyframes snakeMove { 0% { left: -100%; } 100% { left: 100%; } }
+        .btn-plus { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 99; }
 
-        /* PREMIUM MODO */
-        .is-premium .profile-pic { animation: var(--fire-anim); border-color: var(--premium) !important; }
+        /* [5] MODO PREMIUM (ESTILOS APLICADOS) */
+        .is-premium .profile-pic-top, .is-premium #modalPic { animation: var(--fire-anim); border-color: var(--premium) !important; }
         .is-premium .crown { display: block; }
-        .is-premium .float-box { border-color: var(--premium); animation: var(--fire-anim); }
+        .is-premium .float-box { border-color: var(--premium); }
+        .is-premium .snake-line { background: var(--premium); box-shadow: 0 0 10px var(--premium); }
     </style>
 </head>
 <body id="mainBody">
@@ -70,211 +56,138 @@
         <div onclick="toggleSidebar()" style="font-size: 24px; cursor:pointer">☰</div>
         <div style="font-weight: bold; letter-spacing: 2px;">ESTUDOS-S</div>
         <div class="profile-container" onclick="openModal('profileModal')">
-            <span style="display:block; font-size: 10px;">{{NOME}}</span>
-            <img src="https://via.placeholder.com/50" class="profile-pic" id="mainPfp">
+            <span style="display:block; font-size: 10px; color: var(--blue);">ADMIN</span>
+            <img src="https://via.placeholder.com/50" class="profile-pic-top" id="mainPfp">
             <div class="online-dot"></div>
             <div class="crown">👑</div>
         </div>
     </header>
 
-    <div class="banner" onclick="openBannerUpload()">
-        <div class="snake-line"></div>
-    </div>
+    <main style="padding: 10px;">
+        <div id="groupsContainer">
+            <h3 style="color: var(--blue); border-bottom: 1px solid #333; padding-bottom: 5px;">Meus Grupos</h3>
+            <div id="groupList"></div>
+        </div>
 
-    <div id="groupsContainer" style="padding: 10px;">
-        <h3 style="color: var(--blue); border-bottom: 1px solid #333;">Meus Grupos</h3>
-        <div id="groupList"></div>
-    </div>
+        <div id="chatGeral" style="margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
+            <h3>IA de Estudos 🤖</h3>
+            <div style="height: 100px; background: #111; padding: 10px; border-radius: 8px; font-size: 14px;">
+                Olá! Como posso ajudar nos seus estudos hoje?
+            </div>
+        </div>
+    </main>
 
-    <div class="btn-plus" onclick="openModal('createGroupModal')">+</div>
+    <div class="btn-plus" onclick="alert('Criar Grupo em breve...')">+</div>
 
     <div id="profileModal" class="float-box" style="padding:0; overflow:hidden;">
-        <div class="banner" id="userBanner" onclick="document.getElementById('bannerInput').click()" style="width:100%; height:100px; background:#222; position:relative; cursor:pointer;">
+        <div class="banner" id="userBanner" onclick="document.getElementById('bannerInput').click()" style="cursor:pointer;">
             <div class="snake-line"></div>
             <input type="file" id="bannerInput" style="display:none" onchange="updateBanner(this)">
         </div>
 
         <div style="text-align:center; margin-top:-45px; position:relative; z-index:10;">
-            <img src="https://via.placeholder.com/100" id="modalPic" class="profile-img" onclick="document.getElementById('pfpInput').click()" style="width:85px; height:85px; border-radius:50%; border:4px solid #111; cursor:pointer; object-fit:cover;">
+            <img src="https://via.placeholder.com/100" id="modalPic" onclick="document.getElementById('pfpInput').click()" style="width:85px; height:85px; border-radius:50%; border:4px solid #111; cursor:pointer; object-fit:cover;">
             <input type="file" id="pfpInput" style="display:none" onchange="updatePic(this)">
         </div>
 
         <div style="padding:15px; text-align:center;">
             <p style="margin:5px 0;">ID: <span class="id-fire-text">22 🔥</span></p>
-            <p style="font-size: 11px; color:#ccc; margin-bottom:10px;">Visto por último: <span id="clock"></span> | <span style="color: #0f0;">Online</span></p>
+            <p style="font-size: 11px; color:#ccc; margin-bottom:10px;">Visto por último: <span id="clock">00:00:00</span> | <span style="color: #0f0;">Online</span></p>
             
-            <div class="bio-rect" style="margin:10px 0; text-align:left;">Fundador Do Site Estudos-s</div>
+            <div class="bio-rect" style="margin:10px 0; text-align:left; font-size: 13px;">Fundador Do Site Estudos-s</div>
             
-            <button onclick="togglePremium()" style="background:var(--premium); color:#000; border:none; padding:8px; width:100%; cursor:pointer; font-weight:bold; border-radius:5px;">OBTER MODO PREMIUM</button>
+            <button onclick="togglePremium()" style="background:var(--premium); color:#000; border:none; padding:10px; width:100%; cursor:pointer; font-weight:bold; border-radius:5px;">OBTER MODO PREMIUM</button>
             <button onclick="closeModal('profileModal')" style="width:100%; margin-top:8px; background:transparent; color:#fff; border:1px solid #444; border-radius:5px; padding:5px; cursor:pointer;">Fechar</button>
         </div>
     </div>
 
-        <p>ID: <span class="id-fire-text">22 🔥</span></p>
-        <p style="font-size: 12px;">Visto por último: <span id="clock"></span> | <span style="color: #0f0;">Online</span></p>
-        <div class="bio-rect" id="founderBio">Fundador Do Site Estudos-s</div>
-        
-        <button onclick="togglePremium()" style="background:var(--premium); color:#000; border:none; padding:5px 10px; width:100%; cursor:pointer; font-weight:bold">OBTER MODO PREMIUM</button>
-        <hr>
-        <button onclick="closeModal('profileModal')" style="width:100%">Fechar</button>
-    </div>
-
-    <div id="calcModal" class="float-box" style="width: 200px;">
-        <h4>Calculadora</h4>
-        <input type="number" id="n1" style="width:40%"> + <input type="number" id="n2" style="width:40%">
-        <button onclick="alert(Number(document.getElementById('n1').value)+Number(document.getElementById('n2').value))" style="width:100%; margin-top:10px">Somar</button>
+    <div id="calcModal" class="float-box" style="width: 220px; padding: 15px;">
+        <h4 style="margin-top:0">Calculadora</h4>
+        <input type="number" id="n1" style="width:80%; margin-bottom:5px" placeholder="Num 1">
+        <input type="number" id="n2" style="width:80%" placeholder="Num 2">
+        <button onclick="alert('Resultado: ' + (Number(document.getElementById('n1').value) + Number(document.getElementById('n2').value)))" style="width:100%; margin-top:10px">Somar</button>
         <button onclick="closeModal('calcModal')" style="width:100%; margin-top:5px">Fechar</button>
     </div>
 
-    <div id="chatGeral" style="padding: 20px; border-top: 1px solid #333;">
-        <h3>IA de Estudos 🤖</h3>
-        <div style="height: 150px; background: #111; padding: 10px; overflow-y: auto; border-radius: 8px;" id="iaChat">
-            Olá! Sou sua IA. Em que matéria posso te ajudar hoje?
-        </div>
-        <input type="text" placeholder="Perguntar para IA..." style="width:80%; background:#222; border:none; color:#fff; padding:10px; margin-top:10px;">
+    <div id="sidebar" class="float-box" style="left: 10%; transform: translate(0, -50%); width: 200px;">
+        <h4 onclick="openModal('calcModal')" style="cursor:pointer">🧮 Calculadora</h4>
+        <h4 onclick="alert('Flashcards em breve!')" style="cursor:pointer">📄 Flashcards</h4>
+        <h4 onclick="alert('Modo Desempenho Ativado!')" style="cursor:pointer">⚡ Acelerar App</h4>
+        <button onclick="closeModal('sidebar')" style="width:100%">Sair</button>
     </div>
 
-    <div id="sidebar" class="float-box" style="left: 10%; transform: translate(0, -50%);">
-        <h4 onclick="openModal('calcModal')">🧮 Calculadora</h4>
-        <h4 onclick="alert('Flashcards abertos!')">📄 Flashcards</h4>
-        <h4 onclick="alert('Modo rápido ativado!')">⚡ Acelerar App (Celulares Fracos)</h4>
-        <button onclick="closeModal('sidebar')">Sair</button>
-    </div>
     <script>
-        // --- FUNÇÕES DE PERSISTÊNCIA (SALVAR DADOS) ---
-
-        // Executa ao abrir o site
-        window.onload = function() {
-            // Recupera a foto salva
-            const savedPic = localStorage.getItem('userPhoto');
-            if (savedPic) {
-                document.getElementById('myPic').src = savedPic;
-                document.getElementById('modalPic').src = savedPic;
-            }
-
-            // Recupera o status Premium
-            const isPremium = localStorage.getItem('premiumStatus');
-            if (isPremium === 'true') {
-                document.getElementById('mainBody').classList.add('is-premium');
-            }
-
-            // Inicia o relógio
-            atualizarRelogio();
-        };
-
-        function atualizarRelogio() {
-            setInterval(() => {
-                const now = new Date();
-                document.getElementById('clock').innerText = now.toLocaleTimeString();
-            }, 1000);
-        }
-
-        // --- SISTEMA DE FOTO (COM SALVAMENTO) ---
-        function triggerFile(id) { document.getElementById(id).click(); }
-
-                        // --- FUNÇÃO PARA A FOTO DE PERFIL ---
-        function updatePic(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imgData = e.target.result;
-                    // Atualiza no topo e no menu
-                    if(document.getElementById('mainPfp')) document.getElementById('mainPfp').src = imgData;
-                    if(document.getElementById('modalPic')) document.getElementById('modalPic').src = imgData;
-                    // Salva no navegador
-                    saveToStorage('userPfp', imgData);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // --- FUNÇÃO PARA O BANNER ---
-        function updateBanner(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const bannerData = e.target.result;
-                    const bannerDiv = document.getElementById('userBanner');
-                    if(bannerDiv) {
-                        bannerDiv.style.backgroundImage = `url(${bannerData})`;
-                        bannerDiv.style.backgroundSize = 'cover';
-                        bannerDiv.style.backgroundPosition = 'center';
-                    }
-                    // Salva no navegador
-                    saveToStorage('userBanner', bannerData);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // --- FUNÇÃO PARA SALVAR DADOS ---
-        function saveToStorage(key, value) {
-            localStorage.setItem(key, value);
-        }
-
-        // --- CARREGAR TUDO AO ABRIR O SITE (F5) ---
+        /* [1] CARREGAMENTO INICIAL */
         window.addEventListener('load', () => {
-            // Carrega Foto
+            // Carrega Foto de Perfil
             const savedPfp = localStorage.getItem('userPfp');
             if(savedPfp) {
                 if(document.getElementById('mainPfp')) document.getElementById('mainPfp').src = savedPfp;
                 if(document.getElementById('modalPic')) document.getElementById('modalPic').src = savedPfp;
             }
+
             // Carrega Banner
             const savedBanner = localStorage.getItem('userBanner');
             if(savedBanner) {
                 const bannerDiv = document.getElementById('userBanner');
-                if(bannerDiv) {
-                    bannerDiv.style.backgroundImage = `url(${savedBanner})`;
-                    bannerDiv.style.backgroundSize = 'cover';
-                }
+                if(bannerDiv) bannerDiv.style.backgroundImage = `url(${savedBanner})`;
             }
-            // Inicia o relógio real
+
+            // Carrega Status Premium
+            if (localStorage.getItem('premiumStatus') === 'true') {
+                document.getElementById('mainBody').classList.add('is-premium');
+            }
+
+            // Inicia Relógio
             setInterval(() => {
                 const clock = document.getElementById('clock');
                 if(clock) clock.innerText = new Date().toLocaleTimeString();
             }, 1000);
         });
 
-        // Funções de abrir/fechar modal
-        function openModal(id) { document.getElementById(id).style.display = 'block'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-
-
-        // --- SISTEMA PREMIUM (COM SALVAMENTO) ---
-        function togglePremium() {
-            const body = document.getElementById('mainBody');
-            body.classList.toggle('is-premium');
-            
-            // Salva a escolha
-            const status = body.classList.contains('is-premium');
-            localStorage.setItem('premiumStatus', status);
-            
-            if(status) {
-                alert("👑 MODO PREMIUM ATIVADO! Seus dados foram salvos.");
-            } else {
-                alert("Modo Premium desativado.");
+        /* [2] SISTEMA DE MÍDIA (FOTO/BANNER) */
+        function updatePic(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = e.target.result;
+                    document.getElementById('mainPfp').src = data;
+                    document.getElementById('modalPic').src = data;
+                    localStorage.setItem('userPfp', data);
+                };
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // --- MODAIS E INTERFACE ---
+        function updateBanner(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = e.target.result;
+                    document.getElementById('userBanner').style.backgroundImage = `url(${data})`;
+                    localStorage.setItem('userBanner', data);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        /* [3] FUNÇÕES DE INTERFACE */
         function openModal(id) { document.getElementById(id).style.display = 'block'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        
         function toggleSidebar() { 
             const side = document.getElementById('sidebar');
             side.style.display = (side.style.display === 'block') ? 'none' : 'block';
         }
 
-        // Lógica de Ban/Multa
-        function aplicarMulta(userId) {
-            let tempo = prompt("Multar por 2 dias, 3 dias ou personalizado? (Ex: 4 meses)");
-            if(tempo && confirm(`Deseja multar o ID ${userId} por ${tempo}?`)) {
-                alert("Ação registrada com sucesso.");
-            }
+        /* [4] SISTEMA PREMIUM */
+        function togglePremium() {
+            const body = document.getElementById('mainBody');
+            const active = body.classList.toggle('is-premium');
+            localStorage.setItem('premiumStatus', active);
+            alert(active ? "👑 MODO PREMIUM ATIVADO!" : "Modo Premium Desativado.");
         }
-</script>
-    
+    </script>
 </body>
 </html>
 
