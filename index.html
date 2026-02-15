@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudos-s | Oficial</title>
     <style>
+        /* Faz a linha da Bio ficar dourada no modo Premium */
+.is-premium .bio-rect { 
+    border-color: var(--premium) !important; 
+    border-left-color: var(--premium) !important; 
+}
+/* Muda a cor do texto "BIO" para dourado no Premium */
+.is-premium span[style*="color: #888"] {
+    color: var(--premium) !important;
+}
         /* [1] CONFIGURAÇÕES DE CORES E TEMA */
         :root {
             --bg: #000;
@@ -94,8 +103,13 @@
             <p style="margin:5px 0;">ID: <span class="id-fire-text">22 🔥</span></p>
             <p style="font-size: 11px; color:#ccc; margin-bottom:10px;">Visto por último: <span id="clock">00:00:00</span> | <span style="color: #0f0;">Online</span></p>
             
-            <div class="bio-rect" style="margin:10px 0; text-align:left; font-size: 13px;">Fundador Do Site Estudos-s</div>
-            
+<div style="margin: 20px 0; text-align: left; position: relative; padding: 5px 0;">
+    <span style="position: absolute; top: -5px; left: 8px; font-size: 9px; color: #888; background: #111; padding: 0 4px; font-weight: bold; z-index: 5;">BIO</span>
+    
+    <div class="bio-rect" style="margin: 0; background: transparent; border: 0.5px solid #444; border-left: 4px solid var(--blue); padding: 12px; border-radius: 4px; color: #eee; font-size: 13px; line-height: 1.4;">
+        Fundador Do Site Estudos-s
+    </div>
+</div>            
             <button onclick="togglePremium()" style="background:var(--premium); color:#000; border:none; padding:10px; width:100%; cursor:pointer; font-weight:bold; border-radius:5px;">OBTER MODO PREMIUM</button>
             <button onclick="closeModal('profileModal')" style="width:100%; margin-top:8px; background:transparent; color:#fff; border:1px solid #444; border-radius:5px; padding:5px; cursor:pointer;">Fechar</button>
         </div>
