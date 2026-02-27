@@ -1,215 +1,91 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudos-s | Oficial</title>
-    <style>
-        /* [1] CONFIGURAÇÕES DE CORES E TEMA */
-        :root {
-            --bg: #000;
-            --txt: #fff;
-            --blue: #1DA1F2;
-            --premium: #FFD700;
-            --fire-anim: fire 0.5s ease-in-out infinite alternate;
-        }
+/* DEFINIÇÃO DE CORES E VARIÁVEIS (Fácil de mudar depois) */
+:root {
+    --cor-fundo-preto: #0f172a;    /* Preto levemente azulado para o fundo */
+    --cor-roxo-principal: #8b5cf6; /* Roxo vibrante */
+    --cor-azul-destaque: #3b82f6;  /* Azul para botões e links */
+    --cor-branco-puro: #ffffff;
+    --cor-texto-cinza: #94a3b8;
+}
 
-        body { background: var(--bg); color: var(--txt); font-family: 'Arial', sans-serif; margin: 0; overflow-x: hidden; }
-        
-        /* MODO PC */
-        @media (min-width: 1024px) { body { width: 800px; margin: auto; border-left: 1px solid #333; border-right: 1px solid #333; } }
+/* CONFIGURAÇÃO GERAL */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--cor-fundo-preto);
+    color: var(--cor-branco-puro);
+}
 
-        /* [2] HEADER (TOPO) */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-bottom: 1px solid #333; position: sticky; top: 0; background: rgba(0,0,0,0.9); z-index: 1000; }
-        .profile-container { position: relative; cursor: pointer; text-align: right; }
-        .profile-pic-top { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--blue); object-fit: cover; }
-        .crown { position: absolute; top: -15px; right: 10px; font-size: 20px; display: none; }
-        .online-dot { width: 12px; height: 12px; background: #00FF00; border-radius: 50%; position: absolute; bottom: 5px; right: 0; border: 2px solid #000; }
+/* ESTILO DO CABEÇALHO (Onde fica o nome do site) */
+.cabecalho-principal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    background-color: rgba(0, 0, 0, 0.3); /* Um preto transparente */
+    border-bottom: 2px solid var(--cor-roxo-principal);
+}
 
-        /* [3] ANIMAÇÕES (FOGO E COBRINHA) */
-        @keyframes fire { 
-            0% { box-shadow: 0 0 10px #ff4500, 0 0 20px #ff8c00; border-color: #ff4500; }
-            100% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff4500; border-color: #ff8c00; }
-        }
+.logo-site {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--cor-azul-destaque);
+    letter-spacing: 2px;
+}
 
-        @keyframes snakeColors {
-            0% { background-position: 200% 0%; }
-            100% { background-position: 0% 0%; }
-        } 
+/* LINKS DE NAVEGAÇÃO */
+.menu-navegacao a {
+    color: var(--cor-branco-puro);
+    text-decoration: none;
+    margin-right: 20px;
+    transition: 0.3s;
+}
 
-        .id-fire-text { color: #00ccff; font-weight: bold; text-shadow: 0 0 10px #00ccff; animation: pulse 1s infinite; }
-        @keyframes pulse { from { opacity: 0.7; } to { opacity: 1; } }
+.menu-navegacao a:hover {
+    color: var(--cor-roxo-principal);
+}
 
-        /* [4] ELEMENTOS DE INTERFACE */
-        .bio-rect { border-radius: 4px; background: #111; border: 1px solid #fff; border-left: 15px solid var(--blue); padding: 15px; margin: 10px 0; }
-        .float-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: #111; border: 2px solid var(--blue); border-radius: 15px; display: none; z-index: 2000; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .banner { width: 100%; height: 120px; background: #222; position: relative; overflow: hidden; background-position: center; background-size: cover; }
+/* BOTÕES */
+.botao-login, .botao-primario {
+    background-color: var(--cor-roxo-principal);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-        /* LINHA DIVISÓRIA COLORIDA (COBRINHA) */
-        .snake-line-animated {
-            width: 100%;
-            height: 3px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            background: linear-gradient(90deg, #800080, #ffffff, #1DA1F2, #000000, #FFFF00, #800080);
-            background-size: 200% 100%;
-            animation: snakeColors 3s linear infinite;
-            z-index: 5;
-        }
+.botao-secundario {
+    background: transparent;
+    color: var(--cor-azul-destaque);
+    border: 2px solid var(--cor-azul-destaque);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 10px;
+}
 
-        .btn-plus { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 99; }
+/* ÁREA DE CONTEÚDO */
+.container-principal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    text-align: center;
+}
 
-        /* [5] MODO PREMIUM (ESTILOS APLICADOS) */
-        .is-premium .profile-pic-top, .is-premium #modalPic { animation: var(--fire-anim); border-color: var(--premium) !important; }
-        .is-premium .crown { display: block; }
-        .is-premium .float-box { border-color: var(--premium); }
-        .is-premium .bio-rect { border-color: var(--premium) !important; border-left-color: var(--premium) !important; }
-        .is-premium span.label-bio { color: var(--premium) !important; }
-    </style>
-</head>
-<body id="mainBody">
-    V K, [15/2/2026 11:50]
-<header class="header">
-        <div onclick="toggleSidebar()" style="font-size: 24px; cursor:pointer">☰</div>
-        <div style="font-weight: bold; letter-spacing: 2px;">ESTUDOS-S</div>
-        <div class="profile-container" onclick="openModal('profileModal')">
-            <span style="display:block; font-size: 10px; color: var(--blue);">ADMIN</span>
-            <img src="https://via.placeholder.com/50" class="profile-pic-top" id="mainPfp">
-            <div class="online-dot"></div>
-            <div class="crown">👑</div>
-        </div>
-    </header>
+.titulo-destaque {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
 
-    <main style="padding: 10px;">
-        <div id="groupsContainer">
-            <h3 style="color: var(--blue); border-bottom: 1px solid #333; padding-bottom: 5px;">Meus Grupos</h3>
-            <div id="groupList"></div>
-        </div>
+.texto-roxo {
+    color: var(--cor-roxo-principal);
+}
 
-        <div id="chatGeral" style="margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
-            <h3>IA de Estudos 🤖</h3>
-            <div style="height: 100px; background: #111; padding: 10px; border-radius: 8px; font-size: 14px;">
-                Olá! Como posso ajudar nos seus estudos hoje?
-            </div>
-        </div>
-    </main>
-
-    <div class="btn-plus" onclick="alert('Criar Grupo em breve...')">+</div>
-
-    <div id="profileModal" class="float-box" style="padding:0; overflow:hidden;">
-        <div class="banner" id="userBanner" onclick="document.getElementById('bannerInput').click()" style="cursor:pointer;">
-            <div class="snake-line-animated"></div>
-            <input type="file" id="bannerInput" style="display:none" onchange="updateBanner(this)">
-        </div>
-
-        <div style="text-align:center; margin-top:-45px; position:relative; z-index:10;">
-            <img src="https://via.placeholder.com/100" id="modalPic" onclick="document.getElementById('pfpInput').click()" style="width:85px; height:85px; border-radius:50%; border:4px solid #111; cursor:pointer; object-fit:cover;">
-            <input type="file" id="pfpInput" style="display:none" onchange="updatePic(this)">
-        </div>
-
-        <div style="padding:15px; text-align:center;">
-            <p style="margin:5px 0;">ID: <span class="id-fire-text">22 🔥</span></p>
-            <p style="font-size: 11px; color:#ccc; margin-bottom:10px;">Visto por último: <span id="clock">00:00:00</span> | <span style="color: #0f0;">Online</span></p>
-            
-            <div style="margin: 20px 0; text-align: left; position: relative; padding: 5px 0;">
-                <span class="label-bio" style="position: absolute; top: -5px; left: 8px; font-size: 9px; color: #888; background: #111; padding: 0 4px; font-weight: bold; z-index: 5;">BIO</span>
-                <div class="bio-rect" style="margin: 0; background: transparent; border: 0.5px solid #444; border-left: 4px solid var(--blue); padding: 12px; border-radius: 4px; color: #eee; font-size: 13px; line-height: 1.4;">
-                    Fundador Do Site Estudos-s
-                </div>
-            </div>            
-            
-            <button onclick="togglePremium()" style="background:var(--premium); color:#000; border:none; padding:10px; width:100%; cursor:pointer; font-weight:bold; border-radius:5px;">OBTER MODO PREMIUM</button>
-            <button onclick="closeModal('profileModal')" style="width:100%; margin-top:8px; background:transparent; color:#fff; border:1px solid #444; border-radius:5px; padding:5px; cursor:pointer;">Fechar</button>
-        </div>
-    </div>
-
-    <div id="calcModal" class="float-box" style="width: 220px; padding: 15px;">
-        <h4 style="margin-top:0">Calculadora</h4>
-        <input type="number" id="n1" style="width:80%; margin-bottom:5px" placeholder="Num 1">
-        <input type="number" id="n2" style="width:80%" placeholder="Num 2">
-        <button onclick="alert('Resultado: ' + (Number(document.getElementById('n1').value) + Number(document.getElementById('n2').value)))" style="width:100%; margin-top:10px">Somar</button>
-        <button onclick="closeModal('calcModal')" style="width:100%; margin-top:5px">Fechar</button>
-    </div>
-    V K, [15/2/2026 11:50]
-<div id="sidebar" class="float-box" style="left: 10%; transform: translate(0, -50%); width: 200px;">
-        <h4 onclick="openModal('calcModal')" style="cursor:pointer">🧮 Calculadora</h4>
-        <h4 onclick="alert('Flashcards em breve!')" style="cursor:pointer">📄 Flashcards</h4>
-        <h4 onclick="alert('Modo Desempenho Ativado!')" style="cursor:pointer">⚡️ Acelerar App</h4>
-        <button onclick="closeModal('sidebar')" style="width:100%">Sair</button>
-    </div>
-
-    <script>
-        /* [1] CARREGAMENTO INICIAL */
-        window.addEventListener('load', () => {
-            // Carrega Foto de Perfil
-            const savedPfp = localStorage.getItem('userPfp');
-            if(savedPfp) {
-                if(document.getElementById('mainPfp')) document.getElementById('mainPfp').src = savedPfp;
-                if(document.getElementById('modalPic')) document.getElementById('modalPic').src = savedPfp;
-            }
-
-            // Carrega Banner
-            const savedBanner = localStorage.getItem('userBanner');
-            if(savedBanner) {
-                const bannerDiv = document.getElementById('userBanner');
-                if(bannerDiv) bannerDiv.style.backgroundImage = url("${savedBanner}");
-            }
-
-            // Carrega Status Premium
-            if (localStorage.getItem('premiumStatus') === 'true') {
-                document.getElementById('mainBody').classList.add('is-premium');
-            }
-
-            // Inicia Relógio
-            setInterval(() => {
-                const clock = document.getElementById('clock');
-                if(clock) clock.innerText = new Date().toLocaleTimeString();
-            }, 1000);
-        });
-
-        /* [2] SISTEMA DE MÍDIA (FOTO/BANNER) */
-        function updatePic(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const data = e.target.result;
-                    document.getElementById('mainPfp').src = data;
-                    document.getElementById('modalPic').src = data;
-                    localStorage.setItem('userPfp', data);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function updateBanner(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const data = e.target.result;
-                    document.getElementById('userBanner').style.backgroundImage = url("${data}");
-                    localStorage.setItem('userBanner', data);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        /* [3] FUNÇÕES DE INTERFACE */
-        function openModal(id) { document.getElementById(id).style.display = 'block'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        
-        function toggleSidebar() { 
-            const side = document.getElementById('sidebar');
-            side.style.display = (side.style.display === 'block') ? 'none' : 'block';
-        }
-
-        /* [4] SISTEMA PREMIUM */
-        function togglePremium() {
-            const body = document.getElementById('mainBody');
-            const active = body.classList.toggle('is-premium');
-            localStorage.setItem('premiumStatus', active);
-            alert(active ? "👑 MODO PREMIUM ATIVADO!" : "Modo Premium Desativado.");
-        }
-    </script>
-</body>
-</html>
+.subtitulo {
+    color: var(--cor-texto-cinza);
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
