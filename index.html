@@ -1,91 +1,182 @@
-/* DEFINIÇÃO DE CORES E VARIÁVEIS (Fácil de mudar depois) */
-:root {
-    --cor-fundo-preto: #0f172a;    /* Preto levemente azulado para o fundo */
-    --cor-roxo-principal: #8b5cf6; /* Roxo vibrante */
-    --cor-azul-destaque: #3b82f6;  /* Azul para botões e links */
-    --cor-branco-puro: #ffffff;
-    --cor-texto-cinza: #94a3b8;
-}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESTUDY - Plataforma de Estudos</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
-/* CONFIGURAÇÃO GERAL */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--cor-fundo-preto);
-    color: var(--cor-branco-puro);
-}
+    <style>
+        /* --- 1. VARIÁVEIS DE CORES (Fácil de mudar) --- */
+        :root {
+            --preto-fundo: #000000;
+            --branco-puro: #FFFFFF;
+            --azul-estudy: #3B82F6;
+            --roxo-estudy: #8B5CF6;
+            --cinza-suave: #A1A1AA;
+            --preto-card: #111111;
+        }
 
-/* ESTILO DO CABEÇALHO (Onde fica o nome do site) */
-.cabecalho-principal {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 5%;
-    background-color: rgba(0, 0, 0, 0.3); /* Um preto transparente */
-    border-bottom: 2px solid var(--cor-roxo-principal);
-}
+        /* --- 2. CONFIGURAÇÕES GERAIS --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-.logo-site {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: var(--cor-azul-destaque);
-    letter-spacing: 2px;
-}
+        body {
+            background-color: var(--preto-fundo);
+            color: var(--branco-puro);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-/* LINKS DE NAVEGAÇÃO */
-.menu-navegacao a {
-    color: var(--cor-branco-puro);
-    text-decoration: none;
-    margin-right: 20px;
-    transition: 0.3s;
-}
+        /* --- 3. CABEÇALHO (ESTUDY NO TOPO) --- */
+        .header-site {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 8%;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid #222;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-.menu-navegacao a:hover {
-    color: var(--cor-roxo-principal);
-}
+        .logo-texto {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: var(--branco-puro);
+        }
 
-/* BOTÕES */
-.botao-login, .botao-primario {
-    background-color: var(--cor-roxo-principal);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
+        .menu-nav a {
+            color: var(--branco-puro);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.3s;
+        }
 
-.botao-secundario {
-    background: transparent;
-    color: var(--cor-azul-destaque);
-    border: 2px solid var(--cor-azul-destaque);
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-left: 10px;
-}
+        .menu-nav a:hover {
+            color: var(--roxo-estudy);
+        }
 
-/* ÁREA DE CONTEÚDO */
-.container-principal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    text-align: center;
-}
+        /* --- 4. SEÇÃO PRINCIPAL (INICIAL) --- */
+        .hero-container {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 5%;
+        }
 
-.titulo-destaque {
-    font-size: 3rem;
-    margin-bottom: 10px;
-}
+        .titulo-home {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 900;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
 
-.texto-roxo {
-    color: var(--cor-roxo-principal);
-}
+        .destaque-azul { color: var(--azul-estudy); }
+        .destaque-roxo { color: var(--roxo-estudy); }
 
-.subtitulo {
-    color: var(--cor-texto-cinza);
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-}
+        .subtitulo-home {
+            font-size: 1.2rem;
+            color: var(--cinza-suave);
+            max-width: 650px;
+            margin-bottom: 40px;
+        }
+
+        /* --- 5. BOTÕES --- */
+        .area-botoes {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-principal {
+            background-color: var(--roxo-estudy);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.4s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-principal:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-contorno {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 18px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.4s;
+        }
+
+        .btn-contorno:hover {
+            background-color: white;
+            color: black;
+        }
+
+        /* --- 6. RODAPÉ --- */
+        .footer-site {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid #111;
+            font-size: 13px;
+            color: #444;
+        }
+
+        /* RESPONSIVIDADE PARA CELULAR */
+        @media (max-width: 768px) {
+            .menu-nav { display: none; }
+            .titulo-home { font-size: 3rem; }
+            .area-botoes { flex-direction: column; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-site">
+        <div class="logo-texto">ESTUDY</div>
+        <nav class="menu-nav">
+            <a href="#">Matérias</a>
+            <a href="#">Cronograma</a>
+            <a href="#">Flashcards</a>
+            <a href="#" style="color: var(--azul-estudy);">Entrar</a>
+        </nav>
+    </header>
+
+    <main class="hero-container">
+        <h1 class="titulo-home">Estude com <span class="destaque-azul">foco</span>.<br>Alcance o <span class="destaque-roxo">topo</span>.</h1>
+        <p class="subtitulo-home">Organize seus materiais, crie rotinas de estudo e acompanhe sua evolução em uma interface limpa e profissional.</p>
+        
+        <div class="area-botoes">
+            <a href="#" class="btn-principal">Começar agora</a>
+            <a href="#" class="btn-contorno">Saiba mais</a>
+        </div>
+    </main>
+
+    <footer class="footer-site">
+        &copy; 2026 ESTUDY - Todos os direitos reservados.
+    </footer>
+
+</body>
+</html>
