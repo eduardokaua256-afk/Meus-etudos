@@ -8,14 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. VARIÁVEIS DE CORES (Fácil de mudar) --- */
+        /* --- 1. VARIÁVEIS DE CORES --- */
         :root {
             --preto-fundo: #000000;
             --branco-puro: #FFFFFF;
             --azul-estudy: #3B82F6;
             --roxo-estudy: #8B5CF6;
             --cinza-suave: #A1A1AA;
-            --preto-card: #111111;
         }
 
         /* --- 2. CONFIGURAÇÕES GERAIS --- */
@@ -29,8 +28,9 @@
         body {
             background-color: var(--preto-fundo);
             color: var(--branco-puro);
-            line-height: 1.6;
-            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* --- 3. CABEÇALHO (ESTUDY NO TOPO) --- */
@@ -39,11 +39,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 25px 8%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: #000000;
             border-bottom: 1px solid #222;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
         }
 
         .logo-texto {
@@ -66,89 +63,27 @@
             color: var(--roxo-estudy);
         }
 
-        /* --- 4. SEÇÃO PRINCIPAL (INICIAL) --- */
-        .hero-container {
-            height: 90vh;
+        /* --- 4. ÁREA DE CONTEÚDO VAZIA --- */
+        .conteudo-principal {
+            flex: 1; /* Faz essa área ocupar o resto da tela */
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            padding: 0 5%;
         }
 
-        .titulo-home {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            font-weight: 900;
-            margin-bottom: 15px;
-            letter-spacing: -2px;
-        }
-
-        .destaque-azul { color: var(--azul-estudy); }
-        .destaque-roxo { color: var(--roxo-estudy); }
-
-        .subtitulo-home {
-            font-size: 1.2rem;
-            color: var(--cinza-suave);
-            max-width: 650px;
-            margin-bottom: 40px;
-        }
-
-        /* --- 5. BOTÕES --- */
-        .area-botoes {
-            display: flex;
-            gap: 20px;
-        }
-
-        .btn-principal {
-            background-color: var(--roxo-estudy);
-            color: white;
-            padding: 18px 40px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.4s;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-principal:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
-        }
-
-        .btn-contorno {
-            background-color: transparent;
-            color: white;
-            border: 2px solid white;
-            padding: 18px 40px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.4s;
-        }
-
-        .btn-contorno:hover {
-            background-color: white;
-            color: black;
-        }
-
-        /* --- 6. RODAPÉ --- */
+        /* --- 5. RODAPÉ --- */
         .footer-site {
             text-align: center;
-            padding: 40px;
+            padding: 30px;
             border-top: 1px solid #111;
             font-size: 13px;
             color: #444;
         }
 
-        /* RESPONSIVIDADE PARA CELULAR */
+        /* RESPONSIVIDADE */
         @media (max-width: 768px) {
             .menu-nav { display: none; }
-            .titulo-home { font-size: 3rem; }
-            .area-botoes { flex-direction: column; width: 100%; }
+            .header-site { justify-content: center; }
         }
     </style>
 </head>
@@ -164,15 +99,8 @@
         </nav>
     </header>
 
-    <main class="hero-container">
-        <h1 class="titulo-home">Estude com <span class="destaque-azul">foco</span>.<br>Alcance o <span class="destaque-roxo">topo</span>.</h1>
-        <p class="subtitulo-home">Organize seus materiais, crie rotinas de estudo e acompanhe sua evolução em uma interface limpa e profissional.</p>
-        
-        <div class="area-botoes">
-            <a href="#" class="btn-principal">Começar agora</a>
-            <a href="#" class="btn-contorno">Saiba mais</a>
-        </div>
-    </main>
+    <main class="conteudo-principal">
+        </main>
 
     <footer class="footer-site">
         &copy; 2026 ESTUDY - Todos os direitos reservados.
