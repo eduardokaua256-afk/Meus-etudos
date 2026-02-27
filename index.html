@@ -3,108 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESTUDY - Plataforma de Estudos</title>
-    
+    <title>ESTUDY - Perfil</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. VARIÁVEIS DE CORES --- */
+        /* --- CONFIGURAÇÕES DE CORES --- */
         :root {
-            --preto-fundo: #000000;
-            --branco-puro: #FFFFFF;
-            --azul-estudy: #3B82F6;
-            --roxo-estudy: #8B5CF6;
-            --cinza-suave: #A1A1AA;
-        }
-
-        /* --- 2. CONFIGURAÇÕES GERAIS --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            --preto: #000000;
+            --branco: #FFFFFF;
+            --azul: #3B82F6;
+            --roxo: #8B5CF6;
+            --verde-online: #22c55e;
+            --vermelho: #ef4444;
+            --dourado: #fbbf24;
         }
 
         body {
-            background-color: var(--preto-fundo);
-            color: var(--branco-puro);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            background-color: var(--preto);
+            color: var(--branco);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
         }
 
-        /* --- 3. CABEÇALHO (ESTUDY NO TOPO) --- */
+        /* --- HEADER COM BOTÃO DE PERFIL --- */
         .header-site {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 25px 8%;
-            background-color: #000000;
+            padding: 20px 8%;
             border-bottom: 1px solid #222;
         }
 
-        .logo-texto {
-            font-size: 26px;
-            font-weight: 900;
-            letter-spacing: 4px;
-            color: var(--branco-puro);
-        }
+        .logo { font-weight: 900; letter-spacing: 2px; font-size: 22px; }
 
-        .menu-nav a {
-            color: var(--branco-puro);
-            text-decoration: none;
-            margin-left: 25px;
-            font-weight: 500;
-            font-size: 14px;
+        .btn-perfil {
+            background: var(--roxo);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
             transition: 0.3s;
         }
 
-        .menu-nav a:hover {
-            color: var(--roxo-estudy);
+        /* --- ABA DE PERFIL (MODAL) --- */
+        .modal-perfil {
+            width: 380px;
+            background: #0a0a0a;
+            border: 1px solid #222;
+            border-radius: 20px;
+            margin: 50px auto;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* --- 4. ÁREA DE CONTEÚDO VAZIA --- */
-        .conteudo-principal {
-            flex: 1; /* Faz essa área ocupar o resto da tela */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* BANNER */
+        .banner-perfil {
+            width: 100%;
+            height: 120px;
+            background: #1a1a1a;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
         }
 
-        /* --- 5. RODAPÉ --- */
-        .footer-site {
+        /* FOTO DE PERFIL E COROA */
+        .foto-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: -50px auto 10px auto;
+        }
+
+        .foto-perfil {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid #0a0a0a;
+            background: #333;
+            cursor: pointer;
+            object-fit: cover;
+        }
+
+        .coroa-premium {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: var(--dourado);
+            display: block; /* Mude para 'none' para esconder */
+        }
+
+        /* STATUS ONLINE E ID */
+        .info-status {
             text-align: center;
-            padding: 30px;
-            border-top: 1px solid #111;
-            font-size: 13px;
-            color: #444;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
 
-        /* RESPONSIVIDADE */
-        @media (max-width: 768px) {
-            .menu-nav { display: none; }
-            .header-site { justify-content: center; }
+        .status-online { color: var(--verde-online); font-weight: bold; }
+        .ultimo-visto { color: var(--branco); margin-left: 10px; }
+        .user-id { display: block; color: #555; margin-top: 5px; }
+
+        /* LINHA DIVISÓRIA BRILHANTE (As 5 cores solicitadas) */
+        .linha-brilhante {
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--roxo), var(--branco), var(--azul), var(--vermelho), var(--dourado));
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+            margin: 15px 0;
+        }
+
+        /* CAMPO DA BIO */
+        .container-bio {
+            padding: 20px;
+        }
+
+        .caixa-bio {
+            border: 1px solid #333;
+            padding: 15px;
+            position: relative;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .caixa-bio::before {
+            content: "BIO";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0a0a0a;
+            padding: 0 10px;
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--azul);
+        }
+
+        .bio-texto { font-size: 14px; color: #ccc; }
+
+        .btn-premium {
+            display: block;
+            width: 80%;
+            margin: 10px auto 20px auto;
+            background: var(--dourado);
+            color: black;
+            border: none;
+            padding: 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
     <header class="header-site">
-        <div class="logo-texto">ESTUDY</div>
-        <nav class="menu-nav">
-            <a href="#">Matérias</a>
-            <a href="#">Cronograma</a>
-            <a href="#">Flashcards</a>
-            <a href="#" style="color: var(--azul-estudy);">Entrar</a>
-        </nav>
+        <div class="logo">ESTUDY</div>
+        <button class="btn-perfil" onclick="alert('Abrindo Perfil...')">Meu Perfil</button>
     </header>
 
-    <main class="conteudo-principal">
-        </main>
+    <div class="modal-perfil">
+        <div class="banner-perfil" title="Clique para mudar o banner" onclick="document.getElementById('inputBanner').click()"></div>
+        <input type="file" id="inputBanner" style="display:none">
 
-    <footer class="footer-site">
-        &copy; 2026 ESTUDY - Todos os direitos reservados.
-    </footer>
+        <div class="foto-container">
+            <span class="coroa-premium">👑</span>
+            <div class="foto-perfil" title="Clique para mudar a foto" onclick="document.getElementById('inputFoto').click()"></div>
+            <input type="file" id="inputFoto" style="display:none">
+        </div>
+
+        <div class="info-status">
+            <span class="status-online">● On-line</span>
+            <span class="ultimo-visto">Visto por último: Hoje</span>
+            <span class="user-id">ID: 22</span>
+        </div>
+
+        <div class="linha-brilhante"></div>
+
+        <div class="container-bio">
+            <div class="caixa-bio">
+                <p class="bio-texto">Ceo do Estudy-site</p>
+            </div>
+        </div>
+
+        <button class="btn-premium">Ativar Premium</button>
+    </div>
 
 </body>
 </html>
