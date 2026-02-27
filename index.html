@@ -56,6 +56,37 @@
             margin: 50px auto;
             overflow: hidden;
             position: relative;
+            /* BOTÃO DE FECHAR (X) NO CANTO DA ABA */
+.btn-fechar-perfil {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 101; /* Fica na frente de tudo */
+    transition: 0.3s;
+}
+
+.btn-fechar-perfil:hover {
+    background: var(--vermelho);
+}
+
+/* ESCONDER A ABA INICIALMENTE */
+.modal-perfil {
+    display: none; /* A aba começa escondida */
+}
+
+/* CLASSE PARA MOSTRAR A ABA */
+.modal-perfil.ativo {
+    display: block;
+}
+
         }
 
         /* BANNER */
@@ -159,6 +190,44 @@
     </style>
 </head>
 <body>
+    <header class="header-site">
+    <div class="logo">ESTUDY</div>
+    <button class="btn-perfil" onclick="togglePerfil()">Meu Perfil</button>
+</header>
+
+<div class="modal-perfil" id="caixaPerfil">
+    <button class="btn-fechar-perfil" onclick="togglePerfil()">X</button>
+
+    ```
+
+---
+
+### 3. O Código de Ação (No final do arquivo, antes de `</body>`)
+Este é o código que faz o botão de "Sair" e o de "Abrir" funcionarem de verdade. Cole isso logo acima da tag `</body>`:
+
+```html
+<script>
+    function togglePerfil() {
+        // Pega a aba de perfil pelo ID
+        const perfil = document.getElementById('caixaPerfil');
+        
+        // Se estiver aberta, ele fecha. Se estiver fechada, ele abre.
+        perfil.classList.toggle('ativo');
+    }
+
+    // Código para mostrar a foto que você escolher da galeria
+    document.getElementById('inputFoto').addEventListener('change', function(e) {
+        if (e.target.files[0]) {
+            const leitor = new FileReader();
+            leitor.onload = function(event) {
+                document.querySelector('.foto-perfil').style.backgroundImage = `url(${event.target.result})`;
+                document.querySelector('.foto-perfil').style.backgroundSize = "cover";
+            }
+            leitor.readAsDataURL(e.target.files[0]);
+        }
+    });
+</script>
+
 
     <header class="header-site">
         <div class="logo">ESTUDY</div>
