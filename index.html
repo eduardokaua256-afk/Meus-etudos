@@ -3,263 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESTUDY - Perfil</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
+    <title>Estudy-Site | Chat Seguro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* --- CONFIGURAÇÕES DE CORES --- */
         :root {
-            --preto: #000000;
-            --branco: #FFFFFF;
-            --azul: #3B82F6;
-            --roxo: #8B5CF6;
-            --verde-online: #22c55e;
-            --vermelho: #ef4444;
-            --dourado: #fbbf24;
+            --bg-main: #0b0e11;
+            --sidebar: #15191c;
+            --chat-bg: #1e2329;
+            --accent: #00c896; /* Verde Neon para contraste */
+            --accent-hover: #00a57c;
+            --text-p: #ffffff;
+            --text-s: #949ba4;
+            --msg-in: #2b2d31;
+            --msg-out: #004d3b;
         }
 
-        body {
-            background-color: var(--preto);
-            color: var(--branco);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
 
-        /* --- HEADER COM BOTÃO DE PERFIL --- */
-        .header-site {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 8%;
-            border-bottom: 1px solid #222;
-        }
+        body { background: var(--bg-main); color: var(--text-p); height: 100vh; display: flex; overflow: hidden; }
 
-        .logo { font-weight: 900; letter-spacing: 2px; font-size: 22px; }
+        /* --- SIDEBAR --- */
+        .sidebar { width: 320px; background: var(--sidebar); display: flex; flex-direction: column; border-right: 1px solid #2d3238; transition: 0.3s; }
 
-        .btn-perfil {
-            background: var(--roxo);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+        .profile-section { padding: 20px; background: rgba(0,0,0,0.2); border-bottom: 1px solid #2d3238; }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 45px; height: 45px; border-radius: 12px; border: 2px solid var(--accent); object-fit: cover; }
+        .user-id { font-size: 0.8rem; color: var(--accent); font-weight: bold; }
 
-        /* --- ABA DE PERFIL (MODAL) --- */
-        .modal-perfil {
-            width: 380px;
-            background: #0a0a0a;
-            border: 1px solid #222;
-            border-radius: 20px;
-            margin: 50px auto;
-            overflow: hidden;
-            position: relative;
-            /* BOTÃO DE FECHAR (X) NO CANTO DA ABA */
-.btn-fechar-perfil {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    font-weight: bold;
-    z-index: 101; /* Fica na frente de tudo */
-    transition: 0.3s;
-}
+        .search-container { padding: 15px; }
+        .search-container input { width: 100%; padding: 10px; border-radius: 8px; border: none; background: #2b2d31; color: white; outline: none; }
 
-.btn-fechar-perfil:hover {
-    background: var(--vermelho);
-}
+        .group-list { flex: 1; overflow-y: auto; }
+        .group-item { padding: 15px; display: flex; gap: 12px; cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
+        .group-item:hover { background: #2b2d31; }
+        .group-item.active { background: #2b2d31; border-left-color: var(--accent); }
+        .group-icon { width: 40px; height: 40px; background: #3a4047; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
 
-/* ESCONDER A ABA INICIALMENTE */
-.modal-perfil {
-    display: none; /* A aba começa escondida */
-}
+        /* --- CHAT AREA --- */
+        .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--chat-bg); }
 
-/* CLASSE PARA MOSTRAR A ABA */
-.modal-perfil.ativo {
-    display: block;
-}
+        .chat-header { padding: 15px 25px; background: var(--sidebar); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; }
 
-        }
+        .messages-view { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
 
-        /* BANNER */
-        .banner-perfil {
-            width: 100%;
-            height: 120px;
-            background: #1a1a1a;
-            cursor: pointer;
-            background-size: cover;
-            background-position: center;
-        }
+        /* Animação de Entrada de Mensagem */
+        .message { max-width: 70%; display: flex; flex-direction: column; gap: 4px; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* FOTO DE PERFIL E COROA */
-        .foto-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: -50px auto 10px auto;
-        }
+        .message.sent { align-self: flex-end; }
+        .message.received { align-self: flex-start; }
 
-        .foto-perfil {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 4px solid #0a0a0a;
-            background: #333;
-            cursor: pointer;
-            object-fit: cover;
-        }
+        .msg-bubble { padding: 12px 16px; border-radius: 15px; font-size: 0.95rem; position: relative; line-height: 1.4; }
+        .sent .msg-bubble { background: var(--msg-out); border-bottom-right-radius: 2px; }
+        .received .msg-bubble { background: var(--msg-in); border-bottom-left-radius: 2px; }
 
-        .coroa-premium {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 24px;
-            color: var(--dourado);
-            display: block; /* Mude para 'none' para esconder */
-        }
+        .msg-meta { font-size: 0.7rem; color: var(--text-s); margin-top: 2px; align-self: flex-end; }
 
-        /* STATUS ONLINE E ID */
-        .info-status {
-            text-align: center;
-            font-size: 12px;
-            margin-bottom: 10px;
-        }
+        /* Filtro de IA Mockup */
+        .ia-warning { background: #ff4757 !important; color: white !important; font-weight: bold; }
 
-        .status-online { color: var(--verde-online); font-weight: bold; }
-        .ultimo-visto { color: var(--branco); margin-left: 10px; }
-        .user-id { display: block; color: #555; margin-top: 5px; }
+        /* --- INPUT AREA --- */
+        .chat-input-bar { padding: 20px; background: var(--sidebar); display: flex; align-items: center; gap: 15px; }
+        
+        .input-controls { flex: 1; display: flex; background: #2b2d31; border-radius: 25px; padding: 5px 15px; align-items: center; }
+        .input-controls input { flex: 1; border: none; background: transparent; color: white; padding: 10px; outline: none; }
 
-        /* LINHA DIVISÓRIA BRILHANTE (As 5 cores solicitadas) */
-        .linha-brilhante {
-            height: 3px;
-            width: 100%;
-            background: linear-gradient(90deg, var(--roxo), var(--branco), var(--azul), var(--vermelho), var(--dourado));
-            box-shadow: 0 0 10px rgba(255,255,255,0.2);
-            margin: 15px 0;
-        }
+        .action-btn { background: none; border: none; color: var(--text-s); cursor: pointer; font-size: 1.2rem; transition: 0.2s; }
+        .action-btn:hover { color: var(--accent); }
+        .send-btn { background: var(--accent); color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
+        .send-btn:hover { background: var(--accent-hover); transform: scale(1.05); }
 
-        /* CAMPO DA BIO */
-        .container-bio {
-            padding: 20px;
-        }
+        /* Áudio Player Estilizado */
+        .audio-player { display: flex; align-items: center; gap: 10px; min-width: 200px; }
+        .audio-wave { flex: 1; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
+        .audio-progress { width: 40%; height: 100%; background: var(--accent); }
 
-        .caixa-bio {
-            border: 1px solid #333;
-            padding: 15px;
-            position: relative;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .caixa-bio::before {
-            content: "BIO";
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #0a0a0a;
-            padding: 0 10px;
-            font-size: 10px;
-            font-weight: bold;
-            color: var(--azul);
-        }
-
-        .bio-texto { font-size: 14px; color: #ccc; }
-
-        .btn-premium {
-            display: block;
-            width: 80%;
-            margin: 10px auto 20px auto;
-            background: var(--dourado);
-            color: black;
-            border: none;
-            padding: 8px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        /* Scrollbar Personalizado */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #2d3238; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <header class="header-site">
-    <div class="logo">ESTUDY</div>
-    <button class="btn-perfil" onclick="togglePerfil()">Meu Perfil</button>
-</header>
 
-<div class="modal-perfil" id="caixaPerfil">
-    <button class="btn-fechar-perfil" onclick="togglePerfil()">X</button>
-
-    ```
-
----
-
-### 3. O Código de Ação (No final do arquivo, antes de `</body>`)
-Este é o código que faz o botão de "Sair" e o de "Abrir" funcionarem de verdade. Cole isso logo acima da tag `</body>`:
-
-```html
-<script>
-    function togglePerfil() {
-        // Pega a aba de perfil pelo ID
-        const perfil = document.getElementById('caixaPerfil');
-        
-        // Se estiver aberta, ele fecha. Se estiver fechada, ele abre.
-        perfil.classList.toggle('ativo');
-    }
-
-    // Código para mostrar a foto que você escolher da galeria
-    document.getElementById('inputFoto').addEventListener('change', function(e) {
-        if (e.target.files[0]) {
-            const leitor = new FileReader();
-            leitor.onload = function(event) {
-                document.querySelector('.foto-perfil').style.backgroundImage = `url(${event.target.result})`;
-                document.querySelector('.foto-perfil').style.backgroundSize = "cover";
-            }
-            leitor.readAsDataURL(e.target.files[0]);
-        }
-    });
-</script>
-
-
-    <header class="header-site">
-        <div class="logo">ESTUDY</div>
-        <button class="btn-perfil" onclick="alert('Abrindo Perfil...')">Meu Perfil</button>
-    </header>
-
-    <div class="modal-perfil">
-        <div class="banner-perfil" title="Clique para mudar o banner" onclick="document.getElementById('inputBanner').click()"></div>
-        <input type="file" id="inputBanner" style="display:none">
-
-        <div class="foto-container">
-            <span class="coroa-premium">👑</span>
-            <div class="foto-perfil" title="Clique para mudar a foto" onclick="document.getElementById('inputFoto').click()"></div>
-            <input type="file" id="inputFoto" style="display:none">
-        </div>
-
-        <div class="info-status">
-            <span class="status-online">● On-line</span>
-            <span class="ultimo-visto">Visto por último: Hoje</span>
-            <span class="user-id">ID: 22</span>
-        </div>
-
-        <div class="linha-brilhante"></div>
-
-        <div class="container-bio">
-            <div class="caixa-bio">
-                <p class="bio-texto">Ceo do Estudy-site</p>
+    <aside class="sidebar">
+        <div class="profile-section">
+            <div class="user-info">
+                <img src="https://i.pravatar.cc/150?u=id22" class="avatar" alt="User">
+                <div>
+                    <h4 id="user-display-name">Veneza</h4>
+                    <span class="user-id">ID: @22_dev</span>
+                </div>
             </div>
         </div>
 
-        <button class="btn-premium">Ativar Premium</button>
-    </div>
+        <div class="search-container">
+            <input type="search" placeholder="Buscar no mundo aberto...">
+        </div>
 
+        <nav class="group-list">
+            <div class="group-item active">
+                <div class="group-icon" style="color: #ff9f43">HS</div>
+                <div class="group-info">
+                    <h4>História & Geografia</h4>
+                    <p style="font-size: 0.75rem; color: var(--accent)">● 14 ativos</p>
+                </div>
+            </div>
+            <div class="group-item">
+                <div class="group-icon" style="color: #54a0ff">DV</div>
+                <div class="group-info">
+                    <h4>Dev Helpers</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-s)">5 ativos</p>
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="main-chat">
+        <header class="chat-header">
+            <div>
+                <h3># História & Geografia</h3>
+                <small style="color: var(--text-s)">Foco: Pré-Colonial e Território</small>
+            </div>
+            <div class="header-actions">
+                <i class="fas fa-shield-virus action-btn" title="IA de Segurança Ativa"></i>
+                <i class="fas fa-search action-btn" style="margin-left: 15px;"></i>
+            </div>
+        </header>
+
+        <section class="messages-view" id="chatBox">
+            <div class="message received">
+                <div class="msg-bubble">
+                    O estudo sobre o período pré-colonial está no bot?
+                </div>
+                <span class="msg-meta">10:45 AM</span>
+            </div>
+
+            <div class="message received">
+                <div class="msg-bubble">
+                    <div class="audio-player">
+                        <i class="fas fa-play"></i>
+                        <div class="audio-wave"><div class="audio-progress"></div></div>
+                        <small>0:14</small>
+                    </div>
+                </div>
+                <span class="msg-meta">10:46 AM</span>
+            </div>
+        </section>
+
+        <footer class="chat-input-bar">
+            <button class="action-btn" onclick="triggerFile()"><i class="fas fa-image"></i></button>
+            <input type="file" id="fileInput" hidden onchange="handleFile(event)">
+            
+            <div class="input-controls">
+                <input type="text" id="mainInput" placeholder="Escreva algo seguro..." onkeypress="checkEnter(event)">
+                <button class="action-btn"><i class="fas fa-microphone"></i></button>
+            </div>
+
+            <button class="send-btn" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </footer>
+    </main>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const mainInput = document.getElementById('mainInput');
+
+        // Função de Envio
+        function sendMessage() {
+            const text = mainInput.value.trim();
+            if(!text) return;
+
+            // Simulação de Filtro de IA para Palavras Proibidas
+            if(text.toLowerCase().includes("spam") || text.toLowerCase().includes("offense")) {
+                alert("IA Security: Conteúdo bloqueado por violar as diretrizes.");
+                mainInput.value = "";
+                return;
+            }
+
+            renderMessage(text, 'sent');
+            mainInput.value = "";
+            
+            // Auto-scroll
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Simulação de Resposta Bot
+            setTimeout(() => {
+                renderMessage("Mensagem recebida com segurança! 🛡️", 'received');
+            }, 1000);
+        }
+
+        function renderMessage(content, type) {
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${type}`;
+            msgDiv.innerHTML = `
+                <div class="msg-bubble">${content}</div>
+                <span class="msg-meta">${time}</span>
+            `;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function checkEnter(e) {
+            if(e.key === 'Enter') sendMessage();
+        }
+
+        function triggerFile() {
+            document.getElementById('fileInput').click();
+        }
+
+        // Mock de Filtro de Imagem com IA
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if(file) {
+                alert("Escaneando arquivo com IA de Segurança...");
+                setTimeout(() => {
+                    renderMessage(`🖼️ Arquivo enviado: ${file.name} (Verificado)`, 'sent');
+                }, 1500);
+            }
+        }
+    </script>
 </body>
 </html>
